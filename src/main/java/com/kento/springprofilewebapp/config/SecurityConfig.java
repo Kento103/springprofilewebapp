@@ -32,6 +32,8 @@ public class SecurityConfig {
             .logoutSuccessUrl("/") // ログアウト成功したときに遷移するページ
         ).authorizeHttpRequests(authz -> authz
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 静的なものはすべて権限なしでも許可する
+            .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // USERとADMINロールのみ許可する
+            .requestMatchers("/register").permitAll() // 権限なしでも許可する
             .requestMatchers("/").permitAll() // 権限なしでも許可する
             .anyRequest().authenticated() // ルールにないものは常に認証が必要
         );

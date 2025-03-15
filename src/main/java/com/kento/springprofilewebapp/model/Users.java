@@ -35,9 +35,16 @@ public class Users implements UserDetails {
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private String password; // パスワード(ハッシュ化する！)
 
-    private String role;
+    private String role; // 権限設定は必ず(ROLE_[権限とすること] 例）ROLE_USER、ROLE_ADMIN)
+
+    public Users(String username, String email, String password, String role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { //必ずこの変数にすること！

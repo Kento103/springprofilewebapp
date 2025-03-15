@@ -27,4 +27,11 @@ public class UserService {
     public Users getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
     }
+
+    // ユーザー登録する
+    public Users registerUser(String username, String email, String password) {
+        String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュ化する
+        Users user = new Users(username, email, encordedPassword, "ROLE_USER"); // パスワードはハッシュ化して、ロールはユーザーで保管する
+        return userRepository.save(user); // DBにユーザー情報を保管する
+    }
 }
