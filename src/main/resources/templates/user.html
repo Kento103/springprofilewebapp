@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ユーザーページ</title>
+</head>
+<body>
+    <h1>自分のページ</h1>
+    <h2><!--span sec:authentication="principal.username"></span--> さん、ようこそ！</h2>
+    <h3>登録しているメールアドレス：<!--span sec:authentication="principal.email"--></span></h3>
+    <form th:action="@{/logout}" method="post">
+        <button>ログアウト</button>
+    </form>
+</body>
+</body>
+</html>

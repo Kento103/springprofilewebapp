@@ -16,4 +16,9 @@ public class LoginController {
     public String top() {
         return "top"; // トップページの表示をする。
     }
+
+    @GetMapping("/user")
+    public String user() {
+        return "user"; // ユーザーページの表示
+    }
 }
