@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{base/layout}">
 <head>
 <meta charset="UTF-8">
 <title>トップページ</title>
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}"/>
 </head>
 <body>
+    <!--layout:fragment="[共通化したいもの]"divの間に挿入される-->
+    <div layout:fragment="content"></div>
     <h1>トップページ</h1>
     <a href="/login">ログイン</a>
     <a href="/register">ユーザー登録</a>
