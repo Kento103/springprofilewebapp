@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<title>ユーザーページ</title>
-</head>
-<body>
-    <h1>自分のページ</h1>
-    <h2><span sec:authentication="principal.username"></span> さん、ようこそ！</h2>
-    <h3>登録しているメールアドレス：<span sec:authentication="principal.email"></span></h3>
-    <form th:action="@{/logout}" method="post">
-        <button>ログアウト</button>
-    </form>
-</body>
-</body>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+    <head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+        <meta charset="UTF-8">
+    <title>トップページ | SpringBootアプリ</title>
+    </head>
+    <body>
+        <header th:replace="~{base/layout::header}"></header>
+        <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+            <h1><span sec:authentication="principal.username"></span>さんのマイページ</h1>
+            <h3>登録しているメールアドレス：<span sec:authentication="principal.email"></span></h3>
+        <form th:action="@{/logout}" method="post">
+            <button>ログアウト</button>
+        </form>
+        </div>
+    </body>
 </html>

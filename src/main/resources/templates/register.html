@@ -1,32 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>ユーザー登録</title>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>ユーザー登録 | SpringBootアプリ</title>
 </head>
 <body>
-    <h2>ユーザー登録</h2>
-    <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
-    <form th:action="@{/register}" th:object="${users}" method="post">
-        <label for="username">ユーザー名：</label>
-        <!--th:field="*{username}" どのフィールドなのか指定する-->
-        <input type="text" id="username" name="username" th:field="*{username}" required />
-        <!--th:errors="*{username}" エラーが出た際に、ここに表示される-->
-        <span class="error" th:errors="*{username}"></span>
-        <label for="email">メールアドレス:</label>
-        <input type="email" id="email" name="email" th:field="*{email}" required />
-        <span class="error" th:errors="*{email}"></span>
-        <br/>
-        <label for="password">パスワード:</label>
-        <input type="password" id="password" name="password" th:field="*{password}" required />
-        <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
-        <span class="error" th:errors="*{password}"></span>
-        <br/>
-        <button type="submit">登録</button>
-    </form>
+    <header th:replace="~{base/layout::header}"></header>
+    <div class="main-content container-md">
+            <h2><i class="bi bi-person-add"></i> ユーザー登録</h2>
+            <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
+        <form th:action="@{/register}" th:object="${users}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
+                <!--th:field="*{username}" どのフィールドなのか指定する-->
+                <input type="text" id="username" name="username" th:field="*{username}" class="form-control" required />
+                <div class="form-text">255文字まで</div>
+                <!--th:errors="*{username}" エラーが出た際に、ここに表示される-->
+                <span class="error" th:errors="*{username}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="hurigana" class="form-label">ふりがな： <span class="badge bg-secondary">必須</span></label>
+                <input type="text" id="hurigana" name="hurigana" th:field="*{hurigana}" class="form-control" required />
+                <div class="form-text">ひらがなのみ使用可</div>
+                <span class="error" th:errors="*{hurigana}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">メールアドレス: <span class="badge bg-secondary">必須</span></label>
+                <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required />
+                <span class="error" th:errors="*{email}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
+                <input type="password" id="password" name="password" th:field="*{password}" class="form-control" required />
+                <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
+                <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
+                <span class="error" th:errors="*{password}"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">登録</button>
+        </form>
 
-    <p th:if="${success}" th:text="${success}" style="color: green;"></p>
-    <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-
-    <a th:href="@{/login}">ログイン画面へ</a>
+        <p th:if="${success}" th:text="${success}" style="color: green;"></p>
+        <p th:if="${error}" th:text="${error}" style="color: red;"></p>
+        <a th:href="@{/login}">ログイン画面へ</a>
+    </div>    
 </body>
 </html>

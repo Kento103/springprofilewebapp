@@ -29,9 +29,9 @@ public class UserService {
     }
 
     // ユーザー登録する
-    public Users registerUser(String username, String email, String password) {
+    public Users registerUser(String username, String email, String password, String hurigana) {
         String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュ化する
-        Users user = new Users(username, email, encordedPassword, "ROLE_USER"); // パスワードはハッシュ化して、ロールはユーザーで保管する
+        Users user = new Users(username, email, encordedPassword, "ROLE_USER", hurigana); // パスワードはハッシュ化して、ロールはユーザーで保管する
         return userRepository.save(user); // DBにユーザー情報を保管する
     }
 }
