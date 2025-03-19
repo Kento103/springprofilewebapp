@@ -13,10 +13,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// DTO (Data Transfer Object)
 // データベースのテーブルに対応するエンティティを作成する。
 @Entity
 @Table(name = "users") // テーブル名を設定するためのアノテーション
@@ -28,12 +34,20 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // startgy = GenerationType.IDENTITY自動採番する
     private int id;
 
+    // validationメッセージ message={0}で全部の情報が出てくる
+    @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する)
+    @NotBlank(message = "このフィールドは必須です")
     @Column(nullable = false) // nulladle ..(nullを許可するか？)
     private String username;
 
+    @Size(min = 1, max = 255, message = "メールアドレスは1～255文字以内で入力してください")
+    @NotBlank(message = "このフィールドは必須です")
+    @Email(message = "メールアドレスの正しい形式で入力してください")
     @Column(nullable = false, unique = true) //unique...一意でないと登録できないようにする
     private String email;
 
+    //@Pattern(regexp = "^[a-zA-Z0-9_-]$", message = "パスワードは半角英数と数字、_-のみ使用出来ます")
+    @NotBlank(message = "このフィールドは必須です")
     @Column(nullable = false)
     private String password; // パスワード(ハッシュ化する！)
 
