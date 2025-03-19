@@ -36,6 +36,23 @@
                 <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
                 <span class="error" th:errors="*{password}"></span>
             </div>
+            <!--性別のコントローラ、モデル未実装-->
+            <div class="mb-3">
+                <label for="sexial" class="form-label">性別： </label>
+                <select name="sexial" id="sexial" class="form-select">
+                    <option selected>選択してください</option>
+                    <option value="1">男性</option>
+                    <option value="2">女性</option>
+                    <option value="3">その他</option>
+                    <option value="4">選択しない</option>
+                </select>
+                <div class="form-text">性別は公開されません</div>
+            </div>
+            <!--誕生日のコントローラー、モデル未実装-->
+            <div class="mb-3">
+                <label for="birthday" class="form-label">誕生日： </label>
+                <input type="date" name="birthday" id="birthday" class="form-control">
+            </div>
             <button type="submit" class="btn btn-primary">登録</button>
         </form>
 
