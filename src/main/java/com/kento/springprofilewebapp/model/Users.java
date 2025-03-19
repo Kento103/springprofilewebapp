@@ -53,11 +53,17 @@ public class Users implements UserDetails {
 
     private String role; // 権限設定は必ず(ROLE_[権限とすること] 例）ROLE_USER、ROLE_ADMIN)
 
-    public Users(String username, String email, String password, String role) {
+    @Size(min = 1, max = 255, message = "ふりがなは1～255文字以内で入力してください。")
+    @NotBlank(message = "このフィールドは必須です")
+    @Pattern(regexp = "^[ぁ-んー]*$", message = "ひらがなのみ入力できます")
+    private String hurigana; // ふりがな(必須とはしない)
+
+    public Users(String username, String email, String password, String role, String hurigana) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.hurigana = hurigana;
     }
 
     @Override

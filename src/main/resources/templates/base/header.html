@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorate="~{bace/layout}">
+    <head>
+    </head>
+    <body>
+        <!--ヘッダー部-->
+        <header layout:fragment="header">
+            <div class="header-logo container-fluid">
+                <h1>SpringApp(仮)</h1>
+            </div>
+            <div class="header-menu">
+                <!--ログインなし時のメニュー-->
+                <ul sec:authorize="isAnonymous()">
+                    <li><a th:href="@{/login}" class="menu-list"><i class="fa-regular fa-circle-user"></i> ログイン</a></li>
+                    <li><a th:href="@{/register}" class="menu-list"><i class="bi bi-door-open"></i> 新規登録</a></li>
+                </ul>
+                <!--一般ユーザログイン時のメニュー-->
+                <ul sec:authorize="hasRole('ROLE_USER')">
+                    <li><a th:href="@{user}" class="menu-list">マイページ</a></li>
+                    <li><a href="#" class="menu-list">ログアウト</a></li>
+                </ul>
+                <!--管理者ユーザ時のメニュー-->
+                <ul sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li><a href="#" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
+                    <li><a href="#" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
+                    <li><a th:href="@{user}" class="menu-list">マイページ</a></li>
+                    <li><a href="#" class="menu-list">ログアウト</a></li>
+                </ul>
+            </div>
+        </header>
+    </body>
+</html>

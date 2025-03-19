@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap');
 /* 基本ひな形設定用個別はそれぞれ作る */
 body {
-    background-color: #f1f1f1;
+    background-color: #f1f1f1 !important;
 }
 .header-logo {
     background-color: rgb(249, 191, 78);
@@ -36,5 +36,11 @@ body {
     transition: all 0.2s;
 }
 .menu-list:hover {
-    color: rgb(205, 229, 197);
+    color: rgb(196, 104, 0);
+}
+.logout-btn {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
