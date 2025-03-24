@@ -28,7 +28,7 @@ public class RegisterContoroller {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, Model model, @Validated @ModelAttribute Users users, BindingResult bindingResult) {
+    public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, @RequestParam String description, @RequestParam int sexial, @RequestParam String role, @RequestParam int age, Model model, @Validated @ModelAttribute Users users, BindingResult bindingResult) {
         // パスワード専用バリデーションチェック(パスワードはハッシュ化するため、下の所でバリデーションチェック出来ない)
         // チェック用(正規表現)検査値
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9_-]{8,32}$");
@@ -52,7 +52,7 @@ public class RegisterContoroller {
         }
         try {
             // 登録成功したときの処理
-            userService.registerUser(username, email, password, hurigana); // @RequestParamから値を受け取る
+            userService.registerUser(username, email, password, hurigana, description, sexial, role, age); // @RequestParamから値を受け取る
             model.addAttribute("success", "ユーザー登録が完了しました");
             return "login";
         } catch (Exception e) {

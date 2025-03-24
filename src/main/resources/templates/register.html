@@ -38,20 +38,39 @@
             </div>
             <!--性別のコントローラ、モデル未実装-->
             <div class="mb-3">
-                <label for="sexial" class="form-label">性別： </label>
+                <label for="sexial" class="form-label">性別： <span class="badge bg-secondary">必須</span></label>
                 <select name="sexial" id="sexial" class="form-select">
-                    <option selected>選択してください</option>
+                    <option value="0" selected>選択しない</option>
                     <option value="1">男性</option>
                     <option value="2">女性</option>
                     <option value="3">その他</option>
-                    <option value="4">選択しない</option>
                 </select>
                 <div class="form-text">性別は公開されません</div>
+                <span class="error" th:errors="*{sexial}"></span>
             </div>
             <!--誕生日のコントローラー、モデル未実装-->
             <div class="mb-3">
-                <label for="birthday" class="form-label">誕生日： </label>
-                <input type="date" name="birthday" id="birthday" class="form-control">
+                <label for="age" class="form-label">年齢： <span class="badge bg-secondary">必須</span></label>
+                <input type="text" name="age" id="age" class="form-control" required>
+                <div class="form-text">年齢を入力(任意)</div>
+                <span class="error" th:errors="*{age}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">自己紹介： </label>
+                <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                <span class="error" th:errors="*{description}"></span>
+                <div class="form-text">1,500文字まで</div>
+                <span class="error" th:errors="*{description}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
+                <label><input type="radio" name="role" id="role" value="ROLE_USER" checked> 一般ユーザ</label>
+                <label><input type="radio" name="role" id="role" value="ROLE_ADMIN"> 管理者</label>
+                <span class="error" th:errors="*{role}"></span>
+                <div class="form-text">
+                    一般ユーザ：自分自身の情報を編集できる<br>
+                    管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">登録</button>
         </form>
