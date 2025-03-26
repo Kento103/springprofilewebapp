@@ -3,3 +3,6 @@
 .error {
     color: red;
 }
+.danger-text {
+    color: rgb(170, 0, 0);
+}

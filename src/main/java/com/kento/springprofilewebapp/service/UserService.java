@@ -34,4 +34,17 @@ public class UserService {
         Users user = new Users(username, email, encordedPassword, role, hurigana, description, sexial, age); // パスワードはハッシュ化して、ロールはユーザーで保管する
         return userRepository.save(user); // DBにユーザー情報を保管する
     }
+
+    // ユーザー情報を編集する
+    public Users updateUser(int id, Users updatedUser) {
+        return userRepository.findById(id) // ユーザーをIDで検索する
+            .map(user -> { // #.mapでOptionalないのデータを取り出し、編集している
+                user.setUsername(updatedUser.getUsername()); // ユーザーネームを取得して変数に代入する
+                user.setHurigana(updatedUser.getHurigana()); // ふりがな
+                user.setEmail(updatedUser.getEmail()); // 登録メールアドレス
+                user.setDescription(updatedUser.getDescription()); // 自己紹介
+                return userRepository.save(user); // #.saveでデータベースの情報を更新する
+            })
+            .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
+    }
 }

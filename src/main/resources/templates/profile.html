@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+    <head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+        <meta charset="UTF-8">
+    <title>トップページ | SpringBootアプリ</title>
+    </head>
+    <body>
+        <header th:replace="~{base/layout::header}"></header>
+        <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+            <!--ここから新ページ用-->
+            <div class="user-container">
+                <!--ユーザー名の表示用-->
+                <h2 th:text="${user.username}">ユーザー名</h2>
+                <!--登録されているメールアドレス(表示するかは要検討ふつうはないことが多いと思う)-->
+                <p>メールアドレス：<span th:text="${user.email}"></span></p>
+                <p><span th:text="${user.description}"></span></p>
+            </div>
+            <!--編集ボタンエリア(実装時は、管理者権限と、本人のみ表示すること)-->
+            <div class="edit-btn-aria">
+                <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> ユーザー情報を編集</button></a>
+            </div>
+        </div>
+    </body>
+</html>
