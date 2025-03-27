@@ -16,9 +16,17 @@
                 <p><span th:text="${user.description}"></span></p>
             </div>
             <!--編集ボタンエリア(実装時は、管理者権限と、本人のみ表示すること)-->
-            <div class="edit-btn-aria">
-                <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> ユーザー情報を編集</button></a>
+            <!-- 管理者権限専用で表示するボタン -->
+            <div class="edit-btn-aria" sec:authorize="hasRole('ROLE_ADMIN')">
+                <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> このユーザーの情報を編集</button></a>
             </div>
+            <!-- 一般ユーザ専用で表示するボタン -->
+            <div class="edit-btn-aria" sec:authorize="hasRole('ROLE_USER')" th:if="${user.id} == ${#authentication.principal.id}">
+                <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> 編集する</button></a>
+            </div>
+            <!-- テスト用現在ログインのメールアドレス -->
+             <!-- th:text="${#authentication.principal}" でログイン中のユーザー情報を取得できる -->
+             <!-- <h2 th:text="${#authentication.principal}"></h2> -->
         </div>
     </body>
 </html>

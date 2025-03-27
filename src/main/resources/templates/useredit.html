@@ -83,7 +83,7 @@
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
         <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
         <br><br><br>
-        <div class="mb-3">
+        <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
             <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
             <div class="mb-3">
                 <label for="form-label">権限の変更</label><br>
