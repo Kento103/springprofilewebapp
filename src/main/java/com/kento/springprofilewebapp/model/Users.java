@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 
 // DTO (Data Transfer Object)
 // データベースのテーブルに対応するエンティティを作成する。
-@Entity
+@Entity // エンティティだよ
 @Table(name = "users") // テーブル名を設定するためのアノテーション
 @NoArgsConstructor // デフォルトで引数なしのコンストラクタを自動生成する
 @AllArgsConstructor // すべてのフィールドを引数に受け取るコンストラクタを自動生成できる

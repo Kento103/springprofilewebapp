@@ -1,10 +1,13 @@
 package com.kento.springprofilewebapp.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-@Controller
-@RequestMapping("/users")
-@RequiredArgsConstructor
+@Controller // これは！コントローラ！！！
+@RequestMapping("/users")  // マッピング！
+@RequiredArgsConstructor // コンストラクタを自動で入れてくれる物！
 public class UserController {
-    private final UserService userService;
+    private final UserService userService; // 定数にしておくよ！
 
     // 各ユーザーページを表示する
     @GetMapping("/{id}")
@@ -71,9 +74,20 @@ public class UserController {
             }
         }
     
-    // ユーザーリスト一覧
+    // ユーザーリスト一覧(ここは、usersのルートで表示したいので、@GetMappingの)引数は入れない！
+    // そのうち抹消対象
     @GetMapping
-    public String userList() {
+    public String userList(Model model) {
+        model.addAttribute("users", userService.getallUsers());
+        return "userlist";
+    }
+
+    // ユーザーを指定したページから5件だけ取得する
+    @GetMapping("/list")
+    public String getUsers(
+            @RequestParam(defaultValue = "0") int page, // URL?page=0でページを取得できる,defaultValueで指定しなかったときの初期値を指定できる。
+            Model model) { // 取得したものを入れる用のもの
+        model.addAttribute("users", userService.getLimitedUsers(page, 5)); // page:ページ数 size：いくつ取得するか
         return "userlist";
     }
 }

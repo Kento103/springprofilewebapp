@@ -2,12 +2,16 @@ package com.kento.springprofilewebapp.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kento.springprofilewebapp.model.Users;
 
 public interface UserRepository extends JpaRepository<Users, Integer>{
     Optional<Users> findByEmail(String email); // カスタムメゾット、メールアドレスで検索
+
+    Page<Users> findAll(Pageable pageable); // ユーザー一覧の件数を制限して取得する
 }
 
 /*

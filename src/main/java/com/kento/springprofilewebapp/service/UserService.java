@@ -3,6 +3,7 @@ package com.kento.springprofilewebapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +47,10 @@ public class UserService {
                 return userRepository.save(user); // #.saveでデータベースの情報を更新する
             })
             .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
+    }
+
+    // 最初の5件を取得する
+    public List<Users> getLimitedUsers(int page, int size) {
+        return userRepository.findAll(PageRequest.of(page, size)).getContent(); // 最初のページの5件を取得する
     }
 }
