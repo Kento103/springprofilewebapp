@@ -3,6 +3,7 @@ package com.kento.springprofilewebapp.model;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // デフォルトで引数なしのコンストラクタを自動生成する
 @AllArgsConstructor // すべてのフィールドを引数に受け取るコンストラクタを自動生成できる
 @Data // クラスに付与することで、全フィールドでゲッターセッターが使えるようになる。
+@Where(clause = "deleted = false")  // デフォルトでdeleted = falseのデータのみを取得する
 public class Users implements UserDetails {
     @Id // IDの主キーに設定する
     @GeneratedValue(strategy = GenerationType.IDENTITY) // startgy = GenerationType.IDENTITY自動採番する
@@ -70,6 +72,9 @@ public class Users implements UserDetails {
     @Max(value = 999, message = "年齢は最大3桁までです")
     @NotNull(message = "年齢を入力してください")
     private int age; // 年齢(最大999歳まで許可)
+
+    // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ
+    private boolean deleted;
 
     public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
         this.username = username; // ユーザー名

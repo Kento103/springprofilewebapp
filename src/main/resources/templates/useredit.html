@@ -97,7 +97,7 @@
             </div>
             <div class="mb-3">
                 <label for="form-label">アカウント削除</label><br>
-                <button class="btn btn-danger"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</button>
+                <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button class="btn btn-danger"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</form></button>
                 <div class="form-text">アカウントを削除します。</div>    
             </div>
         </div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>削除リスト | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1>削除ユーザー一覧</h1>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">名前</th>
+                    <th scope="col">メール</th>
+                    <th scope="col">編集</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td>
+                        <a href="#"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 復元する</button></a>
+                        <a href="#"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 削除</button></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

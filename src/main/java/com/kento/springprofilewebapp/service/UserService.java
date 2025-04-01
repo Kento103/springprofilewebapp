@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.repository.UserRepository;
@@ -52,5 +53,17 @@ public class UserService {
     // 最初の5件を取得する
     public List<Users> getLimitedUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size)).getContent(); // 最初のページの5件を取得する
+    }
+
+    // 指定したユーザーを削除フラグを立てる(論理削除)
+    @Transactional
+    public void deletedUser(int id) {
+        userRepository.softDelete(id);
+    }
+
+    // 削除フラグ(論理削除)がついているユーザの一覧を表示する
+    @Transactional
+    public List<Users> deleted_list() {
+        return userRepository.findByDeleted(); // 削除済みユーザを表示する
     }
 }
