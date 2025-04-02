@@ -3,8 +3,10 @@ package com.kento.springprofilewebapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.repository.UserRepository;
@@ -46,5 +48,34 @@ public class UserService {
                 return userRepository.save(user); // #.saveでデータベースの情報を更新する
             })
             .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
+    }
+
+    // 最初の5件を取得する
+    public List<Users> getLimitedUsers(int page, int size) {
+        return userRepository.findAll(PageRequest.of(page, size)).getContent(); // 最初のページの5件を取得する
+    }
+
+    // 指定したユーザーを削除フラグを立てる(論理削除)
+    @Transactional
+    public void deletedUser(int id) {
+        userRepository.softDelete(id);
+    }
+
+    // 指定したユーザーの削除フラグを取り消す(論理削除取り消し)
+    @Transactional
+    public void recoveryUser(int id) {
+        userRepository.recoveryUser(id);
+    }
+
+    // 削除フラグ(論理削除)がついているユーザの一覧を表示する
+    @Transactional
+    public List<Users> deleted_list() {
+        return userRepository.findByDeleted(); // 削除済みユーザを表示する
+    }
+
+    // 指定したユーザーを完全に削除する(物理削除)
+    @Transactional
+    public void removeUser(int id) {
+        userRepository.removeUser(id);
     }
 }

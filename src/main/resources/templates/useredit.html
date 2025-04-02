@@ -83,7 +83,8 @@
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
         <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
         <br><br><br>
-        <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
+        <!-- 管理者かつ自分自身のアカウント編集以外で表示 -->
+        <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.id} != ${#authentication.principal.id}">
             <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
             <div class="mb-3">
                 <label for="form-label">権限の変更</label><br>
@@ -97,8 +98,27 @@
             </div>
             <div class="mb-3">
                 <label for="form-label">アカウント削除</label><br>
-                <button class="btn btn-danger"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</button>
+                <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button class="btn btn-danger"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</form></button>
                 <div class="form-text">アカウントを削除します。</div>    
+            </div>
+        </div>
+        <!-- 管理者かつ自分のアカウント編集画面で表示する -->
+        <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.id} == ${#authentication.principal.id}">
+            <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
+            <div class="mb-3">
+                <label for="form-label">権限の変更</label><br>
+                <button class="btn btn-outline-secondary disabled" aria-disabled="false"><i class="bi bi-award-fill"></i> アクセス権限変更</button>
+                <div class="form-text">あなたの権限を削除することになるため、実行できません。</div>
+            </div>
+            <div class="mb-3">
+                <label for="form-label">アカウントのロック・ロック解除</label><br>
+                <button class="btn btn-outline-secondary disabled" aria-disabled="true"><i class="bi bi-ban"></i> アカウントロック</button>
+                <div class="form-text">自分自身のアカウントをロックすることはできません。</div>    
+            </div>
+            <div class="mb-3">
+                <label for="form-label">アカウント削除</label><br>
+                <button class="btn btn-outline-secondary disabled" aria-disabled="true"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</form></button>
+                <div class="form-text">自分自身を削除することはできません。他の管理者に依頼してください。</div>    
             </div>
         </div>
     </div>    
