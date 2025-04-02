@@ -61,9 +61,21 @@ public class UserService {
         userRepository.softDelete(id);
     }
 
+    // 指定したユーザーの削除フラグを取り消す(論理削除取り消し)
+    @Transactional
+    public void recoveryUser(int id) {
+        userRepository.recoveryUser(id);
+    }
+
     // 削除フラグ(論理削除)がついているユーザの一覧を表示する
     @Transactional
     public List<Users> deleted_list() {
         return userRepository.findByDeleted(); // 削除済みユーザを表示する
+    }
+
+    // 指定したユーザーを完全に削除する(物理削除)
+    @Transactional
+    public void removeUser(int id) {
+        userRepository.removeUser(id);
     }
 }

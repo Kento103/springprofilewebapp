@@ -46,4 +46,18 @@ public class AdminController {
         userService.deletedUser(id);
         return "redirect:/admin/list";
     }
+
+    // ユーザーを復元する(Postリクエスト)
+    @PostMapping("/{id}/recovery")
+    public String recoveryUser(@PathVariable int id) {
+        userService.recoveryUser(id);
+        return "redirect:/admin/deleted_list";
+    }
+
+    // ユーザーを完全消去(物理削除)する(Postリクエスト)
+    @PostMapping("/{id}/delete_all")
+    public String deleteAllUser(@PathVariable int id) {
+        userService.removeUser(id); // 完全削除コマンド。実行注意。
+        return "redirect:/admin/deleted_list";
+    }
 }

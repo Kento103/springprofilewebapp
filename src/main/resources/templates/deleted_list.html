@@ -14,7 +14,8 @@
                     <th scope="col">ID</th>
                     <th scope="col">名前</th>
                     <th scope="col">メール</th>
-                    <th scope="col">編集</th>
+                    <th scope="col">復元</th>
+                    <th scope="col">完全削除</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,8 +24,10 @@
                     <td th:text="${user.username}"></td>
                     <td th:text="${user.email}"></td>
                     <td>
-                        <a href="#"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 復元する</button></a>
-                        <a href="#"><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 削除</button></a>
+                        <form th:action="@{/admin/{id}/recovery(id=${user.id})}" method="post"><button class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 復元する</button></form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/{id}/delete_all(id=${user.id})}" method="post"><button class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 完全に削除</button></form>
                     </td>
                 </tr>
             </tbody>

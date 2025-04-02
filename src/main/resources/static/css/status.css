@@ -6,3 +6,7 @@
 .danger-text {
     color: rgb(170, 0, 0);
 }
+
+.button-not-used:hover {
+    cursor: not-allowed;
+}
