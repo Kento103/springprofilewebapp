@@ -2,14 +2,14 @@
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
     <meta charset="UTF-8">
-<title>ユーザー登録 | SpringBootアプリ</title>
+<title>ユーザー情報編集 | SpringBootアプリ</title>
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
     <div class="main-content container-md">
-            <h2><i class="bi bi-person-add"></i> ユーザー登録</h2>
+            <h2><i class="bi bi-person-add"></i> ユーザー編集</h2>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
-        <form th:action="@{/register}" th:object="${users}" method="post">
+        <form th:action="@{/users/{id}(id=${user.id})}" th:object="${user}" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
                 <!--th:field="*{username}" どのフィールドなのか指定する-->
@@ -30,14 +30,17 @@
                 <span class="error" th:errors="*{email}"></span>
             </div>
             <div class="mb-3">
-                <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
-                <input type="password" id="password" name="password" th:field="*{password}" class="form-control" required />
+                <label for="password" class="form-label">パスワードの変更</label><br>
+                <button class="btn btn-danger"><i class="bi bi-key-fill"></i> パスワードの変更</button>
+                <div class="form-text">パスワードを変更するにはこのボタンをクリックしてください</div>
+                <!-- <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
+                <input type="password" id="password" name="password" th:field="*{password}" class="form-control">
                 <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
                 <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
-                <span class="error" th:errors="*{password}"></span>
+                <span class="error" th:errors="*{password}"></span> -->
             </div>
             <!--性別のコントローラ、モデル未実装-->
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="sexial" class="form-label">性別： <span class="badge bg-secondary">必須</span></label>
                 <select name="sexial" id="sexial" class="form-select">
                     <option value="0" selected>選択しない</option>
@@ -47,22 +50,23 @@
                 </select>
                 <div class="form-text">性別は公開されません</div>
                 <span class="error" th:errors="*{sexial}"></span>
-            </div>
+            </div> -->
             <!--誕生日のコントローラー、モデル未実装-->
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="age" class="form-label">年齢： <span class="badge bg-secondary">必須</span></label>
-                <input type="text" name="age" id="age" class="form-control" required>
+                <input type="text" name="age" id="age" class="form-control" th:field="*{age}" required>
                 <div class="form-text">年齢を入力(任意)</div>
                 <span class="error" th:errors="*{age}"></span>
-            </div>
+            </div> -->
             <div class="mb-3">
                 <label for="description" class="form-label">自己紹介： </label>
-                <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                <textarea class="form-control" id="description" name="description" rows="5" th:field="*{description}"></textarea>
                 <span class="error" th:errors="*{description}"></span>
                 <div class="form-text">1,500文字まで</div>
                 <span class="error" th:errors="*{description}"></span>
             </div>
-            <div class="mb-3">
+            <!--管理者ユーザー時のメニュー-->
+            <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
                 <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
                 <label><input type="radio" name="role" id="role" value="ROLE_USER" checked> 一般ユーザ</label>
                 <label><input type="radio" name="role" id="role" value="ROLE_ADMIN"> 管理者</label>
@@ -72,12 +76,31 @@
                     管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">登録</button>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> 保存</button>
         </form>
 
         <p th:if="${success}" th:text="${success}" style="color: green;"></p>
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-        <a th:href="@{/login}">ログイン画面へ</a>
+        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
+        <br><br><br>
+        <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
+            <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
+            <div class="mb-3">
+                <label for="form-label">権限の変更</label><br>
+                <button class="btn btn-danger"><i class="bi bi-award-fill"></i> アクセス権限変更</button>
+                <div class="form-text">一般ユーザと管理者権限の変更が行えます。</div>
+            </div>
+            <div class="mb-3">
+                <label for="form-label">アカウントのロック・ロック解除</label><br>
+                <button class="btn btn-danger"><i class="bi bi-ban"></i> アカウントロック</button>
+                <div class="form-text">アカウントをロックし、アカウントへのログインを無効化したり、ロックされたアカウントの解除を行うことが出来ます。</div>    
+            </div>
+            <div class="mb-3">
+                <label for="form-label">アカウント削除</label><br>
+                <button class="btn btn-danger"><i class="bi bi-exclamation-diamond-fill"></i> アカウントを削除する</button>
+                <div class="form-text">アカウントを削除します。</div>    
+            </div>
+        </div>
     </div>    
 </body>
 </html>

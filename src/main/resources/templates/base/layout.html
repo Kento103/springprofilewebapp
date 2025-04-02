@@ -10,6 +10,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/status.css}">
     <script src="https://kit.fontawesome.com/97c4c8df8d.js" crossorigin="anonymous"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}" defer></script>
 
     <!--各View固有で読み込むものを指定-->
     <th:block th:replace="${links} ?: _" />
@@ -29,14 +30,14 @@
             </ul>
             <!--一般ユーザログイン時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_USER')">
-                <li><a th:href="@{user}" class="menu-list">マイページ</a></li>
+                <li><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="menu-list">マイページ</a></li>
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
             </ul>
             <!--管理者ユーザ時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_ADMIN')">
-                <li><a href="#" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
-                <li><a href="#" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
-                <li><a th:href="@{user}" class="menu-list">マイページ</a></li>
+                <li><a th:href="@{/admin}" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
+                <li><a th:href="@{/users}" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
+                <li><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="menu-list">マイページ</a></li>
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
             </ul>
         </div>

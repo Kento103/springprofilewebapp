@@ -21,7 +21,7 @@
                 </ul>
                 <!--管理者ユーザ時のメニュー-->
                 <ul sec:authorize="hasRole('ROLE_ADMIN')">
-                    <li><a href="#" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
+                    <li><a th:href="@{admin}" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
                     <li><a href="#" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
                     <li><a th:href="@{user}" class="menu-list">マイページ</a></li>
                     <li><a href="#" class="menu-list">ログアウト</a></li>

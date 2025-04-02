@@ -7,11 +7,15 @@
     <body>
         <header th:replace="~{base/layout::header}"></header>
         <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+            <!--管理者ユーザーの場合は管理者バッチを表示する-->
+            <div sec:authorize="hasRole('ROLE_ADMIN')"><h4><span class="badge text-bg-warning"><i class="fa-solid fa-web-awesome"></i> 管理者アカウント</h4></span></div>
             <h1><span sec:authentication="principal.username"></span>さんのマイページ</h1>
             <h3>登録しているメールアドレス：<span sec:authentication="principal.email"></span></h3>
-        <form th:action="@{/logout}" method="post">
-            <button>ログアウト</button>
-        </form>
+            <h3>現在のUserID：<span sec:authentication="principal.id"></span></h3>
+            <form th:action="@{/logout}" method="post">
+                <button>ログアウト</button>
+            </form>
+            <!--↑旧フォーマット-->
         </div>
     </body>
 </html>

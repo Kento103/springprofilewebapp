@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>管理者ページ - SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</h1>
+        <div class="admin-menu">
+            <button type="button" class="btn btn-outline-primary"><i class="bi bi-people-fill"></i> アカウント管理</button>
+            <a th:href="@{/register}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-add"></i> アカウント追加</button></a>
+            <button type="button" class="btn btn-outline-danger"><i class="bi bi-person-dash-fill"></i> 削除アカウント管理</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -14,8 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -35,8 +36,8 @@ public class Users implements UserDetails {
     private int id;
 
     // validationメッセージ message={0}で全部の情報が出てくる
-    @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する)
-    @NotBlank(message = "このフィールドは必須です")
+    @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する) @Sizeはstring型のみ使える
+    @NotBlank(message = "このフィールドは必須です") // @NotBlankはstring型のみ使える
     @Column(nullable = false) // nulladle ..(nullを許可するか？)
     private String username;
 
@@ -58,12 +59,27 @@ public class Users implements UserDetails {
     @Pattern(regexp = "^[ぁ-んー]*$", message = "ひらがなのみ入力できます")
     private String hurigana; // ふりがな(必須とはしない)
 
-    public Users(String username, String email, String password, String role, String hurigana) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.hurigana = hurigana;
+    @Max(value = 3, message = "不正な値です")
+    @NotNull(message = "性別を入力してください")
+    @Column(nullable = false)
+    private int sexial; // 性別設定用(0:設定なし,1:男性,2:女性,3:その他)
+
+    @Size(min = 0, max = 1500, message = "自己紹介は最大1,500文字以内で入力してください")
+    private String description; // 自己紹介保存用
+
+    @Max(value = 999, message = "年齢は最大3桁までです")
+    @NotNull(message = "年齢を入力してください")
+    private int age; // 年齢(最大999歳まで許可)
+
+    public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
+        this.username = username; // ユーザー名
+        this.email = email; // メールアドレス
+        this.password = password; // パスワード
+        this.role = role; // 権限
+        this.hurigana = hurigana; // ふりがな
+        this.description = description; // 自己紹介
+        this.sexial = sexial; // 性別
+        this.age = age; // 年齢
     }
 
     @Override
