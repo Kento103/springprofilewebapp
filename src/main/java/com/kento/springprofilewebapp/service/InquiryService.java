@@ -22,6 +22,11 @@ public class InquiryService {
         return inquiryRepository.findAll();
     }
 
+    // ユーザーをIDで取得する
+    public Inquirys getInquirysById(Integer id) {
+        return inquiryRepository.findById(id).orElse(null);
+    }
+
     // users.idテーブルと結合させて表示する。
     public List<Inquirys> getInquirysWithUser() {
         return inquiryRepository.findAllWithUsers();

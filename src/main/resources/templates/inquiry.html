@@ -16,6 +16,7 @@
                     <th scope="col">カテゴリー</th>
                     <th scope="col">内容</th>
                     <th scope="col">ステータス</th>
+                    <th scope="col">詳細</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,6 +27,7 @@
                     <td th:text="${inquiry.categorys.name}"></td>
                     <td th:text="${inquiry.description}"></td>
                     <td th:text="${inquiry.status}"></td>
+                    <td><a th:href="@{/inquiry/{id}(id=${inquiry.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-journal-text"></i> 詳細</button></a></td>
                 </tr>
             </tbody>
         </table>
