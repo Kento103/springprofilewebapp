@@ -1,11 +1,21 @@
 package com.kento.springprofilewebapp.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
 
 public interface InquiryRepository extends JpaRepository<Inquirys, Integer>{
+    // usersテーブルのidカラムを内部結合する。(users.id)
+    @Query("SELECT i FROM Inquirys i JOIN i.users u")
+    List<Inquirys> findAllWithUsers();
 
+    // categorysテーブルのidカラムを内部結合する(categorys.id)
+    @Query("SELECT i FROM Inquirys i JOIN i.categorys n")
+    List<Inquirys> findAllWithCategorys();
 }
 
 /*

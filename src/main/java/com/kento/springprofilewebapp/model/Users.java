@@ -13,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -36,6 +37,9 @@ public class Users implements UserDetails {
     @Id // IDの主キーに設定する
     @GeneratedValue(strategy = GenerationType.IDENTITY) // startgy = GenerationType.IDENTITY自動採番する
     private int id;
+
+    @OneToMany(mappedBy = "users") // 一体多の関係mappedBY="テーブル名"を指定する。
+    private List<Inquirys> inquirysList; // 内部結合する為に使うもの(内部結合は必ずListとすること。)
 
     // validationメッセージ message={0}で全部の情報が出てくる
     @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する) @Sizeはstring型のみ使える

@@ -20,9 +20,10 @@
             </thead>
             <tbody>
                 <tr th:each="inquiry : ${inquirys}">
+                    <!-- 内部結合したものを使いたいときは、inquiry.内部結合したテーブル.カラム名で指定する -->
                     <td th:text="${inquiry.id}"></td>
-                    <td th:text="${inquiry.userId}"></td>
-                    <td th:text="${inquiry.category}"></td>
+                    <td th:text="${inquiry.users.username}"></td>
+                    <td th:text="${inquiry.categorys.name}"></td>
                     <td th:text="${inquiry.description}"></td>
                     <td th:text="${inquiry.status}"></td>
                 </tr>

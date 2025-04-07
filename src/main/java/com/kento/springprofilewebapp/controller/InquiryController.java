@@ -18,8 +18,9 @@ public class InquiryController {
 
     // お問い合わせリスト
     @GetMapping
-    public String inquiryTop(Model model) {
-        model.addAttribute("inquirys", inquiryService.getAllLists());
+    public String inquiryTop(Model model, Model model2) {
+        model.addAttribute("inquirys", inquiryService.getInquirysWithUser()); // userテーブル
+        model2.addAttribute("categorys", inquiryService.getInquirysWithCategorys()); // categoryテーブル
         return "inquiry";
     }
 
@@ -28,4 +29,10 @@ public class InquiryController {
     public String inquieyCreate() {
         return "inquiry_create";
     }
+
+    // @GetMapping("/test")
+    // public String inquiryTes(Model model) {
+    //     model.addAttribute("inquirys", inquiryService.getInquirysWithUser());
+    //     return "inquiry";
+    // }
 }

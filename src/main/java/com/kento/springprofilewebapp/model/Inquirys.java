@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,10 +24,18 @@ public class Inquirys {
     private int id;
 
     // 投稿したユーザー
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id") // 自分のテーブル(この場合は、inquirysのどのテーブルとくっつけるかを名前にかく)
+    private Users users;
+
+    // private int userId;
 
     // 選択されたカテゴリー
-    private int category;
+    @ManyToOne
+    @JoinColumn(name = "category")
+    private Categorys categorys;
+
+    // private int category;
 
     // 本文
     private String description;

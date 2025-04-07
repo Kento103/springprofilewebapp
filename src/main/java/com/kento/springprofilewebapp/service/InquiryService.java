@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
 import com.kento.springprofilewebapp.repository.InquiryRepository;
 
@@ -19,5 +20,15 @@ public class InquiryService {
     // 全リストを取得する
     public List<Inquirys> getAllLists() {
         return inquiryRepository.findAll();
+    }
+
+    // users.idテーブルと結合させて表示する。
+    public List<Inquirys> getInquirysWithUser() {
+        return inquiryRepository.findAllWithUsers();
+    }
+
+    // categorysテーブルのidカラムを内部結合する
+    public List<Inquirys> getInquirysWithCategorys() {
+        return inquiryRepository.findAllWithCategorys();
     }
 }
