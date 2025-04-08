@@ -30,4 +30,8 @@ public class Categorys {
 
     // カテゴリーの名前
     private String name;
+
+    public Categorys(String name) {
+        this.name = name; // カテゴリ名
+    }
 }

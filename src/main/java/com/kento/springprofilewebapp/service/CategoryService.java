@@ -20,4 +20,15 @@ public class CategoryService {
     public List<Categorys> getAllLists() {
         return categoryRepository.findAll();
     }
+
+    // カテゴリ登録する
+    public Categorys registeCategorys(String name) {
+        Categorys categorys = new Categorys(name); // 取得する
+        return categoryRepository.save(categorys); // 取得したものをモデルに挿入して、DBに保存する
+    }
+
+    // 指定したIDのレコードを削除する
+    public void deleteCategory(int id) {
+        categoryRepository.deleteById(id); // 指定した物を削除
+    }
 }
