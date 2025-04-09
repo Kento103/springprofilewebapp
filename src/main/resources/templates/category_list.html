@@ -22,7 +22,7 @@
                 <tr th:each="category : ${categorys}">
                     <td th:text="${category.id}"></td>
                     <td th:text="${category.name}"></td>
-                    <td><a href="#"><button class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i> 編集</button></a></td>
+                    <td><a th:href="@{/inquiry/category/{id}/edit(id=${category.id})}"><button class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i> 編集</button></a></td>
                     <td><form th:action="@{/inquiry/category/{id}/delete(id=${category.id})}" method="post"><button class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 削除</button></form></td>
                 </tr>
             </tbody>
