@@ -80,6 +80,27 @@ public class InquiryController {
         return "redirect:/inquiry/category";
     }
 
+    // カテゴリを編集する
+    @GetMapping("/category/{id}/edit")
+    public String editCategory(@PathVariable int id, Categorys categorys, Model model) {
+        categorys = categoryService.getCategorysById(id);
+        model.addAttribute("categorys", categorys);
+        return "category_edit";
+    }
+
+    // 編集結果を保存する(Postリクエスト)
+    @PostMapping("/category/{id}/edit")
+    public String saveEditCategory(@PathVariable int id, @ModelAttribute Categorys categorys, @ModelAttribute Categorys category , Model model) {
+        try {
+            categorys =categoryService.updateCategorys(id, category);
+            model.addAttribute("category", category);
+            return "redirect:/inquiry/category";
+        } catch (Exception e) {
+            model.addAttribute("error" ,"登録に失敗しました。入力内容を確認してください");
+            return "category_edit";
+        }
+    }
+
     // @GetMapping("/test")
     // public String inquiryTes(Model model) {
     //     model.addAttribute("inquirys", inquiryService.getInquirysWithUser());
