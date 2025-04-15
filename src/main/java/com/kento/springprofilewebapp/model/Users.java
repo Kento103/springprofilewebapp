@@ -80,6 +80,9 @@ public class Users implements UserDetails {
     // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ
     private boolean deleted;
 
+    // プロフィール画像のパスを保管するための変数
+    private String imagePath; // 画像のURLパス
+
     public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
         this.username = username; // ユーザー名
         this.email = email; // メールアドレス

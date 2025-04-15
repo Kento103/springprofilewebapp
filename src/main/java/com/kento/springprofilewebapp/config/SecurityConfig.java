@@ -35,6 +35,8 @@ public class SecurityConfig {
             .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // USERとADMINロールのみ許可する
             .requestMatchers("/admin").hasAnyRole("ADMIN") //管理者権限があるユーザーのみ閲覧を許可する
             .requestMatchers("/register").permitAll() // 権限なしでも許可する
+            .requestMatchers("/images/**").permitAll() // 画像の閲覧を許可
+            .requestMatchers("/uploads").permitAll() // 画像の閲覧を許可
             .requestMatchers("/").permitAll() // 権限なしでも許可する
             .anyRequest().authenticated() // ルールにないものは常に認証が必要
         );

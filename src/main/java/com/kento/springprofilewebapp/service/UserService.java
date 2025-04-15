@@ -30,6 +30,11 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    // ユーザー情報を保存する(基本的な保存)
+    public void save(Users users) {
+        userRepository.save(users);
+    }
+    
     // ユーザー登録する
     public Users registerUser(String username, String email, String password, String hurigana, String description, int sexial, String role, int age) {
         String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュ化する

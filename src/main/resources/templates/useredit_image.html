@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>プロフィール画像変更 | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1>プロフィール画像変更</h1>
+        <!-- アップロードフォーム -->
+        <form action="#" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" id="image/*">
+            <button type="submit" class="btn btn-primary">画像アップロード</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -2,11 +2,16 @@ package com.kento.springprofilewebapp.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -74,6 +79,29 @@ public class UserController {
             }
         }
     
+    // ユーザーのプロフィール画像を変更するための画面
+    @GetMapping("/{id}/edit/image")
+    public String changeImage() {
+        return "useredit_image";
+    }
+
+    // プロフィール画像の変更を処理する(Postリクエスト)
+    @PostMapping("/{id}/edit/image")
+    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file) {
+        Users user = userService.getUserById(id); // 対象のユーザーを検索
+        String uploadDir = "uploads/"; // アップロードするディレクトリを指定する
+        String filename = "user_" + id + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
+        Path path = Paths.get(uploadDir + filename);
+        Files.createDirectories(path.getParent());
+        file.transferTo(path.toFile());
+
+        // データベースにデータを保管する
+        user.setImagePath("/images/" + filename);
+        userService.save(user);
+
+        return "redirect:/users/{id}";
+    }
+
     // ユーザーリスト一覧(ここは、usersのルートで表示したいので、@GetMappingの)引数は入れない！
     // そのうち抹消対象
     @GetMapping
