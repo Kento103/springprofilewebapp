@@ -55,6 +55,11 @@ public class UserService {
         return userRepository.findAll(PageRequest.of(page, size)).getContent(); // 最初のページの5件を取得する
     }
 
+    // テーブルの全レコード件数を取得する
+    public long countUsers() {
+        return userRepository.count();
+    }
+
     // 指定したユーザーを削除フラグを立てる(論理削除)
     @Transactional
     public void deletedUser(int id) {
