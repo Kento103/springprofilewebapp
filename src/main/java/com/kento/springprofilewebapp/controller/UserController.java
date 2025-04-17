@@ -9,6 +9,7 @@ import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -81,25 +82,33 @@ public class UserController {
     
     // ユーザーのプロフィール画像を変更するための画面
     @GetMapping("/{id}/edit/image")
-    public String changeImage() {
+    public String changeImage(@PathVariable int id, Model model) {
+        Users users = userService.getUserById(id); // 対象のユーザーを検索
+        model.addAttribute("user", users);
         return "useredit_image";
     }
 
     // プロフィール画像の変更を処理する(Postリクエスト)
     @PostMapping("/{id}/edit/image")
     public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file) {
-        Users user = userService.getUserById(id); // 対象のユーザーを検索
-        String uploadDir = "uploads/"; // アップロードするディレクトリを指定する
-        String filename = "user_" + id + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
-        Path path = Paths.get(uploadDir + filename);
-        Files.createDirectories(path.getParent());
-        file.transferTo(path.toFile());
+        try {
+            Users user = userService.getUserById(id); // 対象のユーザーを検索
+            String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+            String filename = "user_" + id + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
+            Path path = Paths.get(uploadDir + filename);
+            Files.createDirectories(path.getParent()); // ディレクトリがない時は作成してくれる。
+            file.transferTo(path.toFile());
 
-        // データベースにデータを保管する
-        user.setImagePath("/images/" + filename);
-        userService.save(user);
+            // データベースにデータを保管する
+            user.setImagePath("/images/" + filename); // Webでアクセスするパスになる
+            userService.save(user);
 
-        return "redirect:/users/{id}";
+            return "redirect:/users/{id}";
+        } catch (IOException e) {
+            e.printStackTrace(); // ログ出力
+            return "error"; // エラーページに遷移する(未実装)
+        }
+        
     }
 
     // ユーザーリスト一覧(ここは、usersのルートで表示したいので、@GetMappingの)引数は入れない！

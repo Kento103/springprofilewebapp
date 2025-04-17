@@ -9,7 +9,7 @@
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>プロフィール画像変更</h1>
         <!-- アップロードフォーム -->
-        <form action="#" method="post" enctype="multipart/form-data">
+        <form th:action="@{/users/{id}/edit/image(id=${user.id})}" method="post" enctype="multipart/form-data">
             <input type="file" name="image" id="image/*">
             <button type="submit" class="btn btn-primary">画像アップロード</button>
         </form>

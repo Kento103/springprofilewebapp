@@ -44,3 +44,9 @@ body {
     outline: none;
     box-shadow: none;
 }
+/* プロフ画像用 */
+.profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+}
