@@ -41,6 +41,14 @@ public class Users implements UserDetails {
     @OneToMany(mappedBy = "users") // 一体多の関係mappedBY="テーブル名"を指定する。
     private List<Inquirys> inquirysList; // 内部結合する為に使うもの(内部結合は必ずListとすること。)
 
+    // Likesモデル用
+    @OneToMany(mappedBy = "fromLikeUserId") // 一体多の関係(参照先の変数を指定すること！)
+    private List<Likes> likesSent; // 内部結合するために使うもの
+
+    // Likesモデル用
+    @OneToMany(mappedBy = "toLikeUserId")
+    private List<Likes> likesReception;
+
     // validationメッセージ message={0}で全部の情報が出てくる
     @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する) @Sizeはstring型のみ使える
     @NotBlank(message = "このフィールドは必須です") // @NotBlankはstring型のみ使える

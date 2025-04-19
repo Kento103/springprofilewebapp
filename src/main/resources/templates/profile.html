@@ -15,6 +15,8 @@
                 <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                 <!--ユーザー名の表示用-->
                 <h2 th:text="${user.username}">ユーザー名</h2>
+                <!-- いいねできる所(場所は要検討) -->
+                <form action="#" method="post"><button type="submit"><i class="bi bi-heart-fill"></i></button></form>
                 <!--登録されているメールアドレス(表示するかは要検討ふつうはないことが多いと思う)-->
                 <p>メールアドレス：<span th:text="${user.email}"></span></p>
                 <p><span th:text="${user.description}"></span></p>
