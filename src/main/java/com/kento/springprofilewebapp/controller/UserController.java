@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kento.springprofilewebapp.model.Users;
+import com.kento.springprofilewebapp.service.LikeService;
 import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor // コンストラクタを自動で入れてくれる物！
 public class UserController {
     private final UserService userService; // 定数にしておくよ！
+    private final LikeService likeService; // 定数にしておく。いいね昨日のコントロール用
 
     // 各ユーザーページを表示する
     @GetMapping("/{id}")
@@ -126,5 +128,21 @@ public class UserController {
             Model model) { // 取得したものを入れる用のもの
         model.addAttribute("users", userService.getLimitedUsers(page, 5)); // page:ページ数 size：いくつ取得するか
         return "userlist";
+    }
+
+    // いいねした時の動作(Postリクエスト)
+    /**
+     * (Postリクエスト)いいね！をする機能です。Likeテーブルにいいねした人といいねされた人の情報を登録、または編集します。
+     * @param id いいねされる対象のユーザID(通常は自動で渡します。)
+     * @param user ユーザIDから対象のユーザを検索します
+     * @param loginUser 現在ログイン中のユーザがここに入ります。
+     * @return DBに保存して、プロフィールページに遷移します。
+     */
+    @PostMapping("/{id}/like")
+    public String likeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.likeYou(loginUser.getId(), id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+        return "profile";
     }
 }
