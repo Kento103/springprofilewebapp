@@ -42,4 +42,40 @@ public class LikeService {
         likes.setToLikeUserId(toUser); // いいねされるユーザ(対象のユーザー)
         return likeRepository.save(likes);
     }
+
+    // 特定のユーザーのいいねされた数のカウント
+    /**
+     * 特定のユーザのいいねされた数のカウントをします。
+     * @param id 検索対象のユーザID
+     * @return いいねされた数を返します。
+     */
+    public int likesCount(int id) {
+        return likeRepository.likesCount(id);
+    }
+
+    /**
+     * 対象のユーザがすでにいいねしているか確認します。(主にいいねしたかの確認に用います。)
+     * 検索したユーザーがいいねをすでにしていたらtrueを、していなかったらfalseを返します。
+     * @param loginId いいねを送った人(通常はログインしているユーザのIDを検索対象にする)
+     * @param id いいねを送られた人(通常は表示中のページの対象ユーザ)
+     * @return すでにいいねされている場合はtrueを、まだいいねしたことのない場合はfalseを返します。
+     */
+    public boolean isExistLike(int loginId, int id) {
+        if (likeRepository.existByLike(loginId, id)) {
+            // 存在する場合の処理
+            return true;
+        } else {
+            // 存在しない場合の処理
+            return false;
+        }
+    }
+
+    /**
+     * 指定したレコードを検索して削除します。返り値はありません。
+     * @param loginId 対象のいいねを送ったユーザ
+     * @param id 対象のいいねされたユーザ
+     */
+    public void unLikeYou(int loginId, int id) {
+        likeRepository.removeLike(loginId, id);
+    }
 }

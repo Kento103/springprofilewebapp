@@ -83,4 +83,5 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
  * findById([データ型] [テーブルの名前]) 例）findById(int id)
  * save(User user) 新規登録または更新する
  * count() 全部の件数を取得する
+ * existById(userId) 存在チェックができる。 例) existsById(userId)
  */

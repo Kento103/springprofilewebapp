@@ -34,9 +34,11 @@ public class UserController {
 
     // 各ユーザーページを表示する
     @GetMapping("/{id}")
-    public String getUserPage(@PathVariable int id, Model model) {
+    public String getUserPage(@PathVariable int id, Model model, @AuthenticationPrincipal Users loginUser) {
         Users user = userService.getUserById(id); // usersテーブルのidから該当の情報尾を検索する
         model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
+        model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。
+        model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
         return "profile"; // profile.htmlのページを表示する
     }
 
@@ -143,6 +145,23 @@ public class UserController {
         user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
         model.addAttribute("user", user);
         likeService.likeYou(loginUser.getId(), id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
-        return "profile";
+        return "redirect:/users/{id}";
+    }
+
+    // いいねをやめる(取り消し)の動作(Postリクエスト)
+    /**
+     * (Postリクエスト)いいねを取り消す機能です。Likeテーブルのレコード情報を削除します。
+     * @param id いいねされたユーザID
+     * @param user Userエンティティ
+     * @param loginUser ログイン中のユーザID
+     * @param model モデル
+     * @return DBから削除してプロフィールページに遷移します。
+     */
+    @PostMapping("/{id}/unlike")
+    public String unLikeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当ユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.unLikeYou(loginUser.getId(), id); // fromにはログイン中のユーザーid、toには対象のユーザIDが入る。該当のいいねのレコードを削除して保存する
+        return "redirect:/users/{id}";
     }
 }
