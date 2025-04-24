@@ -10,3 +10,22 @@
 .button-not-used:hover {
     cursor: not-allowed;
 }
+
+/* いいねマーク用 */
+.like {
+    color: red;
+    font-size: 30px;
+}
+.not-like {
+    color: rgb(20, 20, 20);
+    font-size: 30px;
+}
+
+/* ボタンUI */
+/* ボタンの外枠非表示 */
+.btn-no-outline {
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
