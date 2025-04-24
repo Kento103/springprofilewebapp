@@ -1,0 +1,34 @@
+package com.kento.springprofilewebapp.model;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+// DTOです！
+// データベースのテーブルに対応するエンティティを作成
+@Entity
+@Table(name = "likes") // テーブル名
+@NoArgsConstructor
+@AllArgsConstructor
+@Data // ゲッターセッターを自動で生成
+public class Likes {
+    @Id // しゅきー！！(Likeだけに)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 自動採番(AutoInq)を設定する。これにより、IDは自動設定される。
+    private int id; // 管理ID(PK、NN、UQ)
+
+    @ManyToOne
+    @JoinColumn(name = "from_like_id")
+    private Users fromLikeUserId; // いいね！した本人(誰からいいねをもらったか確認する為にある)
+
+    @ManyToOne
+    @JoinColumn(name = "to_Like_id")
+    private Users toLikeUserId; // いいね！を誰に押したか確認する為の物(いいね！をいくつもらえたかの確認にも使える)
+}

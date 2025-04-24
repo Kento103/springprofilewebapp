@@ -30,6 +30,11 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+    // ユーザー情報を保存する(基本的な保存)
+    public void save(Users users) {
+        userRepository.save(users);
+    }
+    
     // ユーザー登録する
     public Users registerUser(String username, String email, String password, String hurigana, String description, int sexial, String role, int age) {
         String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュ化する
@@ -53,6 +58,11 @@ public class UserService {
     // 最初の5件を取得する
     public List<Users> getLimitedUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page, size)).getContent(); // 最初のページの5件を取得する
+    }
+
+    // テーブルの全レコード件数を取得する
+    public long countUsers() {
+        return userRepository.count();
     }
 
     // 指定したユーザーを削除フラグを立てる(論理削除)

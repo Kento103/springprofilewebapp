@@ -9,8 +9,16 @@
         <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <!--ここから新ページ用-->
             <div class="user-container">
+                <!-- プロフィール画像があるときの画像表示用 -->
+                <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
+                <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                 <!--ユーザー名の表示用-->
                 <h2 th:text="${user.username}">ユーザー名</h2>
+                <!-- いいねをまだしていない場合に表示 -->
+                <form th:if="${!isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいねする</span><i class="bi bi-heart-fill not-like"></i> <span th:text="${like}"></span></button></form>
+                <!-- いいねをすでにしている場合に表示 -->
+                <form th:if="${isLike}" th:action="@{/users/{id}/unlike(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいね取り消し</span><i class="bi bi-heart-fill like"></i> <span th:text="${like}"></span></button></form>
                 <!--登録されているメールアドレス(表示するかは要検討ふつうはないことが多いと思う)-->
                 <p>メールアドレス：<span th:text="${user.email}"></span></p>
                 <p><span th:text="${user.description}"></span></p>

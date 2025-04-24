@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>カテゴリ一覧 | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1>カテゴリー一覧</h1>
+        <a th:href="@{/inquiry/category/create}"><button class="btn btn-outline-primary"><i class="bi bi-plus-circle"></i> 新規追加</button></a>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">カテゴリ名</th>
+                    <th scope="col">編集</th>
+                    <th scope="col">削除</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="category : ${categorys}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                    <td><a th:href="@{/inquiry/category/{id}/edit(id=${category.id})}"><button class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i> 編集</button></a></td>
+                    <td><form th:action="@{/inquiry/category/{id}/delete(id=${category.id})}" method="post"><button class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 削除</button></form></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

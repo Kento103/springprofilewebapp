@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>お問い合わせ一覧 | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1>お問い合わせ</h1>
+        <a th:href="@{/inquiry/category}"><button class="btn btn-outline-primary"><i class="bi bi-list-ul"></i> カテゴリ設定</button></a>
+        <table border="1" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">投稿者</th>
+                    <th scope="col">カテゴリー</th>
+                    <th scope="col">内容</th>
+                    <th scope="col">ステータス</th>
+                    <th scope="col">詳細</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="inquiry : ${inquirys}">
+                    <!-- 内部結合したものを使いたいときは、inquiry.内部結合したテーブル.カラム名で指定する -->
+                    <td th:text="${inquiry.id}"></td>
+                    <td th:text="${inquiry.users.username}"></td>
+                    <td th:text="${inquiry.categorys.name}"></td>
+                    <td th:text="${inquiry.description}"></td>
+                    <td th:text="${inquiry.status}"></td>
+                    <td><a th:href="@{/inquiry/{id}(id=${inquiry.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-journal-text"></i> 詳細</button></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

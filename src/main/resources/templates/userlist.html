@@ -33,6 +33,19 @@
                 </tr>
             </tbody>
         </table>
+        <!-- ページボタン用 -->
+        <div class="page-btn">
+            <!-- 最初のページ(page=0)を表示するただし、最初のページの場合は表示しない -->
+            <a th:href="@{/admin/list(page=${0})}" th:if="${page > 0}"><button class="btn btn-outline-primary">最初のページ</button></a>
+            <!-- 一つ前のページを表示する。ただし、最初のページの場合は表示しない -->
+            <a th:href="@{/admin/list(page=${page - 1})}" th:if="${page > 0}"><button class="btn btn-outline-primary">前のページ</button></a>
+            <!-- 次のページを表示する。ただし、最後のページの場合は表示しない -->
+            <a th:href="@{/admin/list(page=${page + 1})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">次のページ</button></a>
+            <!-- 最後のページを表示する。ただし、最後のページの場合は表示しない -->
+            <a th:href="@{/admin/list(page=${maxpage})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">最後のページ</button></a>
+        </div>
+        <p><span th:text="${maxpage}"></span>中 / <span th:text="${page}"></span></p>
+        <p>全<span th:text="${allUsers}"></span>ユーザー</p>
     </div>
 </body>
 </html>

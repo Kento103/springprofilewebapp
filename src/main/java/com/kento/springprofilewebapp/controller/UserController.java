@@ -2,11 +2,18 @@ package com.kento.springprofilewebapp.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kento.springprofilewebapp.model.Users;
+import com.kento.springprofilewebapp.service.LikeService;
 import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,12 +30,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor // コンストラクタを自動で入れてくれる物！
 public class UserController {
     private final UserService userService; // 定数にしておくよ！
+    private final LikeService likeService; // 定数にしておく。いいね昨日のコントロール用
 
     // 各ユーザーページを表示する
     @GetMapping("/{id}")
-    public String getUserPage(@PathVariable int id, Model model) {
+    public String getUserPage(@PathVariable int id, Model model, @AuthenticationPrincipal Users loginUser) {
         Users user = userService.getUserById(id); // usersテーブルのidから該当の情報尾を検索する
         model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
+        model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。
+        model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
         return "profile"; // profile.htmlのページを表示する
     }
 
@@ -74,6 +84,37 @@ public class UserController {
             }
         }
     
+    // ユーザーのプロフィール画像を変更するための画面
+    @GetMapping("/{id}/edit/image")
+    public String changeImage(@PathVariable int id, Model model) {
+        Users users = userService.getUserById(id); // 対象のユーザーを検索
+        model.addAttribute("user", users);
+        return "useredit_image";
+    }
+
+    // プロフィール画像の変更を処理する(Postリクエスト)
+    @PostMapping("/{id}/edit/image")
+    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file) {
+        try {
+            Users user = userService.getUserById(id); // 対象のユーザーを検索
+            String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+            String filename = "user_" + id + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
+            Path path = Paths.get(uploadDir + filename);
+            Files.createDirectories(path.getParent()); // ディレクトリがない時は作成してくれる。
+            file.transferTo(path.toFile());
+
+            // データベースにデータを保管する
+            user.setImagePath("/images/" + filename); // Webでアクセスするパスになる
+            userService.save(user);
+
+            return "redirect:/users/{id}";
+        } catch (IOException e) {
+            e.printStackTrace(); // ログ出力
+            return "error"; // エラーページに遷移する(未実装)
+        }
+        
+    }
+
     // ユーザーリスト一覧(ここは、usersのルートで表示したいので、@GetMappingの)引数は入れない！
     // そのうち抹消対象
     @GetMapping
@@ -89,5 +130,38 @@ public class UserController {
             Model model) { // 取得したものを入れる用のもの
         model.addAttribute("users", userService.getLimitedUsers(page, 5)); // page:ページ数 size：いくつ取得するか
         return "userlist";
+    }
+
+    // いいねした時の動作(Postリクエスト)
+    /**
+     * (Postリクエスト)いいね！をする機能です。Likeテーブルにいいねした人といいねされた人の情報を登録、または編集します。
+     * @param id いいねされる対象のユーザID(通常は自動で渡します。)
+     * @param user ユーザIDから対象のユーザを検索します
+     * @param loginUser 現在ログイン中のユーザがここに入ります。
+     * @return DBに保存して、プロフィールページに遷移します。
+     */
+    @PostMapping("/{id}/like")
+    public String likeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.likeYou(loginUser.getId(), id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+        return "redirect:/users/{id}";
+    }
+
+    // いいねをやめる(取り消し)の動作(Postリクエスト)
+    /**
+     * (Postリクエスト)いいねを取り消す機能です。Likeテーブルのレコード情報を削除します。
+     * @param id いいねされたユーザID
+     * @param user Userエンティティ
+     * @param loginUser ログイン中のユーザID
+     * @param model モデル
+     * @return DBから削除してプロフィールページに遷移します。
+     */
+    @PostMapping("/{id}/unlike")
+    public String unLikeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当ユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.unLikeYou(loginUser.getId(), id); // fromにはログイン中のユーザーid、toには対象のユーザIDが入る。該当のいいねのレコードを削除して保存する
+        return "redirect:/users/{id}";
     }
 }

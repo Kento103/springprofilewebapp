@@ -36,8 +36,9 @@
             <!--管理者ユーザ時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_ADMIN')">
                 <li><a th:href="@{/admin}" class="menu-list"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
-                <li><a th:href="@{/users}" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
+                <li><a th:href="@{/admin/list}" class="menu-list"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
                 <li><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="menu-list">マイページ</a></li>
+                <li><a th:href="@{/inquiry}" class="menu-list">お問い合わせ管理</a></li>
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
             </ul>
         </div>

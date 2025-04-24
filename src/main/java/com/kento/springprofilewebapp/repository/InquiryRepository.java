@@ -1,0 +1,30 @@
+package com.kento.springprofilewebapp.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.kento.springprofilewebapp.model.Categorys;
+import com.kento.springprofilewebapp.model.Inquirys;
+
+public interface InquiryRepository extends JpaRepository<Inquirys, Integer>{
+    // usersテーブルのidカラムを内部結合する。(users.id)
+    @Query("SELECT i FROM Inquirys i JOIN i.users u")
+    List<Inquirys> findAllWithUsers();
+
+    // categorysテーブルのidカラムを内部結合する(categorys.id)
+    @Query("SELECT i FROM Inquirys i JOIN i.categorys n")
+    List<Inquirys> findAllWithCategorys();
+}
+
+/*
+ * Repositoryのインターフェースを作成
+ * Spring Data JPAのJpaRepositoryを継承することで、自動的にCRUD処理を実装できる。
+ * 
+ * JpaRepositoryが提供するメゾット(デフォで使える)有能！
+ * findAll() 全件取得する
+ * findById([データ型] [テーブルの名前]) 例）findById(int id)
+ * save(User user) 新規登録または更新する
+ * count() 全部の件数を取得する
+ */

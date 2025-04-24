@@ -8,6 +8,11 @@
     <header th:replace="~{base/layout::header}"></header>
     <div class="main-content container-md">
             <h2><i class="bi bi-person-add"></i> ユーザー編集</h2>
+            <div class="mb-3">
+                <label for="image" class="form-label">プロフィール画像</label><br>
+                <a th:href="@{/users/{id}/edit/image(id=${user.id})}"><button class="btn btn-success"><i class="bi bi-image"></i> プロフィール画像の変更</button></a>
+                <div class="form-text">プロフィール画像を変更するにはこのボタンを押してください</div>
+            </div>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
         <form th:action="@{/users/{id}(id=${user.id})}" th:object="${user}" method="post">
             <div class="mb-3">

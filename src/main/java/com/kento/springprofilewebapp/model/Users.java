@@ -13,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -36,6 +37,17 @@ public class Users implements UserDetails {
     @Id // IDの主キーに設定する
     @GeneratedValue(strategy = GenerationType.IDENTITY) // startgy = GenerationType.IDENTITY自動採番する
     private int id;
+
+    @OneToMany(mappedBy = "users") // 一体多の関係mappedBY="テーブル名"を指定する。
+    private List<Inquirys> inquirysList; // 内部結合する為に使うもの(内部結合は必ずListとすること。)
+
+    // Likesモデル用
+    @OneToMany(mappedBy = "fromLikeUserId") // 一体多の関係(参照先の変数を指定すること！)
+    private List<Likes> likesSent; // 内部結合するために使うもの
+
+    // Likesモデル用
+    @OneToMany(mappedBy = "toLikeUserId")
+    private List<Likes> likesReception;
 
     // validationメッセージ message={0}で全部の情報が出てくる
     @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する) @Sizeはstring型のみ使える
@@ -75,6 +87,9 @@ public class Users implements UserDetails {
 
     // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ
     private boolean deleted;
+
+    // プロフィール画像のパスを保管するための変数
+    private String imagePath; // 画像のURLパス
 
     public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
         this.username = username; // ユーザー名
