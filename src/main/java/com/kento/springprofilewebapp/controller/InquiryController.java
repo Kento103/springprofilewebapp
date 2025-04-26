@@ -13,6 +13,7 @@ import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
 import com.kento.springprofilewebapp.service.CategoryService;
 import com.kento.springprofilewebapp.service.InquiryService;
+import com.kento.springprofilewebapp.service.MailService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class InquiryController {
     private final InquiryService inquiryService;
     private final CategoryService categoryService;
+    private final MailService mailService;
 
     // お問い合わせリスト
     @GetMapping
@@ -44,6 +46,12 @@ public class InquiryController {
             // 登録成功したときの処理
             inquiryService.registeInquiry(description);
             model.addAttribute("success", "お問い合わせの追加に成功しました");
+            // 本文を設定する
+            String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";
+            // メールの送信先
+            String mailTo = System.getenv("SPRING_MAIL_USERNAME");
+            // メールを送信する
+            mailService.sendMail(mailTo, "新規のお問い合わせがありました", mailBody);
             return "redirect:/";
         } catch (Exception e) {
             // 登録失敗したときの処理
