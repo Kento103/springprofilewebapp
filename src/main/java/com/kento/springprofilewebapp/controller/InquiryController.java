@@ -37,6 +37,21 @@ public class InquiryController {
         return "inquiry_create";
     }
 
+    // お問い合わせ内容を送信する(Postリクエスト)
+    @PostMapping("/create")
+    public String inquieyAdd(@RequestParam String description, Model model) {
+        try {
+            // 登録成功したときの処理
+            inquiryService.registeInquiry(description);
+            model.addAttribute("success", "お問い合わせの追加に成功しました");
+            return "redirect:/";
+        } catch (Exception e) {
+            // 登録失敗したときの処理
+            model.addAttribute("error", "お問い合わせの追加に失敗しました！内容を確認してください");
+            return "inquiry_create";
+        }
+    }
+
     // 各お問い合わせ内容を表示する
     @GetMapping("/{id}")
     public String getInquiry(@PathVariable int id, Model model) {

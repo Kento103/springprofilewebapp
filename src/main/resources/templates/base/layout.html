@@ -27,11 +27,13 @@
             <ul sec:authorize="isAnonymous()">
                 <li><a th:href="@{/login}" class="menu-list"><i class="fa-regular fa-circle-user"></i> ログイン</a></li>
                 <li><a th:href="@{/register}" class="menu-list"><i class="bi bi-door-open"></i> 新規登録</a></li>
+                <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
             <!--一般ユーザログイン時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_USER')">
                 <li><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="menu-list">マイページ</a></li>
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
+                <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
             <!--管理者ユーザ時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_ADMIN')">
