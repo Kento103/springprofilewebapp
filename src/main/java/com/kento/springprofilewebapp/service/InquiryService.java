@@ -37,8 +37,13 @@ public class InquiryService {
     }
 
     // お問い合わせ登録する
-    public Inquirys registeInquiry(String description) {
-        Inquirys inquirys = new Inquirys(description); // データを取得する
+    public Inquirys registeInquiry(String description, int categoryId) {
+        Inquirys inquirys = new Inquirys(description, categoryId); // データを取得する
         return inquiryRepository.save(inquirys); // 取得したものをモデルに挿入して、DBに保管する
+    }
+
+    // お問い合わせのアップデート
+    public Inquirys updateInquiry(Inquirys inquiry) {
+        return inquiryRepository.save(inquiry);
     }
 }

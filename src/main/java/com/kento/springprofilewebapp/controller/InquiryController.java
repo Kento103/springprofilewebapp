@@ -1,5 +1,7 @@
 package com.kento.springprofilewebapp.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,16 +37,18 @@ public class InquiryController {
 
     // お問い合わせ新規作成
     @GetMapping("/create")
-    public String inquieyCreate() {
+    public String inquieyCreate(Model model) {
+        List<Categorys> categorys = categoryService.getAllLists(); // カテゴリをDBから全件取得する
+        model.addAttribute("categorys", categorys); // 取得したカテゴリリストをcategorysに入れる
         return "inquiry_create";
     }
 
     // お問い合わせ内容を送信する(Postリクエスト)
     @PostMapping("/create")
-    public String inquieyAdd(@RequestParam String description, Model model) {
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, Model model) {
         try {
             // 登録成功したときの処理
-            inquiryService.registeInquiry(description);
+            inquiryService.registeInquiry(description, category);
             model.addAttribute("success", "お問い合わせの追加に成功しました");
             // 本文を設定する
             String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";
@@ -66,6 +70,17 @@ public class InquiryController {
         Inquirys inquirys = inquiryService.getInquirysById(id);
         model.addAttribute("inquiry", inquirys);
         return "inquiry_description";
+    }
+
+    // お問い合わせのステータスを更新する(Postリクエスト)
+    @PostMapping("/{id}/update")
+    public String updateInquiry(@PathVariable int id, @RequestParam int status) {
+        System.out.println(id);
+        System.out.println(status);
+        Inquirys inquiry = inquiryService.getInquirysById(id);
+        inquiry.setStatus(status);
+        inquiryService.updateInquiry(inquiry);
+        return "redirect:/inquiry";
     }
 
     // カテゴリーリストを表示する

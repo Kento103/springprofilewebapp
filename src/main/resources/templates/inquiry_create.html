@@ -18,6 +18,13 @@
                 <input type="text" name="description" id="description" class="form-control" required>
                 <div class="form-text">お問い合わせ内容を入力</div>
             </div>
+            <div class="mb-3">
+                <label for="category">カテゴリー</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option th:each="category : ${categorys}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+                <div class="form-text">お問い合わせのカテゴリを検索</div>
+            </div>
             <button type="submit" class="btn btn-primary">送信する</button>
         </form>
     </div>

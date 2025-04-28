@@ -26,7 +26,8 @@
                     <td th:text="${inquiry.id}"></td>
                     <td th:text="${inquiry.users.username}"></td>
                     <td th:text="${inquiry.categorys.name}"></td>
-                    <td th:text="${inquiry.description}"></td>
+                    <!-- #.substringで文字数制限をかけられる -->
+                    <td th:text="${#strings.length(inquiry.description) <= 10} ? ${inquiry.description} : ${inquiry.description.substring(0, 10) + '...'}"></td>
                     <td th:text="${inquiry.status}"></td>
                     <td><a th:href="@{/inquiry/{id}(id=${inquiry.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-journal-text"></i> 詳細</button></a></td>
                 </tr>

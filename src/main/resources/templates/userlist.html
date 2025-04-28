@@ -44,7 +44,7 @@
             <!-- 最後のページを表示する。ただし、最後のページの場合は表示しない -->
             <a th:href="@{/admin/list(page=${maxpage})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">最後のページ</button></a>
         </div>
-        <p><span th:text="${maxpage}"></span>中 / <span th:text="${page}"></span></p>
+        <p>現在<span th:text="${page}"></span>ページ / 全<span th:text="${maxpage}"></span>ページ</p>
         <p>全<span th:text="${allUsers}"></span>ユーザー</p>
     </div>
 </body>

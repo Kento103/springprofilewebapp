@@ -13,6 +13,18 @@
             <p>カテゴリ：<span th:text="${inquiry.categorys.name}"></span></p>
             <p><span th:text="${inquiry.description}"></span></p>
         </div>
+        <form th:action="@{/inquiry/{id}/update(id=${inquiry.id})}" method="post">
+            <div class="mb-3">
+                <label for="status">対応状況更新</label>
+                <select name="status" id="status" class="form-select">
+                    <option value="0">未対応</option>
+                    <option value="1">対応中</option>
+                    <option value="2">対応完了</option>
+                    <option value="3">対応不要</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">ステータス更新</button>
+        </form>
     </div>
 </body>
 </html>
