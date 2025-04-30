@@ -2,6 +2,7 @@ package com.kento.springprofilewebapp.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
+import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.CategoryService;
 import com.kento.springprofilewebapp.service.InquiryService;
 import com.kento.springprofilewebapp.service.MailService;
@@ -45,10 +47,10 @@ public class InquiryController {
 
     // お問い合わせ内容を送信する(Postリクエスト)
     @PostMapping("/create")
-    public String inquieyAdd(@RequestParam String description, @RequestParam int category, Model model) {
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model) {
         try {
             // 登録成功したときの処理
-            inquiryService.registeInquiry(description, category);
+            inquiryService.registeInquiry(description, category, loginUser);
             model.addAttribute("success", "お問い合わせの追加に成功しました");
             // 本文を設定する
             String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";

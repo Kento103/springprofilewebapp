@@ -24,11 +24,18 @@
                 <tr th:each="inquiry : ${inquirys}">
                     <!-- 内部結合したものを使いたいときは、inquiry.内部結合したテーブル.カラム名で指定する -->
                     <td th:text="${inquiry.id}"></td>
-                    <td th:text="${inquiry.users.username}"></td>
+                    <!-- ログインありの時 -->
+                    <td th:if="${inquiry.users != null}" th:text="${inquiry.users.username}"></td>
+                    <!-- ログインなしの時 -->
+                    <td th:if="${inquiry.users == null}">ゲスト</td>
                     <td th:text="${inquiry.categorys.name}"></td>
                     <!-- #.substringで文字数制限をかけられる -->
                     <td th:text="${#strings.length(inquiry.description) <= 10} ? ${inquiry.description} : ${inquiry.description.substring(0, 10) + '...'}"></td>
-                    <td th:text="${inquiry.status}"></td>
+                    <!-- ステータスは数字で管理し、そのまま文字に変換して表示する -->
+                    <td th:if="${inquiry.status} == 0">未対応</td>
+                    <td th:if="${inquiry.status} == 1">対応中</td>
+                    <td th:if="${inquiry.status} == 2">対応完了</td>
+                    <td th:if="${inquiry.status} == 3">対応不要</td>
                     <td><a th:href="@{/inquiry/{id}(id=${inquiry.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-journal-text"></i> 詳細</button></a></td>
                 </tr>
             </tbody>
