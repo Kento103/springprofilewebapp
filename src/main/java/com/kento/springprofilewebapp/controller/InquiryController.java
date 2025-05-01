@@ -1,5 +1,8 @@
 package com.kento.springprofilewebapp.controller;
 
+import java.util.List;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
+import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.CategoryService;
 import com.kento.springprofilewebapp.service.InquiryService;
+import com.kento.springprofilewebapp.service.MailService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class InquiryController {
     private final InquiryService inquiryService;
     private final CategoryService categoryService;
+    private final MailService mailService;
 
     // お問い合わせリスト
     @GetMapping
@@ -33,8 +39,31 @@ public class InquiryController {
 
     // お問い合わせ新規作成
     @GetMapping("/create")
-    public String inquieyCreate() {
+    public String inquieyCreate(Model model) {
+        List<Categorys> categorys = categoryService.getAllLists(); // カテゴリをDBから全件取得する
+        model.addAttribute("categorys", categorys); // 取得したカテゴリリストをcategorysに入れる
         return "inquiry_create";
+    }
+
+    // お問い合わせ内容を送信する(Postリクエスト)
+    @PostMapping("/create")
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model) {
+        try {
+            // 登録成功したときの処理
+            inquiryService.registeInquiry(description, category, loginUser);
+            model.addAttribute("success", "お問い合わせの追加に成功しました");
+            // 本文を設定する
+            String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";
+            // メールの送信先
+            String mailTo = System.getenv("SPRING_MAIL_USERNAME");
+            // メールを送信する
+            mailService.sendMail(mailTo, "新規のお問い合わせがありました", mailBody);
+            return "redirect:/";
+        } catch (Exception e) {
+            // 登録失敗したときの処理
+            model.addAttribute("error", "お問い合わせの追加に失敗しました！内容を確認してください");
+            return "inquiry_create";
+        }
     }
 
     // 各お問い合わせ内容を表示する
@@ -43,6 +72,17 @@ public class InquiryController {
         Inquirys inquirys = inquiryService.getInquirysById(id);
         model.addAttribute("inquiry", inquirys);
         return "inquiry_description";
+    }
+
+    // お問い合わせのステータスを更新する(Postリクエスト)
+    @PostMapping("/{id}/update")
+    public String updateInquiry(@PathVariable int id, @RequestParam int status) {
+        System.out.println(id);
+        System.out.println(status);
+        Inquirys inquiry = inquiryService.getInquirysById(id);
+        inquiry.setStatus(status);
+        inquiryService.updateInquiry(inquiry);
+        return "redirect:/inquiry";
     }
 
     // カテゴリーリストを表示する

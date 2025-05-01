@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
+import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.repository.InquiryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -35,5 +35,16 @@ public class InquiryService {
     // categorysテーブルのidカラムを内部結合する
     public List<Inquirys> getInquirysWithCategorys() {
         return inquiryRepository.findAllWithCategorys();
+    }
+
+    // お問い合わせ登録する
+    public Inquirys registeInquiry(String description, int categoryId, Users user) {
+        Inquirys inquirys = new Inquirys(description, categoryId, user); // データを取得する
+        return inquiryRepository.save(inquirys); // 取得したものをモデルに挿入して、DBに保管する
+    }
+
+    // お問い合わせのアップデート
+    public Inquirys updateInquiry(Inquirys inquiry) {
+        return inquiryRepository.save(inquiry);
     }
 }

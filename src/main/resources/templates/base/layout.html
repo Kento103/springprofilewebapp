@@ -5,12 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>noname - SpringBootアプリ</title>
+    <!-- BootStrap5 -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" th:href="@{/css/status.css}">
+    <!-- fontAwesome -->
     <script src="https://kit.fontawesome.com/97c4c8df8d.js" crossorigin="anonymous"></script>
     <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}" defer></script>
+    <!-- Beer CSS設定[https://www.beercss.com/] -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/beercss@3.10.8/dist/cdn/beer.min.css" rel="stylesheet"> -->
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.10.8/dist/cdn/beer.min.js"></script> -->
+    <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.2/dist/cdn/material-dynamic-colors.min.js"></script> -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/status.css}">
 
     <!--各View固有で読み込むものを指定-->
     <th:block th:replace="${links} ?: _" />
@@ -27,11 +33,13 @@
             <ul sec:authorize="isAnonymous()">
                 <li><a th:href="@{/login}" class="menu-list"><i class="fa-regular fa-circle-user"></i> ログイン</a></li>
                 <li><a th:href="@{/register}" class="menu-list"><i class="bi bi-door-open"></i> 新規登録</a></li>
+                <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
             <!--一般ユーザログイン時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_USER')">
                 <li><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="menu-list">マイページ</a></li>
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
+                <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
             <!--管理者ユーザ時のメニュー-->
             <ul sec:authorize="hasRole('ROLE_ADMIN')">

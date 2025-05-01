@@ -103,6 +103,11 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>3.4.0</version>
 		</dependency>
+		<!-- メール送信 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -42,4 +42,15 @@ public class Inquirys {
 
     // ステータス
     private int status;
+
+    public Inquirys(String description, int categoryId, Users users) {
+        Categorys category = new Categorys();
+        category.setId(categoryId); // 受け取ったカテゴリIDを挿入する
+        //Users user = new Users();
+        //user.setId(3); // いったん仮で1を挿入する
+        this.description = description; // お問い合わせ内容
+        this.categorys = category;
+        this.users = users; // 投稿したユーザを代入する。
+        this.status = 0; // 仮挿入
+    }
 }
