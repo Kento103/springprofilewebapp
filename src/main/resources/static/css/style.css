@@ -50,3 +50,9 @@ body {
     height: 300px;
     border-radius: 50%;
 }
+
+/* ふりがな表示用 */
+.hurigana {
+    font-size: 50%;
+    color: #555555;
+}
