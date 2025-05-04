@@ -82,4 +82,19 @@ public class AdminController {
         }
         return "redirect:/admin/list";
     }
+
+    // ユーザのアカウントロック状態を変更する
+    @PostMapping("{id}/locked")
+    public String changeLock(@PathVariable int id, Users user, Model model) {
+        user = userService.getUserById(id);
+        System.out.println(user.isAccountNonLocked());
+        if (user.isAccountNonLocked()) {
+            // ロックされていないときはロックする
+            userService.changeLock(id);
+        } else if (!user.isAccountNonLocked()) {
+            // ロックされている時はロック解除する
+            userService.changeUnLock(id);
+        }
+        return "redirect:/admin/list";
+    }
 }

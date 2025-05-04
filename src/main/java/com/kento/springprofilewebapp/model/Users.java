@@ -88,6 +88,9 @@ public class Users implements UserDetails {
     // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ
     private boolean deleted;
 
+    // ユーザが無効(Ban)にされているか確認する:trueで無効化
+    private boolean locked;
+
     // プロフィール画像のパスを保管するための変数
     private String imagePath; // 画像のURLパス
 
@@ -116,7 +119,7 @@ public class Users implements UserDetails {
     // アカウントがロックされていないかBAN等の処理に用いる(falseでロック)
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked; // lockedの変数を読みに行く。false(lockd変数がtrue)の場合は、ログインさせない。
     }
 
     @Override

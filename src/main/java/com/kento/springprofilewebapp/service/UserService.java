@@ -94,4 +94,16 @@ public class UserService {
     public void changeGrant(int id, String grantName) {
         userRepository.changeUserGrant(id, grantName);
     }
+
+    // 指定したユーザのロック状態の変更をする
+    @Transactional
+    public void changeLock(int id) {
+        userRepository.accountLock(id);
+    }
+
+    // 指定したユーザのロック状態を解除する
+    @Transactional
+    public void changeUnLock(int id) {
+        userRepository.accoutUnLock(id);
+    }
 }
