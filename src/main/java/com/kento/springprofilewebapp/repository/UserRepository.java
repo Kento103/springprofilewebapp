@@ -72,6 +72,14 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
      */
     @Query(value = "SELECT * FROM users WHERE users.deleted = true", nativeQuery = true)
     List<Users> findByDeleted();
+
+    /*
+     * 権限の変更をする
+     */
+    @Transactional
+    @Modifying
+    @Query("update Users u set u.role = :grant where u.id = :id")
+    void changeUserGrant(@Param("id") int id, String grant);
 }
 
 /*

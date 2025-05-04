@@ -72,10 +72,10 @@
             </div>
             <!--管理者ユーザー時のメニュー-->
             <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
-                <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
-                <label><input type="radio" name="role" id="role" value="ROLE_USER" checked> 一般ユーザ</label>
-                <label><input type="radio" name="role" id="role" value="ROLE_ADMIN"> 管理者</label>
-                <span class="error" th:errors="*{role}"></span>
+                <label for="role" class="form-label">権限： 
+                    <span th:if="${user.role == 'ROLE_USER'}">一般ユーザ</span>
+                    <span th:if="${user.role == 'ROLE_ADMIN'}">管理者</span>
+                </label>
                 <div class="form-text">
                     一般ユーザ：自分自身の情報を編集できる<br>
                     管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
@@ -93,7 +93,7 @@
             <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
             <div class="mb-3">
                 <label for="form-label">権限の変更</label><br>
-                <button class="btn btn-danger"><i class="bi bi-award-fill"></i> アクセス権限変更</button>
+                <form th:action="@{/admin/{id}/grant(id=${user.id})}" method="post"><button class="btn btn-danger"><i class="bi bi-award-fill"></i> アクセス権限変更</button></form>
                 <div class="form-text">一般ユーザと管理者権限の変更が行えます。</div>
             </div>
             <div class="mb-3">

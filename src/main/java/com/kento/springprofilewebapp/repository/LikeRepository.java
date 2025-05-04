@@ -1,5 +1,7 @@
 package com.kento.springprofilewebapp.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -42,4 +44,8 @@ public interface LikeRepository extends JpaRepository<Likes, Integer>{
     @Modifying
     @Query(value = "DELETE FROM Likes l WHERE l.fromLikeUserId.id = :loginId AND l.toLikeUserId.id = :id", nativeQuery = false)
     void removeLike(@Param("loginId") int loginId, @Param("id") int id);
+
+    // いいねが多い順番に並び替える
+    @Query(value = "select u.id, u.username, count(l.id) as like_count from users u left join likes l on u.id = l.to_like_id group by u.id, u.username order by like_count desc", nativeQuery = true)
+    List<Likes> rankLike();
 }

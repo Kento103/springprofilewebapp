@@ -25,7 +25,7 @@ public class SecurityConfig {
         http.formLogin(login -> login
             .loginProcessingUrl("/login") // ログインページ
             .loginPage("/login") // ログインページの指定
-            .defaultSuccessUrl("/user", true) // ログイン成功した際にリダイレクトするページ
+            .defaultSuccessUrl("/dashboard", true) // ログイン成功した際にリダイレクトするページ
             .failureUrl("/login?error") // ログイン失敗したときに移動するページ
             .permitAll() // このページは誰でも許可
         ).logout(logout -> logout

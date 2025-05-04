@@ -88,4 +88,10 @@ public class UserService {
     public void removeUser(int id) {
         userRepository.removeUser(id);
     }
+
+    // 指定したユーザの権限変更をする
+    @Transactional
+    public void changeGrant(int id, String grantName) {
+        userRepository.changeUserGrant(id, grantName);
+    }
 }
