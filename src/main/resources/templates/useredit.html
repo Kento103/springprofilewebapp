@@ -13,6 +13,16 @@
                 <a th:href="@{/users/{id}/edit/image(id=${user.id})}"><button class="btn btn-success"><i class="bi bi-image"></i> プロフィール画像の変更</button></a>
                 <div class="form-text">プロフィール画像を変更するにはこのボタンを押してください</div>
             </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">パスワードの変更</label><br>
+                <a th:href="@{/users/{id}/edit/password(id=${user.id})}"><button class="btn btn-danger"><i class="bi bi-key-fill"></i> パスワードの変更</button></a>
+                <div class="form-text">パスワードを変更するにはこのボタンをクリックしてください</div>
+                <!-- <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
+                <input type="password" id="password" name="password" th:field="*{password}" class="form-control">
+                <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
+                <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
+                <span class="error" th:errors="*{password}"></span> -->
+            </div>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
         <form th:action="@{/users/{id}(id=${user.id})}" th:object="${user}" method="post">
             <div class="mb-3">
@@ -33,16 +43,6 @@
                 <label for="email" class="form-label">メールアドレス: <span class="badge bg-secondary">必須</span></label>
                 <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required />
                 <span class="error" th:errors="*{email}"></span>
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">パスワードの変更</label><br>
-                <button class="btn btn-danger"><i class="bi bi-key-fill"></i> パスワードの変更</button>
-                <div class="form-text">パスワードを変更するにはこのボタンをクリックしてください</div>
-                <!-- <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
-                <input type="password" id="password" name="password" th:field="*{password}" class="form-control">
-                <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
-                <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
-                <span class="error" th:errors="*{password}"></span> -->
             </div>
             <!--性別のコントローラ、モデル未実装-->
             <!-- <div class="mb-3">
@@ -72,10 +72,10 @@
             </div>
             <!--管理者ユーザー時のメニュー-->
             <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
-                <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
-                <label><input type="radio" name="role" id="role" value="ROLE_USER" checked> 一般ユーザ</label>
-                <label><input type="radio" name="role" id="role" value="ROLE_ADMIN"> 管理者</label>
-                <span class="error" th:errors="*{role}"></span>
+                <label for="role" class="form-label">権限： 
+                    <span th:if="${user.role == 'ROLE_USER'}">一般ユーザ</span>
+                    <span th:if="${user.role == 'ROLE_ADMIN'}">管理者</span>
+                </label>
                 <div class="form-text">
                     一般ユーザ：自分自身の情報を編集できる<br>
                     管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
@@ -93,12 +93,12 @@
             <h2 class="danger-text"><i class="bi bi-person-fill-exclamation"></i> アカウント管理</h2>
             <div class="mb-3">
                 <label for="form-label">権限の変更</label><br>
-                <button class="btn btn-danger"><i class="bi bi-award-fill"></i> アクセス権限変更</button>
+                <form th:action="@{/admin/{id}/grant(id=${user.id})}" method="post"><button class="btn btn-danger"><i class="bi bi-award-fill"></i> アクセス権限変更</button></form>
                 <div class="form-text">一般ユーザと管理者権限の変更が行えます。</div>
             </div>
             <div class="mb-3">
                 <label for="form-label">アカウントのロック・ロック解除</label><br>
-                <button class="btn btn-danger"><i class="bi bi-ban"></i> アカウントロック</button>
+                <form th:action="@{/admin/{id}/locked(id=${user.id})}" method="post"><button class="btn btn-danger"><i class="bi bi-ban"></i> アカウントロック</button></form>
                 <div class="form-text">アカウントをロックし、アカウントへのログインを無効化したり、ロックされたアカウントの解除を行うことが出来ます。</div>    
             </div>
             <div class="mb-3">

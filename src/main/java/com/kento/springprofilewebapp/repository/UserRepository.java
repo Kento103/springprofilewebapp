@@ -41,6 +41,24 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
         });
     }
 
+    // ユーザーに対してロック状態をつける
+    @Transactional
+    default void accountLock(int id) {
+        findById(id).ifPresent(user -> {
+            user.setLocked(true); // ロックする
+            save(user);
+        });
+    }
+
+    // ユーザに対してロックを解除する
+    @Transactional
+    default void accoutUnLock(int id) {
+        findById(id).ifPresent(user -> {
+            user.setLocked(false); // ロックを解除する
+            save(user);
+        });
+    }
+
     /*
      * 本来は上記の削除フラグを付与する方式のfalseで削除フラグを取り消し(false)にしたい。
      * しかし、モデルにて@Whereを入力してしまってるため、削除フラグがついているものは、検索出来ない。
@@ -72,6 +90,14 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
      */
     @Query(value = "SELECT * FROM users WHERE users.deleted = true", nativeQuery = true)
     List<Users> findByDeleted();
+
+    /*
+     * 権限の変更をする
+     */
+    @Transactional
+    @Modifying
+    @Query("update Users u set u.role = :grant where u.id = :id")
+    void changeUserGrant(@Param("id") int id, String grant);
 }
 
 /*

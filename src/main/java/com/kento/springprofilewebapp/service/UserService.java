@@ -42,6 +42,14 @@ public class UserService {
         return userRepository.save(user); // DBにユーザー情報を保管する
     }
 
+    // パスワードのみ変更する
+    public Users changePassword(int id, String password) {
+        Users user = userRepository.findById(id).orElse(null);
+        String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュかする
+        user.setPassword(encordedPassword);
+        return userRepository.save(user); // DBにユーザ情報を保管する
+    }
+
     // ユーザー情報を編集する
     public Users updateUser(int id, Users updatedUser) {
         return userRepository.findById(id) // ユーザーをIDで検索する
@@ -87,5 +95,23 @@ public class UserService {
     @Transactional
     public void removeUser(int id) {
         userRepository.removeUser(id);
+    }
+
+    // 指定したユーザの権限変更をする
+    @Transactional
+    public void changeGrant(int id, String grantName) {
+        userRepository.changeUserGrant(id, grantName);
+    }
+
+    // 指定したユーザのロック状態の変更をする
+    @Transactional
+    public void changeLock(int id) {
+        userRepository.accountLock(id);
+    }
+
+    // 指定したユーザのロック状態を解除する
+    @Transactional
+    public void changeUnLock(int id) {
+        userRepository.accoutUnLock(id);
     }
 }

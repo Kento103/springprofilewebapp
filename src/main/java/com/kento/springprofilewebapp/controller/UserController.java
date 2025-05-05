@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -111,6 +113,42 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace(); // ログ出力
             return "error"; // エラーページに遷移する(未実装)
+        }
+        
+    }
+
+    // ユーザーのパスワード変更を行うページ
+    @GetMapping("/{id}/edit/password")
+    public String editPassword(@PathVariable int id, Model model) {
+        Users users = userService.getUserById(id); // 対象のユーザーを検索
+        model.addAttribute("user", users);
+        return "useredit_password";
+    }
+
+    // パスワード変更処理を行う為のページ
+    @PostMapping("/{id}/edit/password")
+    public String changePassword(@PathVariable int id, @RequestParam String password, Model model) {
+        System.out.println(id);
+        System.out.println(password);
+        // パスワード専用バリデーションチェック(パスワードはハッシュ化するため、下の所でバリデーションチェック出来ない)
+        // チェック用(正規表現)検査値
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_-]{8,32}$");
+        // 正規表現被検査値
+        Matcher checkPassword = pattern.matcher(password);
+        // パスワードが正規表現に一致しているかチェックする
+        if (checkPassword.matches()) {
+            // パスワード正規表現Pass
+            try {
+                userService.changePassword(id, password);
+                return "redirect:/users/{id}";
+            } catch (Exception e) {
+                model.addAttribute("error", "パスワードの保存中にエラーが発生しました！");
+                return editPassword(id, model);
+            }
+        } else {
+            // パスワード正規表現fail
+            model.addAttribute("error", "パスワードは8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可です。");
+            return editPassword(id, model);
         }
         
     }
