@@ -33,7 +33,8 @@ public class SecurityConfig {
         ).authorizeHttpRequests(authz -> authz
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // 静的なものはすべて権限なしでも許可する
             .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // USERとADMINロールのみ許可する
-            .requestMatchers("/admin").hasAnyRole("ADMIN") //管理者権限があるユーザーのみ閲覧を許可する
+            .requestMatchers("/admin/**").hasAnyRole("ADMIN") //管理者権限があるユーザーのみ閲覧を許可する
+            .requestMatchers("/inquiry").hasAnyRole("ADMIN") // 管理者ユーザのみ許可する
             .requestMatchers("/register").permitAll() // 権限なしでも許可する
             .requestMatchers("/inquiry/create").permitAll() // お問い合わせ画面
             .requestMatchers("/").permitAll() // 権限なしでも許可する

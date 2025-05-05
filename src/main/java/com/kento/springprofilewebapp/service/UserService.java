@@ -42,6 +42,14 @@ public class UserService {
         return userRepository.save(user); // DBにユーザー情報を保管する
     }
 
+    // パスワードのみ変更する
+    public Users changePassword(int id, String password) {
+        Users user = userRepository.findById(id).orElse(null);
+        String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュかする
+        user.setPassword(encordedPassword);
+        return userRepository.save(user); // DBにユーザ情報を保管する
+    }
+
     // ユーザー情報を編集する
     public Users updateUser(int id, Users updatedUser) {
         return userRepository.findById(id) // ユーザーをIDで検索する
