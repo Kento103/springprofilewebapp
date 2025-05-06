@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,18 @@ public class LikeService {
      */
     public int likesCount(int id) {
         return likeRepository.likesCount(id);
+    }
+
+    // 指定した年から現在までに取得したいいねのカウントを表示します
+    public int likesCountYearAgo(int id, long fromYear) {
+        LocalDateTime yearAgo = LocalDateTime.now().minusYears(fromYear); // 指定した年からのデータを取得する
+        return likeRepository.likesCountPast(id, yearAgo); // 指定した年以降のものを検索して、その該当の件数を返す。
+    }
+
+    // 指定した月から現在までに取得したいいねのカウントを表示する
+    public int likesCountMonthAgo(int id, long fromMonth) {
+        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(fromMonth); // 指定した月以降のデータを取得する
+        return likeRepository.likesCountPast(id, monthAgo); // 指定した月以降の物を検索して、その該当の件数を返す。
     }
 
     /**

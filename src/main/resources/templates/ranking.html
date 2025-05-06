@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>いいねランキング | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+        <h1>いいねランキング</h1>
+        <div class="row">
+            <div class="col-3 mb-3" th:each="user, iterStat : ${users}">
+                <div class="card" style="width: 18rem;">
+                    <!-- 画像登録があるときの画像表示用 -->
+                    <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="card-img-top">
+                    <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                    <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="card-img-top">
+                    <div class="card-body">
+                        <h5><span th:text="${iterStat.count}"></span>位</h5>
+                        <h5 th:text="${user.username}" class="card-title"></h5>
+                        <p th:text="${user.description}" class="card-text"></p>
+                        <p>いいね：<span th:text="${user.totalLikes}"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

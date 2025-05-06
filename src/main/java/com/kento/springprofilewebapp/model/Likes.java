@@ -1,6 +1,8 @@
 package com.kento.springprofilewebapp.model;
 
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,4 +33,6 @@ public class Likes {
     @ManyToOne
     @JoinColumn(name = "to_Like_id")
     private Users toLikeUserId; // いいね！を誰に押したか確認する為の物(いいね！をいくつもらえたかの確認にも使える)
+
+    private LocalDateTime likedAt = LocalDateTime.now(); // いいねされた時間を現在時刻で記録する
 }

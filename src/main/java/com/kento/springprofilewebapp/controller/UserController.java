@@ -39,7 +39,9 @@ public class UserController {
     public String getUserPage(@PathVariable int id, Model model, @AuthenticationPrincipal Users loginUser) {
         Users user = userService.getUserById(id); // usersテーブルのidから該当の情報尾を検索する
         model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
-        model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。
+        model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。(総数)
+        model.addAttribute("like_year", likeService.likesCountYearAgo(id, 1)); // いいねされた数をカウントする(1年前から現在)
+        model.addAttribute("like_month", likeService.likesCountMonthAgo(id, 1)); // いいねされた数をカウントする(1カ月まえから現在)
         model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
         return "profile"; // profile.htmlのページを表示する
     }

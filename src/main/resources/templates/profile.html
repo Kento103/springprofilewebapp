@@ -27,6 +27,8 @@
                 <p>年齢：<span th:text="${user.age}"></span>歳</p>
                 <!-- 自己紹介欄 -->
                 <p><span th:text="${user.description}"></span></p>
+                <!-- 年間いいね -->
+                <p>年間いいね：<span th:text="${like_year}"></span>  月間いいね：<span th:text="${like_month}"></span></p>
                 <!-- いいねをまだしていない場合に表示 -->
                 <form th:if="${!isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいねする</span><i class="bi bi-heart-fill not-like"></i> <span th:text="${like}"></span></button></form>
                 <!-- いいねをすでにしている場合に表示 -->
