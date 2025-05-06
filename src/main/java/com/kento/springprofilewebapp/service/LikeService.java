@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.kento.springprofilewebapp.model.Likes;
@@ -28,7 +29,15 @@ public class LikeService {
     }
 
     // データの保存(いいねを保存する)
-    public Likes likeYou(int fromUserId, int toUserId) {
+    /*
+     * 注意！非同期処理(@Async)を実装する場合は、必ず返り値の型をvoid,Future<T>,CompletableFuture<T>とする必要がある
+     * 例）public void method() {}...結果を使わず、非同期で保存のみを行いたい場合(返り値なし)
+     * public Future<Likes> method() {}
+     * public CompletableFuture<Likes> method() {}...結果(Likesなど)を受け取りたい(返り値あり)
+     * 等にすること
+     */
+    @Async // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
+    public void likeYou(int fromUserId, int toUserId) {
         Likes likes = new Likes();
         /*
          * Likes.javaでfromLikeUserIdおぴょび、toLikeUserIdはUsersがたとなっている。
@@ -41,7 +50,7 @@ public class LikeService {
         // 変換後、挿入する
         likes.setFromLikeUserId(fromUser); // いいねしたユーザー(ログイン中のユーザ)
         likes.setToLikeUserId(toUser); // いいねされるユーザ(対象のユーザー)
-        return likeRepository.save(likes);
+        likeRepository.save(likes);
     }
 
     // 特定のユーザーのいいねされた数のカウント
@@ -88,6 +97,7 @@ public class LikeService {
      * @param loginId 対象のいいねを送ったユーザ
      * @param id 対象のいいねされたユーザ
      */
+    @Async // 非同期処理をするためのアノテーション
     public void unLikeYou(int loginId, int id) {
         likeRepository.removeLike(loginId, id);
     }
