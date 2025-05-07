@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('トップページ',~{::link},~{::script})}">
     <meta charset="UTF-8">
 <title>トップページ | SpringBootアプリ</title>
 </head>
@@ -8,18 +8,34 @@
     <header th:replace="~{base/layout::header}"></header>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>ユーザーリスト</h1>
-        <div class="row">
-            <div class="col-3 mb-3" th:each="user : ${users}">
+        <!-- <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0" th:each="user : ${users}">
                 <div class="card" style="width: 18rem;">
-                    <!-- 画像登録があるときの画像表示用 -->
                     <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="card-img-top">
-                    <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
                     <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="card-img-top">
                     <div class="card-body">
                         <h5 th:text="${user.username}" class="card-title"></h5>
                         <p th:text="${user.description}" class="card-text"></p>
                     </div>
                 </div>
+            </div>
+        </div> -->
+        <!-- 新フォーマット -->
+        <div class="card mb-3" style="max-width: 540px;" th:each="user : ${users}">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <!-- 画像登録があるときの画像表示用 -->
+                <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid rounded-start">
+                <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid rounded-start">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title" th:text="${user.username}"></h5>
+                  <p class="card-text" th:text="${user.description}"></p>
+                  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
             </div>
         </div>
     </div>

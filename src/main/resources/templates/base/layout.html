@@ -4,7 +4,7 @@
 <head th:fragment="meta_header(title,links,scripts)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>noname - SpringBootアプリ</title>
+    <title th:text="${title}+ ' - ProfileApp'">noname - ProfileApp</title>
     <!-- BootStrap5 -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -23,20 +23,51 @@
     <th:block th:replace="${scripts} ?: _" />
 </head>
 <body>
+    <!-- 新ヘッダー部分 -->
+    <nav class="navbar navbar-expand-md bg-body-secondary" th:fragment="header">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">ProfileApp</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-expanded="false" aria-label="ナビゲーション切り替え">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <!-- ログインしていないときのメニュー -->
+                <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="isAnonymous()">
+                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item"><a th:href="@{/login}" class="nav-link active" aria-current="page">ログイン</a></li>
+                    <li class="nav-item"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
+                </ul>
+                <!-- 一般ユーザでログインしているときのメニュー -->
+                <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="hasRole('ROLE_USER')">
+                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
+                    <li class="nav-item"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
+                </ul>
+                <!-- 管理者ユーザでログインしているときのメニュー -->
+                <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
+                    <li class="nav-item"><a th:href="@{/admin}" class="nav-link active" aria-current="page"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード</a></li>
+                    <li class="nav-item"><a th:href="@{/admin/list}" class="nav-link active" aria-current="page"><i class="bi bi-person-gear"></i> ユーザー管理</a></li>
+                    <li class="nav-item"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
+                    <li class="nav-item"><a th:href="@{/inquiry}" class="nav-link active" aria-current="page">お問い合わせ管理</a></li>
+            </div>
+        </div>
+    </nav>
     <!--ヘッダー部-->
-    <header th:fragment="header">
+    <!-- <header>
         <div class="header-logo container-fluid">
             <h1>SpringApp(仮)</h1>
         </div>
         <div class="header-menu">
-            <!--ログインなし時のメニュー-->
+           
             <ul sec:authorize="isAnonymous()">
                 <li><a th:href="@{/ranking}" class="menu-list">ランキング</a></li>
                 <li><a th:href="@{/login}" class="menu-list"><i class="fa-regular fa-circle-user"></i> ログイン</a></li>
                 <li><a th:href="@{/register}" class="menu-list"><i class="bi bi-door-open"></i> 新規登録</a></li>
                 <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
-            <!--一般ユーザログイン時のメニュー-->
+            
             <ul sec:authorize="hasRole('ROLE_USER')">
                 <li><a th:href="@{/}" class="menu-list">トップページ</a></li>
                 <li><a th:href="@{/ranking}" class="menu-list">ランキング</a></li>
@@ -44,7 +75,7 @@
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
                 <li><a th:href="@{/inquiry/create}" class="menu-list">お問い合わせ</a></li>
             </ul>
-            <!--管理者ユーザ時のメニュー-->
+            
             <ul sec:authorize="hasRole('ROLE_ADMIN')">
                 <li><a th:href="@{/}" class="menu-list">トップページ</a></li>
                 <li><a th:href="@{/ranking}" class="menu-list">ランキング</a></li>
@@ -55,7 +86,7 @@
                 <li><form th:action="@{/logout}" method="post"><button class="menu-list logout-btn"><i class="bi bi-door-open"></i> ログアウト</button></form></li>
             </ul>
         </div>
-    </header>
+    </header> -->
     <!--メイン部分-->
     <div th:fragment="maincontent" class="main-content container-md">
     </div>

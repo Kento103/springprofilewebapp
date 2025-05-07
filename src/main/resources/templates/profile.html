@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-    <head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+    <head th:replace="~{base/layout::meta_header(${user.username},~{::link},~{::script})}">
         <meta charset="UTF-8">
     <title>トップページ | SpringBootアプリ</title>
     </head>
