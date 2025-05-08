@@ -51,38 +51,38 @@ public class Users implements UserDetails {
 
     // validationメッセージ message={0}で全部の情報が出てくる
     @Size(min = 1, max = 255, message = "ユーザー名は255文字以内で入力してください") // バリデーション(1～255文字のみ許可する) @Sizeはstring型のみ使える
-    @NotBlank(message = "このフィールドは必須です") // @NotBlankはstring型のみ使える
+    @NotBlank(message = "{user.username.required}") // @NotBlankはstring型のみ使える
     @Column(nullable = false) // nulladle ..(nullを許可するか？)
     private String username;
 
     @Size(min = 1, max = 255, message = "メールアドレスは1～255文字以内で入力してください")
-    @NotBlank(message = "このフィールドは必須です")
-    @Email(message = "メールアドレスの正しい形式で入力してください")
+    @NotBlank(message = "{user.email.required}")
+    @Email(message = "{user.email.invalided}")
     @Column(nullable = false, unique = true) //unique...一意でないと登録できないようにする
     private String email;
 
     //@Pattern(regexp = "^[a-zA-Z0-9_-]$", message = "パスワードは半角英数と数字、_-のみ使用出来ます")
-    @NotBlank(message = "このフィールドは必須です")
+    @NotBlank(message = "{user.password.required}")
     @Column(nullable = false)
     private String password; // パスワード(ハッシュ化する！)
 
     private String role; // 権限設定は必ず(ROLE_[権限とすること] 例）ROLE_USER、ROLE_ADMIN)
 
-    @Size(min = 1, max = 255, message = "ふりがなは1～255文字以内で入力してください。")
-    @NotBlank(message = "このフィールドは必須です")
-    @Pattern(regexp = "^[ぁ-んー]*$", message = "ひらがなのみ入力できます")
+    @Size(min = 1, max = 255, message = "{user.hurigana.wrong}")
+    @NotBlank(message = "{user.hurigana.required}")
+    @Pattern(regexp = "^[ぁ-んー]*$", message = "{user.hurigana.nothiragana}")
     private String hurigana; // ふりがな(必須とはしない)
 
-    @Max(value = 3, message = "不正な値です")
-    @NotNull(message = "性別を入力してください")
+    @Max(value = 3, message = "{user.sexial.wrong}")
+    @NotNull(message = "{user.sexial.required}")
     @Column(nullable = false)
     private int sexial; // 性別設定用(0:設定なし,1:男性,2:女性,3:その他)
 
-    @Size(min = 0, max = 1500, message = "自己紹介は最大1,500文字以内で入力してください")
+    @Size(min = 0, max = 1500, message = "{user.description.wrong}")
     private String description; // 自己紹介保存用
 
-    @Max(value = 999, message = "年齢は最大3桁までです")
-    @NotNull(message = "年齢を入力してください")
+    @Max(value = 999, message = "{user.age.invalided}")
+    @NotNull(message = "{user.age.required}")
     private int age; // 年齢(最大999歳まで許可)
 
     // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ

@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Categorys {
     private List<Inquirys> inquirysList;
 
     // カテゴリーの名前
+    @NotBlank(message = "カテゴリー名を入力してください！")
     private String name;
 
     public Categorys(String name) {

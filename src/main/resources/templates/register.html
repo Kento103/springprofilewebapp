@@ -6,6 +6,7 @@
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div class="main-content container-md">
             <h2><i class="bi bi-person-add"></i> ユーザー登録</h2>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
@@ -13,28 +14,32 @@
             <div class="mb-3">
                 <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
                 <!--th:field="*{username}" どのフィールドなのか指定する-->
-                <input type="text" id="username" name="username" th:field="*{username}" class="form-control" required />
+                <input type="text" id="username" name="username" th:field="*{username}" class="form-control"/>
                 <div class="form-text">255文字まで</div>
-                <!--th:errors="*{username}" エラーが出た際に、ここに表示される-->
-                <span class="error" th:errors="*{username}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('username')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{username}"></span></div>
             </div>
             <div class="mb-3">
                 <label for="hurigana" class="form-label">ふりがな： <span class="badge bg-secondary">必須</span></label>
                 <input type="text" id="hurigana" name="hurigana" th:field="*{hurigana}" class="form-control" required />
                 <div class="form-text">ひらがなのみ使用可</div>
-                <span class="error" th:errors="*{hurigana}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('hurigana')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{hurigana}"></span></div>
+                <!-- <span class="error" th:errors="*{hurigana}"></span> -->
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">メールアドレス: <span class="badge bg-secondary">必須</span></label>
                 <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required />
-                <span class="error" th:errors="*{email}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('email')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{email}"></span></div>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">パスワード: <span class="badge bg-secondary">必須</span></label>
                 <input type="password" id="password" name="password" th:field="*{password}" class="form-control" required />
                 <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
-                <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
-                <span class="error" th:errors="*{password}"></span>
+                <div class="error" th:if="${passwordfail}"><i class="fa-solid fa-circle-xmark"></i> <span th:text="${passwordfail}"></span></div>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('password')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{password}"></span></div>
             </div>
             <!--性別のコントローラ、モデル未実装-->
             <div class="mb-3">
@@ -46,21 +51,23 @@
                     <option value="3">その他</option>
                 </select>
                 <div class="form-text">性別は公開されません</div>
-                <span class="error" th:errors="*{sexial}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('sexial')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{sexial}"></span></div>
             </div>
             <!--誕生日のコントローラー、モデル未実装-->
             <div class="mb-3">
                 <label for="age" class="form-label">年齢： <span class="badge bg-secondary">必須</span></label>
-                <input type="text" name="age" id="age" class="form-control" required>
+                <input type="number" name="age" id="age" class="form-control" max="999" required>
                 <div class="form-text">年齢を入力(任意)</div>
-                <span class="error" th:errors="*{age}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('age')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{age}"></span></div>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">自己紹介： </label>
                 <textarea class="form-control" id="description" name="description" rows="5"></textarea>
-                <span class="error" th:errors="*{description}"></span>
                 <div class="form-text">1,500文字まで</div>
-                <span class="error" th:errors="*{description}"></span>
+                <!-- バリデーションエラーが出た際に、ここに表示される-->
+                <div class="valided-error" th:if="${#fields.hasErrors('description')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{description}"></span></div>
             </div>
             <div class="mb-3">
                 <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>

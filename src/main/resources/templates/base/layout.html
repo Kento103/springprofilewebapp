@@ -87,8 +87,24 @@
             </ul>
         </div>
     </header> -->
-    <!--メイン部分-->
+    <!--システムダイアログ-->
+    <div th:fragment="system-dialog" class="main-content container-md">
+        <div class="alert alert-danger" role="alert" th:if="${systemError}">
+            <i class="fa-solid fa-circle-xmark"></i> <span th:text="${systemError}"></span>
+        </div>
+        <div class="alert alert-warning" role="alert" th:if="${systemWarning}">
+            <i class="fa-solid fa-triangle-exclamation"></i> <span th:text="${systemWarning}"></span>
+        </div>
+        <div class="alert alert-success" role="alert" th:if="${systemSuccess}">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${systemSuccess}"></span>
+        </div>
+        <div class="alert alert-primary" role="alert" th:if="${systemInfo}">
+            <i class="fa-solid fa-circle-info"></i> <span th:text="${systemInfo}"></span>
+        </div>
+    </div>
+    <!-- メイン部分(不使用) -->
     <div th:fragment="maincontent" class="main-content container-md">
+        
     </div>
 </body>
 </html>
