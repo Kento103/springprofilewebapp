@@ -3,6 +3,7 @@ package com.kento.springprofilewebapp.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.LikeService;
@@ -43,12 +44,14 @@ public class UserController {
         model.addAttribute("like_year", likeService.likesCountYearAgo(id, 1)); // いいねされた数をカウントする(1年前から現在)
         model.addAttribute("like_month", likeService.likesCountMonthAgo(id, 1)); // いいねされた数をカウントする(1カ月まえから現在)
         model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
+        model.addAttribute("systemError", (String) model.getAttribute("systemError"));
+        model.addAttribute("systemSuccess", (String) model.getAttribute("systemSuccess"));
         return "profile"; // profile.htmlのページを表示する
     }
 
     // ユーザー情報の編集ページを表示する
     @GetMapping("/{id}/edit")
-    public String editUserPage(@PathVariable int id, Model model, Users user, @AuthenticationPrincipal Users loginUser) {
+    public String editUserPage(@PathVariable int id, Model model, Users user, @AuthenticationPrincipal Users loginUser, RedirectAttributes redirectAttributes) {
         user = userService.getUserById(id); // usersテーブルのidから該当の情報を検索する
         model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
         if (loginUser.getRole().equals("ROLE_ADMIN")) { // 自分がROLE_ADMIN保有者か確認するloginUserはオブジェクトなので#.equalsでないと不一致となる(==ではだめ)
@@ -59,7 +62,9 @@ public class UserController {
             if (user.getId() == loginUser.getId()) { // user.getId()...閲覧中のUserID loginUser.getId()...ログイン中のユーザーID
                 return "useredit"; // useredit.htmlのページを表示する
             } else {
-                model.addAttribute("error", "権限がありません");
+                // リダイレクト先で呼び出すために用意する
+                redirectAttributes.addFlashAttribute("systemError", "権限がありません");
+                // model.addAttribute("error", "権限がありません");
                 return "redirect:/users/{id}"; // プロフィールに戻す
             }
         }
@@ -73,17 +78,20 @@ public class UserController {
             Model model,
             @ModelAttribute Users users,
             @AuthenticationPrincipal Users loginUsers,
-            BindingResult bindingResult) {
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes
+            ) {
             if (bindingResult.hasErrors()) {
                 //Getリクエスト用のメゾットを呼び出し、編集画面に戻る
-                return editUserPage(user.getId(), model, user, loginUsers);
+                return editUserPage(user.getId(), model, user, loginUsers, null);
             }
             try {
                 users = userService.updateUser(id, user);
                 model.addAttribute("user", users);
-                return "profile";
+                redirectAttributes.addFlashAttribute("systemSuccess", "ユーザー情報の変更に成功しました");
+                return "redirect:/users/{id}";
             } catch (Exception e) {
-                model.addAttribute("error", "登録に失敗しました");
+                model.addAttribute("systemError", "登録に失敗しました");
                 return "useredit";
             }
         }
@@ -102,6 +110,13 @@ public class UserController {
         try {
             Users user = userService.getUserById(id); // 対象のユーザーを検索
             String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+            if (!user.getImagePath().isEmpty()) {
+                System.out.println(user.getImagePath()); // 試験用
+                System.out.println(user.getImagePath().substring(8)); // 先頭から8文字を削除する(ファイルパスが/images/のため)
+                String deleteImageFilename = user.getImagePath().substring(8); // 先頭の/images/の文字列を削除する
+                Path deletePath = Paths.get(uploadDir + deleteImageFilename); // 削除する画像のパスを指定する
+                Files.delete(deletePath); // 変更前に設定されていた画像を削除する
+            }
             String filename = "user_" + id + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
             Path path = Paths.get(uploadDir + filename);
             Files.createDirectories(path.getParent()); // ディレクトリがない時は作成してくれる。

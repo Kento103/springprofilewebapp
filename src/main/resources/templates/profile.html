@@ -6,6 +6,7 @@
     </head>
     <body>
         <header th:replace="~{base/layout::header}"></header>
+        <div th:replace="~{base/layout::system-dialog}"></div>
         <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <!--ここから新ページ用-->
             <div class="user-container">
@@ -30,7 +31,7 @@
                 <!-- 年間いいね -->
                 <p>年間いいね：<span th:text="${like_year}"></span>  月間いいね：<span th:text="${like_month}"></span></p>
                 <!-- いいねをまだしていない場合に表示 -->
-                <form th:if="${!isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいねする</span><i class="bi bi-heart-fill not-like"></i> <span th:text="${like}"></span></button></form>
+                <form th:if="${isLike != null and !isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいねする</span><i class="bi bi-heart-fill not-like"></i> <span th:text="${like}"></span></button></form>
                 <!-- いいねをすでにしている場合に表示 -->
                 <form th:if="${isLike}" th:action="@{/users/{id}/unlike(id=${user.id})}" method="post"><button type="submit" class="btn-no-outline"><span>いいね取り消し</span><i class="bi bi-heart-fill like"></i> <span th:text="${like}"></span></button></form>
             </div>
