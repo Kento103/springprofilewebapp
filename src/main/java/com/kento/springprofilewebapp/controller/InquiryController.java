@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
@@ -47,21 +48,24 @@ public class InquiryController {
 
     // お問い合わせ内容を送信する(Postリクエスト)
     @PostMapping("/create")
-    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model) {
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model, RedirectAttributes redirectAttributes) {
         try {
             // 登録成功したときの処理
             inquiryService.registeInquiry(description, category, loginUser);
-            model.addAttribute("success", "お問い合わせの追加に成功しました");
+            // リダイレクトする場合はRedirectAttributes#addFlashAttribteでパラメーターを送信できる
+            // リダイレクト先で、Model#getAttributeで取り出す
+            redirectAttributes.addFlashAttribute("systemSuccess", "お問い合わせの追加に成功しました");
+            // model.addAttribute("systemSuccess", "お問い合わせの追加に成功しました");
             // 本文を設定する
             String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";
-            // メールの送信先
+            // メールの送信先(環境変数でtoを設定している)
             String mailTo = System.getenv("SPRING_MAIL_USERNAME");
             // メールを送信する
             mailService.sendMail(mailTo, "新規のお問い合わせがありました", mailBody);
             return "redirect:/";
         } catch (Exception e) {
             // 登録失敗したときの処理
-            model.addAttribute("error", "お問い合わせの追加に失敗しました！内容を確認してください");
+            model.addAttribute("systemError", "お問い合わせの追加に失敗しました！内容を確認してください");
             return "inquiry_create";
         }
     }

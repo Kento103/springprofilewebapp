@@ -6,6 +6,7 @@
     </head>
     <body>
         <header th:replace="~{base/layout::header}"></header>
+        <div th:replace="~{base/layout::system-dialog}"></div>
         <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <!--管理者ユーザーの場合は管理者バッチを表示する-->
             <div sec:authorize="hasRole('ROLE_ADMIN')"><h4><span class="badge text-bg-warning"><i class="fa-solid fa-web-awesome"></i> 管理者アカウント</h4></span></div>

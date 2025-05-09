@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('ログイン',~{::link},~{::script})}">
     <meta charset="UTF-8">
 <title>ログイン | SpringBootアプリ</title>
 </head>
 <body>
 	<header th:replace="~{base/layout::header}"></header>
+	<div th:replace="~{base/layout::system-dialog}"></div>
 	<div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1><i class="bi bi-person-check"></i> ログイン</h1>
 		<div class="wrapper">

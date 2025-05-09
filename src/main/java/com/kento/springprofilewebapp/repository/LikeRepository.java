@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,15 @@ public interface LikeRepository extends JpaRepository<Likes, Integer>{
      */
     @Query(value = "SELECT count(*) FROM likes where likes.to_like_id = :id", nativeQuery = true)
     int likesCount(@Param("id") int id);
+
+    /**
+     * 特定のIDで期間内でいいねされた数をカウントします
+     * @param id 検索対象のユーザーID
+     * @param past 対象の開始日付
+     * @return 開始日付から現在までにいいねされた数が返ります
+     */
+    @Query(value = "select count(*) from likes l where l.to_like_id = :id and l.liked_at >= :past", nativeQuery = true)
+    int likesCountPast(@Param("id") int id, @Param("past") LocalDateTime past);
 
     // すでにいいねを送っているか確認する
     /**

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kento.springprofilewebapp.model.Users;
+import com.kento.springprofilewebapp.repository.UserLikeSummary;
 import com.kento.springprofilewebapp.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,11 @@ public class UserService {
     // ユーザーをIDで取得
     public Users getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    // ユーザー一覧を月間いいねの多い順に取得する
+    public List<UserLikeSummary> getMostLikeUsers() {
+        return userRepository.sortByMostLikes();
     }
 
     // ユーザー情報を保存する(基本的な保存)
