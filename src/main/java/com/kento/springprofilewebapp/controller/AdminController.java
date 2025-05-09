@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.UserService;
@@ -36,6 +37,7 @@ public class AdminController {
         allUser.addAttribute("allUsers", userService.countUsers()); // 全ユーザー人数確認用
         allUser.addAttribute("page", page); // 現在のページ
         allUser.addAttribute("maxpage", maxPage); // 最大ページ
+        model.addAttribute("systemSuccess", (String) model.getAttribute("systemSuccess"));
         return "userlist";
     }
 
@@ -48,8 +50,9 @@ public class AdminController {
 
     // ユーザーを削除する(Postリクエスト)
     @PostMapping("/{id}/delete")
-    public String deleteUser(@PathVariable int id) {
+    public String deleteUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.deletedUser(id);
+        redirectAttributes.addFlashAttribute("systemSuccess", "ユーザを削除しました。\n削除したユーザは削除ユーザ一覧から確認できます。");
         return "redirect:/admin/list";
     }
 
@@ -69,14 +72,16 @@ public class AdminController {
 
     // ユーザのアクセス権限を変更する
     @PostMapping("/{id}/grant")
-    public String changeGrant(@PathVariable int id, Users user, Model model) {
+    public String changeGrant(@PathVariable int id, Users user, Model model, RedirectAttributes redirectAttributes) {
         user = userService.getUserById(id); // 該当のユーザを検索する
         if (user.getRole().equals("ROLE_USER")) {
             // 現在の権限がUSERの場合はADMINに変更する
             userService.changeGrant(id, "ROLE_ADMIN");
+            redirectAttributes.addFlashAttribute("systemSuccess", "ユーザの権限を管理者に変更しました");
         } else if (user.getRole().equals("ROLE_ADMIN")) {
             // 現在の権限がADMINの場合はUSERに変更する
             userService.changeGrant(id, "ROLE_USER");
+            redirectAttributes.addFlashAttribute("systemSuccess", "ユーザの権限を一般ユーザに変更しました");
         } else {
             // どれにも一致しない場合はなにもしない
         }
@@ -85,15 +90,17 @@ public class AdminController {
 
     // ユーザのアカウントロック状態を変更する
     @PostMapping("{id}/locked")
-    public String changeLock(@PathVariable int id, Users user, Model model) {
+    public String changeLock(@PathVariable int id, Users user, Model model, RedirectAttributes redirectAttributes) {
         user = userService.getUserById(id);
         System.out.println(user.isAccountNonLocked());
         if (user.isAccountNonLocked()) {
             // ロックされていないときはロックする
             userService.changeLock(id);
+            redirectAttributes.addFlashAttribute("systemSuccess", "このユーザをロックしました");
         } else if (!user.isAccountNonLocked()) {
             // ロックされている時はロック解除する
             userService.changeUnLock(id);
+            redirectAttributes.addFlashAttribute("systemSuccess", "このユーザのロックを解除しました");
         }
         return "redirect:/admin/list";
     }

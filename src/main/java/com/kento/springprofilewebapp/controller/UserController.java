@@ -110,6 +110,7 @@ public class UserController {
         try {
             Users user = userService.getUserById(id); // 対象のユーザーを検索
             String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+            // 画像が設定されていた場合は、以前設定されていた画像ファイルをサーバから削除する
             if (!user.getImagePath().isEmpty()) {
                 System.out.println(user.getImagePath()); // 試験用
                 System.out.println(user.getImagePath().substring(8)); // 先頭から8文字を削除する(ファイルパスが/images/のため)
