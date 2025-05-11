@@ -6,11 +6,12 @@
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>プロフィール画像変更</h1>
         <!-- アップロードフォーム -->
         <form th:action="@{/users/{id}/edit/image(id=${user.id})}" method="post" enctype="multipart/form-data">
-            <input type="file" name="image" id="image/*">
+            <input type="file" name="image" id="image" accept="image/*">
             <button type="submit" class="btn btn-primary">画像アップロード</button>
         </form>
     </div>

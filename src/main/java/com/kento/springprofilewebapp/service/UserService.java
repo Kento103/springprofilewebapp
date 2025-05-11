@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.repository.UserLikeSummary;
@@ -119,5 +120,16 @@ public class UserService {
     @Transactional
     public void changeUnLock(int id) {
         userRepository.accoutUnLock(id);
+    }
+
+    // 画像ファイルアップロード時のバリデーションチェック
+    public void imageValidate(MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            throw new IllegalArgumentException("ファイルが空です。");
+        }
+        String contentType = multipartFile.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new IllegalArgumentException("画像ファイルではありません");
+        }
     }
 }

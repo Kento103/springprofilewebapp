@@ -101,17 +101,21 @@ public class UserController {
     public String changeImage(@PathVariable int id, Model model) {
         Users users = userService.getUserById(id); // 対象のユーザーを検索
         model.addAttribute("user", users);
+        model.addAttribute("systemError", (String) model.getAttribute("systemError"));
         return "useredit_image";
     }
 
     // プロフィール画像の変更を処理する(Postリクエスト)
     @PostMapping("/{id}/edit/image")
-    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file) {
+    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file, RedirectAttributes redirectAttributes) {
         try {
             Users user = userService.getUserById(id); // 対象のユーザーを検索
             String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+            // ファイルのバリデーションチェックを行う
+            userService.imageValidate(file);
             // 画像が設定されていた場合は、以前設定されていた画像ファイルをサーバから削除する
-            if (!user.getImagePath().isEmpty()) {
+            String imagePath = user.getImagePath();
+            if (imagePath != null) {
                 System.out.println(user.getImagePath()); // 試験用
                 System.out.println(user.getImagePath().substring(8)); // 先頭から8文字を削除する(ファイルパスが/images/のため)
                 String deleteImageFilename = user.getImagePath().substring(8); // 先頭の/images/の文字列を削除する
@@ -128,9 +132,12 @@ public class UserController {
             userService.save(user);
 
             return "redirect:/users/{id}";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("systemError", "画像ファイルをアップロードしてください");
+            return "redirect:/users/{id}/edit/image";
         } catch (IOException e) {
-            e.printStackTrace(); // ログ出力
-            return "error"; // エラーページに遷移する(未実装)
+            redirectAttributes.addFlashAttribute("systemError", "予期せぬエラーが発生しました");
+            return "redirect:/users/{id}/edit/image";
         }
         
     }
