@@ -48,10 +48,10 @@ public class InquiryController {
 
     // お問い合わせ内容を送信する(Postリクエスト)
     @PostMapping("/create")
-    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model, RedirectAttributes redirectAttributes) {
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @RequestParam String email, @AuthenticationPrincipal Users loginUser, Model model, RedirectAttributes redirectAttributes) {
         try {
             // 登録成功したときの処理
-            inquiryService.registeInquiry(description, category, loginUser);
+            inquiryService.registeInquiry(description, category, loginUser, email);
             // リダイレクトする場合はRedirectAttributes#addFlashAttribteでパラメーターを送信できる
             // リダイレクト先で、Model#getAttributeで取り出す
             redirectAttributes.addFlashAttribute("systemSuccess", "お問い合わせの追加に成功しました");
@@ -87,6 +87,41 @@ public class InquiryController {
         inquiry.setStatus(status);
         inquiryService.updateInquiry(inquiry);
         return "redirect:/inquiry";
+    }
+
+    // 質問者にメールを送信する(Postリクエスト)
+    @PostMapping("/{id}/send")
+    public String sendEmail(@PathVariable int id, @RequestParam String emailBody, RedirectAttributes redirectAttributes) {
+        try {
+            if (emailBody.isEmpty()) {
+                redirectAttributes.addFlashAttribute("systemError", "本文を入力してください！");
+                return "redirect:/inquiry/{id}";
+            }
+            Inquirys inquiry = inquiryService.getInquirysById(id);
+            String mailTitle = "お問い合わせ内容についてのご連絡";
+            String mailBodyBegin = "ご利用いただき、ありがとうございます。\nお問い合わせ頂きました以下内容につきましてご回答致します。\n\n";
+            String mailBodyFinalWord = "なお、ご不明な点がありましたら、お気軽にご連絡下さい。\n今後ともよろしくお願いいたします。";
+            String mailBody = mailBodyBegin + "ご質問内容：" + inquiry.getDescription() + "\n\n" + "回答：" + emailBody + "\n\n" + mailBodyFinalWord;
+            mailService.sendMail(inquiry.getInquiryEmail(), mailTitle, mailBody);
+            redirectAttributes.addFlashAttribute("systemSuccess", "メールの送信に成功しました");
+            return "redirect:/inquiry";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("systemError", "処理に失敗しました！");
+            return "redirect:/inquiry/{id}";
+        }
+    }
+
+    // お問い合わせを削除する
+    @PostMapping("/{id}/delete")
+    public String deleteInquiry(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            inquiryService.deleteInquiry(id);
+            redirectAttributes.addFlashAttribute("systemSuccess", "削除しました");
+            return "redirect:/inquiry";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("systemError", "処理に失敗しました！");
+            return "redirect:/inquiry/{id}";
+        }
     }
 
     // カテゴリーリストを表示する

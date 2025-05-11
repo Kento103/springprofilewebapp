@@ -27,7 +27,8 @@
                 <!-- 年齢の表示 -->
                 <p>年齢：<span th:text="${user.age}"></span>歳</p>
                 <!-- 自己紹介欄 -->
-                <p><span th:text="${user.description}"></span></p>
+                <!-- <p><span th:text="${user.description}"></span></p> -->
+                <pre th:text="${#strings.replace(#strings.replace(user.description, '\r\n', '<br/>'), '\n', '<br/>')}"></pre>
                 <!-- 年間いいね -->
                 <p>年間いいね：<span th:text="${like_year}"></span>  月間いいね：<span th:text="${like_month}"></span></p>
                 <!-- いいねをまだしていない場合に表示 -->

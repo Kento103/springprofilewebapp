@@ -6,6 +6,7 @@
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>お問い合わせ</h1>
         <a th:href="@{/inquiry/category}"><button class="btn btn-outline-primary"><i class="bi bi-list-ul"></i> カテゴリ設定</button></a>
@@ -32,10 +33,10 @@
                     <!-- #.substringで文字数制限をかけられる -->
                     <td th:text="${#strings.length(inquiry.description) <= 10} ? ${inquiry.description} : ${inquiry.description.substring(0, 10) + '...'}"></td>
                     <!-- ステータスは数字で管理し、そのまま文字に変換して表示する -->
-                    <td th:if="${inquiry.status} == 0">未対応</td>
-                    <td th:if="${inquiry.status} == 1">対応中</td>
-                    <td th:if="${inquiry.status} == 2">対応完了</td>
-                    <td th:if="${inquiry.status} == 3">対応不要</td>
+                    <td th:if="${inquiry.status} == 0"><i class="fa-solid fa-exclamation"></i> 未対応</td>
+                    <td th:if="${inquiry.status} == 1"><i class="fa-solid fa-arrow-right"></i> 対応中</td>
+                    <td th:if="${inquiry.status} == 2"><i class="fa-solid fa-check"></i> 対応完了</td>
+                    <td th:if="${inquiry.status} == 3"><i class="fa-solid fa-check"></i> 対応不要</td>
                     <td><a th:href="@{/inquiry/{id}(id=${inquiry.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-journal-text"></i> 詳細</button></a></td>
                 </tr>
             </tbody>

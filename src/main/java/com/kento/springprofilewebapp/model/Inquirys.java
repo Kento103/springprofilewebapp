@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,10 +43,15 @@ public class Inquirys {
     @NotBlank(message = "本文を入力してください！")
     private String description;
 
+    // メールアドレス
+    @NotBlank(message = "{user.email.required}")
+    @Email(message = "{user.email.invalided}")
+    private String inquiryEmail;
+
     // ステータス
     private int status;
 
-    public Inquirys(String description, int categoryId, Users users) {
+    public Inquirys(String description, int categoryId, Users users, String inquiryEmail) {
         Categorys category = new Categorys();
         category.setId(categoryId); // 受け取ったカテゴリIDを挿入する
         //Users user = new Users();
@@ -54,5 +60,6 @@ public class Inquirys {
         this.categorys = category;
         this.users = users; // 投稿したユーザを代入する。
         this.status = 0; // 仮挿入
+        this.inquiryEmail = inquiryEmail; // 返信希望Eメールアドレス
     }
 }

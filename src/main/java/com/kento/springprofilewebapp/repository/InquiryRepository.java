@@ -16,6 +16,9 @@ public interface InquiryRepository extends JpaRepository<Inquirys, Integer>{
     // categorysテーブルのidカラムを内部結合する(categorys.id)
     @Query("SELECT i FROM Inquirys i JOIN i.categorys n")
     List<Inquirys> findAllWithCategorys();
+
+    // 指定したIDのレコードを削除する
+    void deleteById(int id);
 }
 
 /*

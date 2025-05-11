@@ -38,13 +38,18 @@ public class InquiryService {
     }
 
     // お問い合わせ登録する
-    public Inquirys registeInquiry(String description, int categoryId, Users user) {
-        Inquirys inquirys = new Inquirys(description, categoryId, user); // データを取得する
+    public Inquirys registeInquiry(String description, int categoryId, Users user, String inquiryEmail) {
+        Inquirys inquirys = new Inquirys(description, categoryId, user, inquiryEmail); // データを取得する
         return inquiryRepository.save(inquirys); // 取得したものをモデルに挿入して、DBに保管する
     }
 
     // お問い合わせのアップデート
     public Inquirys updateInquiry(Inquirys inquiry) {
         return inquiryRepository.save(inquiry);
+    }
+
+    // 指定したIDのレコードを削除する
+    public void deleteInquiry(int id) {
+        inquiryRepository.deleteById(id); // 指定したものを削除
     }
 }

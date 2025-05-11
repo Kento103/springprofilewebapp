@@ -13,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -79,6 +80,7 @@ public class Users implements UserDetails {
     private int sexial; // 性別設定用(0:設定なし,1:男性,2:女性,3:その他)
 
     @Size(min = 0, max = 1500, message = "{user.description.wrong}")
+    @Lob // LargeObject...DBのデータ型がTEXT型となり改行も含め保存が可能となる。
     private String description; // 自己紹介保存用
 
     @Max(value = 999, message = "{user.age.invalided}")

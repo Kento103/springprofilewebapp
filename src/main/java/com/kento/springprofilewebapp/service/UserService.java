@@ -65,6 +65,7 @@ public class UserService {
                 user.setHurigana(updatedUser.getHurigana()); // ふりがな
                 user.setEmail(updatedUser.getEmail()); // 登録メールアドレス
                 user.setDescription(updatedUser.getDescription()); // 自己紹介
+                System.out.println("content = [" + user.getDescription().replace("\n", "\\n").replace("\r", "\\r") + "]"); // 試験用
                 return userRepository.save(user); // #.saveでデータベースの情報を更新する
             })
             .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
