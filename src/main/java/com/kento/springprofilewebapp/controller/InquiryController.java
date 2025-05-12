@@ -35,6 +35,7 @@ public class InquiryController {
     public String inquiryTop(Model model, Model model2) {
         model.addAttribute("inquirys", inquiryService.getInquirysWithUser()); // userテーブル
         model2.addAttribute("categorys", inquiryService.getInquirysWithCategorys()); // categoryテーブル
+        model.addAttribute("systemWarning", (String) model.getAttribute("systemWarning"));
         return "inquiry";
     }
 
@@ -72,8 +73,12 @@ public class InquiryController {
 
     // 各お問い合わせ内容を表示する
     @GetMapping("/{id}")
-    public String getInquiry(@PathVariable int id, Model model) {
+    public String getInquiry(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Inquirys inquirys = inquiryService.getInquirysById(id);
+        if (inquirys == null) {
+            redirectAttributes.addFlashAttribute("systemWarning", "指定したお問い合わせはありません");
+            return "redirect:/inquiry";
+        }
         model.addAttribute("inquiry", inquirys);
         return "inquiry_description";
     }

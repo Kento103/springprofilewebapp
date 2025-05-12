@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('404 NotFound',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('404 forbidden',~{::link},~{::script})}">
     <meta charset="UTF-8">
-<title>404 | SpringBootアプリ</title>
+<title>403 | SpringBootアプリ</title>
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
     <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
-        <h1>お探しのページが見つかりませんでした</h1>
+        <h1>お探しのページを閲覧する権限がありません。</h1>
         <img th:src="@{/defaultimage/sysimg_1.png}" alt="驚くねこ">
         <p>
-            お探しのページは存在しないか、移動・削除された可能性があります。<br>
+            お探しのページを閲覧する権限がありません。<br>
             URLの綴りやスペルはお間違えないですか？<br>
             トップページ以外の場所をブックマークしていませんか？(トップページをブックマークしていただきますようお願いいたします。)<br>
         </p>

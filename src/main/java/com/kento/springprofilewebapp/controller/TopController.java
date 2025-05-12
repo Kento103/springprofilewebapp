@@ -5,7 +5,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.kento.springprofilewebapp.service.LikeService;
 import com.kento.springprofilewebapp.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TopController {
     private final UserService userService;
-    private final LikeService likeService;
 
     // いいねの多い順に並び替える
     @GetMapping("/ranking")

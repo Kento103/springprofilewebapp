@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.kento.springprofilewebapp.model.Users;
@@ -21,6 +22,7 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MBまで
 
     // 全ユーザを取得する
     public List<Users> getallUsers() {
@@ -131,6 +133,9 @@ public class UserService {
         String contentType = multipartFile.getContentType();
         if (contentType == null || !contentType.startsWith("image/")) {
             throw new IllegalArgumentException("画像ファイルではありません");
+        }
+        if (multipartFile.getSize() > MAX_FILE_SIZE) {
+            throw new MaxUploadSizeExceededException(MAX_FILE_SIZE);
         }
     }
 }
