@@ -6,6 +6,7 @@
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>カテゴリ編集</h1>
         <form th:action="@{/inquiry/category/{id}/edit(id=${categorys.id})}" th:object="${categorys}" method="post">

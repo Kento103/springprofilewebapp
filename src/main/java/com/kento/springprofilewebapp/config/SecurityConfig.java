@@ -35,7 +35,7 @@ public class SecurityConfig {
             .requestMatchers("/user").hasAnyRole("USER", "ADMIN") // USERとADMINロールのみ許可する
             .requestMatchers("/admin/**").hasAnyRole("ADMIN") //管理者権限があるユーザーのみ閲覧を許可する
             .requestMatchers("/inquiry").hasAnyRole("ADMIN") // 管理者ユーザのみ許可する
-            .requestMatchers("/register").permitAll() // 権限なしでも許可する
+            .requestMatchers("/register").hasAnyRole("ADMIN") // 管理者権限があるユーザのみ許可する
             .requestMatchers("/ranking").permitAll() // 権限なしでも許可する
             .requestMatchers("/inquiry/create").permitAll() // お問い合わせ画面
             .requestMatchers("/").permitAll() // 権限なしでも許可する

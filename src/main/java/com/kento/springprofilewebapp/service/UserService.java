@@ -138,4 +138,13 @@ public class UserService {
             throw new MaxUploadSizeExceededException(MAX_FILE_SIZE);
         }
     }
+
+    // 確認用削除していないユーザが0人の場合、trueとなる
+    public boolean isActiveUsers() {
+        if (userRepository.count() == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

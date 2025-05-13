@@ -145,14 +145,14 @@ public class InquiryController {
 
     // カテゴリの追加処理(Postリクエスト)
     @PostMapping("/category/create")
-    public String registerCategory(@RequestParam String name, @ModelAttribute Categorys categorys, Model model) {
+    public String registerCategory(@RequestParam String name, @ModelAttribute Categorys categorys, Model model, RedirectAttributes redirectAttributes) {
         try {
             // 登録成功した時の処理
             categoryService.registeCategorys(name);
-            model.addAttribute("success", "カテゴリ登録に成功しました");
+            redirectAttributes.addFlashAttribute("systemSuccess", "カテゴリ登録に成功しました");
             return "redirect:/inquiry/category";
         } catch (Exception e) {
-            model.addAttribute("error", "登録に失敗しました。入力内容を確認してください！");
+            model.addAttribute("systemError", "登録に失敗しました。入力内容を確認してください！");
             return "category_create";
         }
     }

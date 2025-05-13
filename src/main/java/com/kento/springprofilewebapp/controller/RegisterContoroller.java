@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.UserService;
@@ -24,11 +25,12 @@ public class RegisterContoroller {
 
     @GetMapping("/register")
     public String showRegisterForm(Users users, Model model) {
+        model.addAttribute("pageTitle", "新規ユーザー作成");
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, @RequestParam String description, @RequestParam int sexial, @RequestParam String role, @RequestParam int age, Model model, @Valid @ModelAttribute Users users, BindingResult bindingResult) {
+    public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, @RequestParam String description, @RequestParam int sexial, @RequestParam String role, @RequestParam int age, Model model, @Valid @ModelAttribute Users users, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         try {
             // パスワード専用バリデーションチェック(パスワードはハッシュ化するため、下の所でバリデーションチェック出来ない)
             // チェック用(正規表現)検査値
@@ -57,8 +59,8 @@ public class RegisterContoroller {
             }
             // 登録成功したときの処理
             userService.registerUser(username, email, password, hurigana, description, sexial, role, age); // @RequestParamから値を受け取る
-            model.addAttribute("systemSuccess", "ユーザー登録が完了しました");
-            return "login";
+            redirectAttributes.addFlashAttribute("systemSuccess", "ユーザー登録が完了しました");
+            return "redirect:/admin/list";
         } catch (Exception e) {
             // 登録失敗したときの処理
             model.addAttribute("systemError", "登録に失敗しました。入力内容を再確認してください！");

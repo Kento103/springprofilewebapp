@@ -12,7 +12,7 @@ class SpringprofilewebappApplicationTests {
 	@Test
 	void contextLoads() {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		String encode = bCryptPasswordEncoder.encode("12345");
+		String encode = bCryptPasswordEncoder.encode("password_12345");
 		System.out.println("password:");
 		System.out.println(encode);
 	}
