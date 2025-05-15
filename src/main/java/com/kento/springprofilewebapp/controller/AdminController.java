@@ -20,13 +20,13 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
     private final UserService userService;
     // 管理者ページトップ
-    @GetMapping
-    public String admintop() {
-        return "admin";
-    }
+    // @GetMapping
+    // public String admintop() {
+    //     return "admin";
+    // }
 
     // 現在登録されているユーザーリストを表示する
-    @GetMapping("/list")
+    @GetMapping
     public String getUsers(
             @RequestParam(defaultValue = "0") int page, // URL?page=0でページを取得できる,defaultValueで指定しなかったときの初期値を指定できる。
             Model allUser, // ユーザー数を検索する(前ページ、次ページを出すために使うもの)
@@ -44,6 +44,7 @@ public class AdminController {
     @GetMapping("/deleted_list")
     public String delUsers(Model model) { // 取得したものを入れるようの物
         model.addAttribute("users", userService.deleted_list());
+        model.addAttribute("userscount", userService.countDeletedList()); // 削除ユーザの人数をlongで返す
         return "deleted_list";
     }
 

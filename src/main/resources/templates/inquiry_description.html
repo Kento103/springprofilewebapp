@@ -10,7 +10,10 @@
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>お問い合わせ詳細</h1>
         <div class="user-container">
-            <p>名前：<span th:text="${inquiry.users.username}"></span></p>
+            <p>名前：
+                <span th:if="${inquiry.users != null}" th:text="${inquiry.users.username}"></span>
+                <span th:unless="${inquiry.users != null}">ゲスト</span>
+            </p>
             <p>カテゴリ：<span th:text="${inquiry.categorys.name}"></span></p>
             <p><span th:text="${inquiry.description}"></span></p>
         </div>

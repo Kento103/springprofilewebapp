@@ -9,7 +9,7 @@
     <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>削除ユーザー一覧</h1>
-        <table border="1" class="table">
+        <table border="1" class="table" th:unless="${userscount} == 0">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -33,6 +33,10 @@
                 </tr>
             </tbody>
         </table>
+        <div th:if="${userscount == 0}">
+            <img th:src="@{/defaultimage/sysimg_3.png}" alt="おばけねこ">
+            <p>削除されているユーザはいません。</p>
+        </div>
     </div>
 </body>
 </html>

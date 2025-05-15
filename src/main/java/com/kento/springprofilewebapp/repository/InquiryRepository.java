@@ -9,8 +9,13 @@ import com.kento.springprofilewebapp.model.Inquirys;
 
 public interface InquiryRepository extends JpaRepository<Inquirys, Integer>{
     // usersテーブルのidカラムを内部結合する。(users.id)
+    // usersがnullの場合は取得が出来ない
     @Query("SELECT i FROM Inquirys i JOIN i.users u")
     List<Inquirys> findAllWithUsers();
+
+    // usersをleftjoinして結合しつつ、一覧を取得
+    @Query("select i from Inquirys i left join i.users u")
+    List<Inquirys> findAllWithUsers2();
 
     // categorysテーブルのidカラムを内部結合する(categorys.id)
     @Query("SELECT i FROM Inquirys i JOIN i.categorys n")

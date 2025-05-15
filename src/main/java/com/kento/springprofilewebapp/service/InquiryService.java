@@ -29,7 +29,7 @@ public class InquiryService {
 
     // users.idテーブルと結合させて表示する。
     public List<Inquirys> getInquirysWithUser() {
-        return inquiryRepository.findAllWithUsers();
+        return inquiryRepository.findAllWithUsers2(); // 試験
     }
 
     // categorysテーブルのidカラムを内部結合する

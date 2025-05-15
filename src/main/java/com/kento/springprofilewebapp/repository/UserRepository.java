@@ -92,6 +92,12 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     List<Users> findByDeleted();
 
     /*
+     * 削除されているユーザの人数を検索する
+     */
+    @Query(value = "select count(id) from users where users.deleted = true", nativeQuery = true)
+    long countByDeletedUser();
+
+    /*
      * 権限の変更をする
      */
     @Transactional

@@ -101,6 +101,11 @@ public class UserService {
         return userRepository.findByDeleted(); // 削除済みユーザを表示する
     }
 
+    // 削除されているユーザの人数を確認
+    public long countDeletedList() {
+        return userRepository.countByDeletedUser(); // 人数をlongで返す
+    }
+
     // 指定したユーザーを完全に削除する(物理削除)
     @Transactional
     public void removeUser(int id) {
