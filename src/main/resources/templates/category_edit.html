@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('カテゴリ編集',~{::link},~{::script})}">
     <meta charset="UTF-8">
 <title>カテゴリ編集 | SpringBootアプリ</title>
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>カテゴリ編集</h1>
         <form th:action="@{/inquiry/category/{id}/edit(id=${categorys.id})}" th:object="${categorys}" method="post">

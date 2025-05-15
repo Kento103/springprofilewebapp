@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.kento.springprofilewebapp.model.Categorys;
 import com.kento.springprofilewebapp.model.Inquirys;
@@ -34,6 +35,7 @@ public class InquiryController {
     public String inquiryTop(Model model, Model model2) {
         model.addAttribute("inquirys", inquiryService.getInquirysWithUser()); // userテーブル
         model2.addAttribute("categorys", inquiryService.getInquirysWithCategorys()); // categoryテーブル
+        model.addAttribute("systemWarning", (String) model.getAttribute("systemWarning"));
         return "inquiry";
     }
 
@@ -47,29 +49,36 @@ public class InquiryController {
 
     // お問い合わせ内容を送信する(Postリクエスト)
     @PostMapping("/create")
-    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @AuthenticationPrincipal Users loginUser, Model model) {
+    public String inquieyAdd(@RequestParam String description, @RequestParam int category, @RequestParam String email, @AuthenticationPrincipal Users loginUser, Model model, RedirectAttributes redirectAttributes) {
         try {
             // 登録成功したときの処理
-            inquiryService.registeInquiry(description, category, loginUser);
-            model.addAttribute("success", "お問い合わせの追加に成功しました");
+            inquiryService.registeInquiry(description, category, loginUser, email);
+            // リダイレクトする場合はRedirectAttributes#addFlashAttribteでパラメーターを送信できる
+            // リダイレクト先で、Model#getAttributeで取り出す
+            redirectAttributes.addFlashAttribute("systemSuccess", "お問い合わせの追加に成功しました");
+            // model.addAttribute("systemSuccess", "お問い合わせの追加に成功しました");
             // 本文を設定する
             String mailBody = "新規のお問い合わせがありました。お問い合わせ内容は以下の通りです。\n\n" + description + "\n\nお問い合わせ管理のページを開いて、対応してください。";
-            // メールの送信先
+            // メールの送信先(環境変数でtoを設定している)
             String mailTo = System.getenv("SPRING_MAIL_USERNAME");
             // メールを送信する
             mailService.sendMail(mailTo, "新規のお問い合わせがありました", mailBody);
             return "redirect:/";
         } catch (Exception e) {
             // 登録失敗したときの処理
-            model.addAttribute("error", "お問い合わせの追加に失敗しました！内容を確認してください");
+            model.addAttribute("systemError", "お問い合わせの追加に失敗しました！内容を確認してください");
             return "inquiry_create";
         }
     }
 
     // 各お問い合わせ内容を表示する
     @GetMapping("/{id}")
-    public String getInquiry(@PathVariable int id, Model model) {
+    public String getInquiry(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Inquirys inquirys = inquiryService.getInquirysById(id);
+        if (inquirys == null) {
+            redirectAttributes.addFlashAttribute("systemWarning", "指定したお問い合わせはありません");
+            return "redirect:/inquiry";
+        }
         model.addAttribute("inquiry", inquirys);
         return "inquiry_description";
     }
@@ -83,6 +92,41 @@ public class InquiryController {
         inquiry.setStatus(status);
         inquiryService.updateInquiry(inquiry);
         return "redirect:/inquiry";
+    }
+
+    // 質問者にメールを送信する(Postリクエスト)
+    @PostMapping("/{id}/send")
+    public String sendEmail(@PathVariable int id, @RequestParam String emailBody, RedirectAttributes redirectAttributes) {
+        try {
+            if (emailBody.isEmpty()) {
+                redirectAttributes.addFlashAttribute("systemError", "本文を入力してください！");
+                return "redirect:/inquiry/{id}";
+            }
+            Inquirys inquiry = inquiryService.getInquirysById(id);
+            String mailTitle = "お問い合わせ内容についてのご連絡";
+            String mailBodyBegin = "ご利用いただき、ありがとうございます。\nお問い合わせ頂きました以下内容につきましてご回答致します。\n\n";
+            String mailBodyFinalWord = "なお、ご不明な点がありましたら、お気軽にご連絡下さい。\n今後ともよろしくお願いいたします。";
+            String mailBody = mailBodyBegin + "ご質問内容：" + inquiry.getDescription() + "\n\n" + "回答：" + emailBody + "\n\n" + mailBodyFinalWord;
+            mailService.sendMail(inquiry.getInquiryEmail(), mailTitle, mailBody);
+            redirectAttributes.addFlashAttribute("systemSuccess", "メールの送信に成功しました");
+            return "redirect:/inquiry";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("systemError", "処理に失敗しました！");
+            return "redirect:/inquiry/{id}";
+        }
+    }
+
+    // お問い合わせを削除する
+    @PostMapping("/{id}/delete")
+    public String deleteInquiry(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            inquiryService.deleteInquiry(id);
+            redirectAttributes.addFlashAttribute("systemSuccess", "削除しました");
+            return "redirect:/inquiry";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("systemError", "処理に失敗しました！");
+            return "redirect:/inquiry/{id}";
+        }
     }
 
     // カテゴリーリストを表示する
@@ -101,14 +145,14 @@ public class InquiryController {
 
     // カテゴリの追加処理(Postリクエスト)
     @PostMapping("/category/create")
-    public String registerCategory(@RequestParam String name, @ModelAttribute Categorys categorys, Model model) {
+    public String registerCategory(@RequestParam String name, @ModelAttribute Categorys categorys, Model model, RedirectAttributes redirectAttributes) {
         try {
             // 登録成功した時の処理
             categoryService.registeCategorys(name);
-            model.addAttribute("success", "カテゴリ登録に成功しました");
+            redirectAttributes.addFlashAttribute("systemSuccess", "カテゴリ登録に成功しました");
             return "redirect:/inquiry/category";
         } catch (Exception e) {
-            model.addAttribute("error", "登録に失敗しました。入力内容を確認してください！");
+            model.addAttribute("systemError", "登録に失敗しました。入力内容を確認してください！");
             return "category_create";
         }
     }

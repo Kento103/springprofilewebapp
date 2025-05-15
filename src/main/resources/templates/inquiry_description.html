@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('お問い合わせ詳細',~{::link},~{::script})}">
     <meta charset="UTF-8">
 <title>お問い合わせ詳細 | SpringBootアプリ</title>
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>お問い合わせ詳細</h1>
         <div class="user-container">
-            <p>名前：<span th:text="${inquiry.users.username}"></span></p>
+            <p>名前：
+                <span th:if="${inquiry.users != null}" th:text="${inquiry.users.username}"></span>
+                <span th:unless="${inquiry.users != null}">ゲスト</span>
+            </p>
             <p>カテゴリ：<span th:text="${inquiry.categorys.name}"></span></p>
             <p><span th:text="${inquiry.description}"></span></p>
         </div>
@@ -23,7 +27,23 @@
                     <option value="3">対応不要</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">ステータス更新</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-rotate-right"></i> ステータス更新</button>
+        </form>
+        <hr>
+        <form th:action="@{/inquiry/{id}/send(id=${inquiry.id})}" method="post">
+            <div class="mb-3">
+                <label for="email">質問者にメールを送信</label>
+                <textarea class="form-control" name="emailBody" id="emailBody" rows="5"></textarea>
+                <div class="form-text">メールの本文を入力</div>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> メールを送信</button>
+        </form>
+        <hr>
+        <form th:action="@{/inquiry/{id}/delete(id=${inquiry.id})}" method="post">
+            <div class="mb-3">
+                <label for="delete">このお問い合わせを削除</label><br>
+                <button type="submit" class="btn btn-danger">削除する</button>
+            </div>
         </form>
     </div>
 </body>
