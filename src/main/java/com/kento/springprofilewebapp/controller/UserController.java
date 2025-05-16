@@ -97,6 +97,10 @@ public class UserController {
                 //Getリクエスト用のメゾットを呼び出し、編集画面に戻る
                 return editUserPage(user.getId(), model, user, loginUsers, null);
             }
+            if (!userService.chackGrant(users, loginUsers)) {
+                redirectAttributes.addFlashAttribute("systemError", "不正なリクエストです\n権限がありません。");
+                return "redirect:/{id}/edit";
+            }
             try {
                 users = userService.updateUser(id, user);
                 model.addAttribute("user", users);
@@ -120,9 +124,13 @@ public class UserController {
 
     // プロフィール画像の変更を処理する(Postリクエスト)
     @PostMapping("/{id}/edit/image")
-    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file, RedirectAttributes redirectAttributes) {
+    public String updatePhoto(@PathVariable int id, @RequestParam("image") MultipartFile file, RedirectAttributes redirectAttributes, @AuthenticationPrincipal Users loginUsers) {
         try {
             Users user = userService.getUserById(id); // 対象のユーザーを検索
+            if (!userService.chackGrant(user, loginUsers)) {
+                redirectAttributes.addFlashAttribute("systemError", "不正なリクエストです\n権限がありません。");
+                return "redirect:/{id}/edit";
+            }
             String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
             // ファイルのバリデーションチェックを行う
             userService.imageValidate(file);
@@ -159,18 +167,21 @@ public class UserController {
     }
 
     // ユーザーのパスワード変更を行うページ
-    @GetMapping("/{id}/edit/password")
-    public String editPassword(@PathVariable int id, Model model) {
-        Users users = userService.getUserById(id); // 対象のユーザーを検索
-        model.addAttribute("user", users);
-        return "useredit_password";
-    }
+    // @GetMapping("/{id}/edit/password")
+    // public String editPassword(@PathVariable int id, Model model) {
+    //     Users users = userService.getUserById(id); // 対象のユーザーを検索
+    //     model.addAttribute("user", users);
+    //     return "useredit_password";
+    // }
 
     // パスワード変更処理を行う為のページ
     @PostMapping("/{id}/edit/password")
-    public String changePassword(@PathVariable int id, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-        System.out.println(id);
-        System.out.println(password);
+    public String changePassword(@PathVariable int id, @RequestParam String password, Model model, RedirectAttributes redirectAttributes, @AuthenticationPrincipal Users loginUsers) {
+        Users user = userService.getUserById(id); // 対象のユーザーを検索
+        if (!userService.chackGrant(user, loginUsers)) {
+                redirectAttributes.addFlashAttribute("systemError", "不正なリクエストです\n権限がありません。");
+                return "redirect:/{id}/edit";
+        }
         // パスワード専用バリデーションチェック(パスワードはハッシュ化するため、下の所でバリデーションチェック出来ない)
         // チェック用(正規表現)検査値
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9_-]{8,32}$");

@@ -53,20 +53,22 @@ public class AdminController {
     public String deleteUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.deletedUser(id);
         redirectAttributes.addFlashAttribute("systemSuccess", "ユーザを削除しました。\n削除したユーザは削除ユーザ一覧から確認できます。");
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 
     // ユーザーを復元する(Postリクエスト)
     @PostMapping("/{id}/recovery")
-    public String recoveryUser(@PathVariable int id) {
+    public String recoveryUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.recoveryUser(id);
+        redirectAttributes.addFlashAttribute("systemSuccess", "選択したユーザを復元しました。");
         return "redirect:/admin/deleted_list";
     }
 
     // ユーザーを完全消去(物理削除)する(Postリクエスト)
     @PostMapping("/{id}/delete_all")
-    public String deleteAllUser(@PathVariable int id) {
+    public String deleteAllUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.removeUser(id); // 完全削除コマンド。実行注意。
+        redirectAttributes.addFlashAttribute("systemSuccess", "選択したユーザを完全に削除しました");
         return "redirect:/admin/deleted_list";
     }
 
@@ -84,8 +86,9 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("systemSuccess", "ユーザの権限を一般ユーザに変更しました");
         } else {
             // どれにも一致しない場合はなにもしない
+            redirectAttributes.addFlashAttribute("systemWarning", "不正なリクエストです");
         }
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 
     // ユーザのアカウントロック状態を変更する
@@ -102,6 +105,6 @@ public class AdminController {
             userService.changeUnLock(id);
             redirectAttributes.addFlashAttribute("systemSuccess", "このユーザのロックを解除しました");
         }
-        return "redirect:/admin/list";
+        return "redirect:/admin";
     }
 }

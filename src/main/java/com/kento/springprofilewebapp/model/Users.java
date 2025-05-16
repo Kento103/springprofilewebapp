@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -95,6 +96,12 @@ public class Users implements UserDetails {
 
     // プロフィール画像のパスを保管するための変数
     private String imagePath; // 画像のURLパス
+
+    private LocalDateTime createAt; // ユーザの作成日
+
+    private LocalDateTime updateAt; // ユーザの最終更新日
+
+    private LocalDateTime deletedAt; // ユーザの削除日
 
     public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
         this.username = username; // ユーザー名

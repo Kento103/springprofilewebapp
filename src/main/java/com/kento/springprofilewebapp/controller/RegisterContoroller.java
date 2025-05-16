@@ -60,7 +60,7 @@ public class RegisterContoroller {
             // 登録成功したときの処理
             userService.registerUser(username, email, password, hurigana, description, sexial, role, age); // @RequestParamから値を受け取る
             redirectAttributes.addFlashAttribute("systemSuccess", "ユーザー登録が完了しました");
-            return "redirect:/admin/list";
+            return "redirect:/admin";
         } catch (Exception e) {
             // 登録失敗したときの処理
             model.addAttribute("systemError", "登録に失敗しました。入力内容を再確認してください！");

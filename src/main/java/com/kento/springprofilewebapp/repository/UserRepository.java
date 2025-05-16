@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,8 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     default void softDelete(int id) { // idで対象ユーザを選択する
         findById(id).ifPresent(user -> {
             user.setDeleted(true); // 削除フラグを更新する
+            user.setDeletedAt(LocalDateTime.now()); // 現在時刻で記録
+            user.setUpdateAt(LocalDateTime.now()); // 現在時刻で更新
             save(user); // 情報をDBに保存する
         });
     }
@@ -34,18 +37,22 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     // ユーザに対して削除フラグを取り消す(復元するときに呼び出す物)
     // NotUsed(@Whereを使っているので使えない。)
     @Transactional
+    @Modifying
     default void softRecovery(int id) {
         findById(id).ifPresent(user -> { // idで対象ユーザーを選択する
             user.setDeleted(false); // 削除フラグを取り消し更新する
+            user.setUpdateAt(LocalDateTime.now()); // 更新時間を更新
             save(user); // 情報をDBに保存する
         });
     }
 
     // ユーザーに対してロック状態をつける
     @Transactional
+    @Modifying // update分とinsert分はこの2つのアノテーションがいる！！
     default void accountLock(int id) {
         findById(id).ifPresent(user -> {
             user.setLocked(true); // ロックする
+            user.setUpdateAt(LocalDateTime.now()); // 現在時刻で記録
             save(user);
         });
     }
@@ -55,6 +62,7 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     default void accoutUnLock(int id) {
         findById(id).ifPresent(user -> {
             user.setLocked(false); // ロックを解除する
+            user.setUpdateAt(LocalDateTime.now()); // 現在時刻で記録
             save(user);
         });
     }
@@ -72,7 +80,7 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
      */
     @Transactional // @Modifyingを使うメゾットはデフォルトでトランザクションが適用されないため、@Transactionalアノテーションをつけてデータ変更を確実に反映させる
     @Modifying // UPDATEやDELETEなどのデータ変更クエリを実行する際、@Modifyingを追加する必要がある
-    @Query(value = "UPDATE users SET users.deleted = FALSE WHERE users.id = :id", nativeQuery = true)
+    @Query(value = "UPDATE users SET users.deleted = FALSE, users.deleted_at = null WHERE users.id = :id", nativeQuery = true)
     void recoveryUser(@Param("id") int id); // @Paramを明示的につけて、クエリパラメータを確実にわたるようにする
 
     /**
