@@ -30,7 +30,7 @@ public class MailService {
     @Async
     public void sendMail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("contact@tomysan.net"); // 送付元のメールアドレス(省略可能、省略した場合はプロパティのメールアドレスになる)
+        message.setFrom(System.getenv("SPRING_MAIL_USERNAME")); // 送付元のメールアドレス(省略可能、省略した場合はプロパティのメールアドレスになる)
         message.setTo(to); // 送付先
         message.setSubject(subject); // 件名
         message.setText(body); // 本文

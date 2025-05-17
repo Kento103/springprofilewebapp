@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,12 +30,12 @@ public class Likes {
 
     @ManyToOne
     @JoinColumn(name = "from_like_id")
-    @NotBlank
+    @NotNull
     private Users fromLikeUserId; // いいね！した本人(誰からいいねをもらったか確認する為にある)
 
     @ManyToOne
     @JoinColumn(name = "to_Like_id")
-    @NotBlank
+    @NotNull
     private Users toLikeUserId; // いいね！を誰に押したか確認する為の物(いいね！をいくつもらえたかの確認にも使える)
 
     private LocalDateTime likedAt = LocalDateTime.now(); // いいねされた時間を現在時刻で記録する

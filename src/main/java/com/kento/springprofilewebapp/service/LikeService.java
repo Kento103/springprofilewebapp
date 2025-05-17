@@ -36,7 +36,7 @@ public class LikeService {
      * public CompletableFuture<Likes> method() {}...結果(Likesなど)を受け取りたい(返り値あり)
      * 等にすること
      */
-    @Async // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
+    // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
     public void likeYou(int fromUserId, int toUserId) {
         Likes likes = new Likes();
         /*
@@ -97,7 +97,6 @@ public class LikeService {
      * @param loginId 対象のいいねを送ったユーザ
      * @param id 対象のいいねされたユーザ
      */
-    @Async // 非同期処理をするためのアノテーション
     public void unLikeYou(int loginId, int id) {
         likeRepository.removeLike(loginId, id);
     }

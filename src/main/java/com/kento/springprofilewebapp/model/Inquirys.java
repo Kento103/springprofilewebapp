@@ -1,5 +1,7 @@
 package com.kento.springprofilewebapp.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -51,6 +53,12 @@ public class Inquirys {
     // ステータス
     private int status;
 
+    // 作成時間
+    private LocalDateTime createAt;
+
+    // 更新時間
+    private LocalDateTime updateAt;
+
     public Inquirys(String description, int categoryId, Users users, String inquiryEmail) {
         Categorys category = new Categorys();
         category.setId(categoryId); // 受け取ったカテゴリIDを挿入する
@@ -61,5 +69,6 @@ public class Inquirys {
         this.users = users; // 投稿したユーザを代入する。
         this.status = 0; // 仮挿入
         this.inquiryEmail = inquiryEmail; // 返信希望Eメールアドレス
+        this.createAt = LocalDateTime.now(); // 現在時刻を代入する
     }
 }

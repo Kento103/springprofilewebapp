@@ -10,22 +10,24 @@
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1>いいねランキング</h1>
         <div class="card mb-3" style="max-width: 540px;" th:each="user, iterStat : ${users}">
-            <div class="row g-0">
-              <div class="col-md-4">
-                <!-- 画像登録があるときの画像表示用 -->
-                <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid rounded-start">
-                <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
-                <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid rounded-start">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5><span th:text="${iterStat.count}"></span>位</h5>
-                  <h5 class="card-title" th:text="${user.username}"></h5>
-                  <p class="card-text">月間いいね：<span th:text="${user.totalLikes}"></span></p>
-                  <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
+            <a th:href="@{/users/{id}(id=${user.userId})}" class="custom-card-link">
+              <div class="row g-0">
+                <div class="col-md-4">
+                  <!-- 画像登録があるときの画像表示用 -->
+                  <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid rounded-start">
+                  <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                  <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5><span th:text="${iterStat.count}"></span>位</h5>
+                    <h5 class="card-title" th:text="${user.username}"></h5>
+                    <p class="card-text">月間いいね：<span th:text="${user.totalLikes}"></span></p>
+                    <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </a>
         </div>
         <!-- <div class="row">
             <div class="col-3 mb-3" th:each="user, iterStat : ${users}">

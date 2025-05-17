@@ -56,3 +56,16 @@ body {
     font-size: 50%;
     color: #555555;
 }
+
+/* カードリンク用 */
+.custom-card-link {
+    text-decoration: none;
+    color: black;
+    transition: all 0.2s;
+}
+.custom-card-link:hover {
+    color: rgb(196, 104, 0);
+    box-shadow: 0 0 10px gray;
+}
+
+/* いいねボタン用 */

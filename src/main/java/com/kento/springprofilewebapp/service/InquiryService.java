@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class InquiryService {
 
     // お問い合わせのアップデート
     public Inquirys updateInquiry(Inquirys inquiry) {
+        inquiry.setUpdateAt(LocalDateTime.now()); // 現在時刻でアップデートする
         return inquiryRepository.save(inquiry);
     }
 

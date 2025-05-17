@@ -68,6 +68,7 @@ public class Users implements UserDetails {
     @Column(nullable = false)
     private String password; // パスワード(ハッシュ化する！)
 
+    @NotBlank(message = "{other.field.required}")
     private String role; // 権限設定は必ず(ROLE_[権限とすること] 例）ROLE_USER、ROLE_ADMIN)
 
     @Size(min = 1, max = 255, message = "{user.hurigana.wrong}")

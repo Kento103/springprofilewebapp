@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -33,7 +34,14 @@ public class Categorys {
     @NotBlank(message = "カテゴリー名を入力してください！")
     private String name;
 
+    // カテゴリーの作成時間を記録する
+    private LocalDateTime createAt;
+
+    // カテゴリの編集時間を記録する
+    private LocalDateTime updateAt;
+
     public Categorys(String name) {
         this.name = name; // カテゴリ名
+        this.createAt = LocalDateTime.now(); // 現在時刻でアップデートする
     }
 }
