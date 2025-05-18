@@ -31,6 +31,12 @@ public class InquiryController {
     private final MailService mailService;
 
     // お問い合わせリスト
+    /**
+     * お問い合わせの一覧を表示します。
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param model2 thymeleef表示用の引数です。通常は代入不要です。
+     * @return お問い合わせの一覧を表示します
+     */
     @GetMapping
     public String inquiryTop(Model model, Model model2) {
         model.addAttribute("inquirys", inquiryService.getInquirysWithUser()); // userテーブル
@@ -40,6 +46,11 @@ public class InquiryController {
     }
 
     // お問い合わせ新規作成
+    /**
+     * お問い合わせを新規作成する画面を表示します
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return お問い合わせの作成画面を表示します
+     */
     @GetMapping("/create")
     public String inquieyCreate(Model model) {
         List<Categorys> categorys = categoryService.getAllLists(); // カテゴリをDBから全件取得する
@@ -48,6 +59,16 @@ public class InquiryController {
     }
 
     // お問い合わせ内容を送信する(Postリクエスト)
+    /**
+     * お問い合わせを新規作成します(sql>insert命令)
+     * @param description 本文
+     * @param category お問い合わせカテゴリ
+     * @param email お問い合わせした人のメールアドレス
+     * @param loginUser お問い合わせした人のuser.idを代入。nullの場合はビジター(ゲスト)が投稿したとみなします。
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 登録し、メールを管理者宛を送信します
+     */
     @PostMapping("/create")
     public String inquieyAdd(@RequestParam String description, @RequestParam int category, @RequestParam String email, @AuthenticationPrincipal Users loginUser, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -72,6 +93,13 @@ public class InquiryController {
     }
 
     // 各お問い合わせ内容を表示する
+    /**
+     * お問い合わせの詳細画面を表示します
+     * @param id 対象のお問い合わせID
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したお問い合わせを表示します
+     */
     @GetMapping("/{id}")
     public String getInquiry(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Inquirys inquirys = inquiryService.getInquirysById(id);
@@ -84,6 +112,12 @@ public class InquiryController {
     }
 
     // お問い合わせのステータスを更新する(Postリクエスト)
+    /**
+     * お問い合わせのステータスを変更します
+     * @param id 変更対象のお問い合わせID(inquiry.id)
+     * @param status 変更するフラグナンバー
+     * @return 変更処理を行います。
+     */
     @PostMapping("/{id}/update")
     public String updateInquiry(@PathVariable int id, @RequestParam int status) {
         System.out.println(id);
@@ -95,6 +129,13 @@ public class InquiryController {
     }
 
     // 質問者にメールを送信する(Postリクエスト)
+    /**
+     * 質問者にメールを送信します。送付先メールアドレス(to)はユーザがお問い合わせの際に登録したメールアドレスとなります
+     * @param id 質問対象のお問い合わせid(inquiry.id)
+     * @param emailBody 送信する予定の本文を記載
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return メールアドレス宛に本文の内容を送信します
+     */
     @PostMapping("/{id}/send")
     public String sendEmail(@PathVariable int id, @RequestParam String emailBody, RedirectAttributes redirectAttributes) {
         try {
@@ -117,6 +158,12 @@ public class InquiryController {
     }
 
     // お問い合わせを削除する
+    /**
+     * 指定したユーザのお問い合わせをを削除します
+     * @param id 削除したい対象のお問い合わせID(inquiry.id)
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したレコードを検索し、削除します
+     */
     @PostMapping("/{id}/delete")
     public String deleteInquiry(@PathVariable int id, RedirectAttributes redirectAttributes) {
         try {
@@ -130,6 +177,11 @@ public class InquiryController {
     }
 
     // カテゴリーリストを表示する
+    /**
+     * カテゴリーリストを表示します
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return カテゴリーの一覧を表示します
+     */
     @GetMapping("/category")
     public String categoryList(Model model) {
         model.addAttribute("categorys", categoryService.getAllLists());
@@ -137,6 +189,12 @@ public class InquiryController {
     }
 
     // カテゴリーの追加(Getリクエスト)
+    /**
+     * カテゴリーの追加する画面を表示します
+     * @param categorys バリデーション用です。代入不要
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return カテゴリーの追加画面を表示します
+     */
     @GetMapping("/category/create")
     public String createCategory(Categorys categorys, Model model) {
         model.addAttribute("categorys", categorys);
@@ -144,6 +202,14 @@ public class InquiryController {
     }
 
     // カテゴリの追加処理(Postリクエスト)
+    /**
+     * カテゴリを追加します
+     * @param name 追加したいカテゴリ名
+     * @param categorys バリデーション用
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return カテゴリーを追加します
+     */
     @PostMapping("/category/create")
     public String registerCategory(@RequestParam String name, @ModelAttribute Categorys categorys, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -158,6 +224,11 @@ public class InquiryController {
     }
 
     // カテゴリを削除する(Postリクエスト)
+    /**
+     * カテゴリーを削除します
+     * @param id 指定したカテゴリIDのレコードを削除します
+     * @return 該当のレコードを削除します
+     */
     @PostMapping("/category/{id}/delete")
     public String deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
@@ -165,6 +236,13 @@ public class InquiryController {
     }
 
     // カテゴリを編集する
+    /**
+     * カテゴリ編集のページを表示します。
+     * @param id 編集対象のカテゴリーを指定します
+     * @param categorys バリデーション用です。代入不要
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return 編集ページを表示します
+     */
     @GetMapping("/category/{id}/edit")
     public String editCategory(@PathVariable int id, Categorys categorys, Model model) {
         categorys = categoryService.getCategorysById(id);
@@ -173,6 +251,14 @@ public class InquiryController {
     }
 
     // 編集結果を保存する(Postリクエスト)
+    /**
+     * 編集内容を保存します
+     * @param id 保存対象のユーザID
+     * @param categorys バリデーション用です。代入不要
+     * @param category バリデーション用です。代入不要
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return 保存します
+     */
     @PostMapping("/category/{id}/edit")
     public String saveEditCategory(@PathVariable int id, @ModelAttribute Categorys categorys, @ModelAttribute Categorys category , Model model) {
         try {

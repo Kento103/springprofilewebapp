@@ -29,6 +29,22 @@ public class RegisterContoroller {
         return "register";
     }
 
+    /**
+     * 新規ユーザの作成を行います。バリデーション内容はModelを参照
+     * @param username お名前
+     * @param email メールアドレス
+     * @param password パスワード(BCrypt)
+     * @param hurigana ふりがな
+     * @param description 自己紹介
+     * @param sexial 性別
+     * @param role 権限
+     * @param age 年齢
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param users 代入不要
+     * @param bindingResult バリデーション用代入不要
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return ユーザを登録します
+     */
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, @RequestParam String description, @RequestParam int sexial, @RequestParam String role, @RequestParam int age, Model model, @Valid @ModelAttribute Users users, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         try {

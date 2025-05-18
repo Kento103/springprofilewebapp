@@ -26,6 +26,13 @@ public class AdminController {
     // }
 
     // 現在登録されているユーザーリストを表示する
+    /**
+     * 現在登録されているユーザリストを表示する為の物です5ユーザ毎に表示します
+     * @param page 何ページ目を表示するかの引数です。指定しない場合は最初のページを表示します
+     * @param allUser // ユーザ数を検索するものです。この引数は自動で入ります
+     * @param model // thymeleef表示用の引数です。通常は代入不要です。
+     * @return ユーザを検索し、userlist.htmlを表示します。
+     */
     @GetMapping
     public String getUsers(
             @RequestParam(defaultValue = "0") int page, // URL?page=0でページを取得できる,defaultValueで指定しなかったときの初期値を指定できる。
@@ -41,6 +48,11 @@ public class AdminController {
     }
 
     // 削除されているユーザーリストを表示する
+    /**
+     * 削除されているユーザリストを表示します
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @return 削除されているユーザリストを検索し、deleted_list.htmlを表示します
+     */
     @GetMapping("/deleted_list")
     public String delUsers(Model model) { // 取得したものを入れるようの物
         model.addAttribute("users", userService.deleted_list());
@@ -49,6 +61,12 @@ public class AdminController {
     }
 
     // ユーザーを削除する(Postリクエスト)
+    /**
+     * id引数で指定したユーザを削除します
+     * @param id 削除対象のユーザ
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したユーザを削除します。なおいない場合は実行しません。
+     */
     @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.deletedUser(id);
@@ -57,6 +75,12 @@ public class AdminController {
     }
 
     // ユーザーを復元する(Postリクエスト)
+    /**
+     * id引数で指定したユーザを復元します。内部的には、削除フラグを取り消し(false)にします
+     * @param id 復元対象のユーザ
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したユーザの削除フラグを取り消します。
+     */
     @PostMapping("/{id}/recovery")
     public String recoveryUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.recoveryUser(id);
@@ -65,6 +89,12 @@ public class AdminController {
     }
 
     // ユーザーを完全消去(物理削除)する(Postリクエスト)
+    /**
+     * 指定したユーザを完全に削除します。このメゾットを実行すると、DB側にdeleteのSQLを実行する為、注意してください
+     * @param id 削除対象のユーザ
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したユーザのuser.idをwhereに指定し、deleteのsqlを実行します。
+     */
     @PostMapping("/{id}/delete_all")
     public String deleteAllUser(@PathVariable int id, RedirectAttributes redirectAttributes) {
         userService.removeUser(id); // 完全削除コマンド。実行注意。
@@ -73,6 +103,14 @@ public class AdminController {
     }
 
     // ユーザのアクセス権限を変更する
+    /**
+     * 指定したユーザのアクセス権限を設定します。
+     * @param id 権限の変更対象のユーザ
+     * @param user 該当のユーザのモデル用変数です。代入不要
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return アクセス権限を変更します。(一般⇔管理者)
+     */
     @PostMapping("/{id}/grant")
     public String changeGrant(@PathVariable int id, Users user, Model model, RedirectAttributes redirectAttributes) {
         user = userService.getUserById(id); // 該当のユーザを検索する
@@ -92,6 +130,14 @@ public class AdminController {
     }
 
     // ユーザのアカウントロック状態を変更する
+    /**
+     * ユーザのアカウントのロック状態を変更します。(BANのフラグを有効にします)
+     * @param id ロックする対象のユーザ
+     * @param user 代入不要
+     * @param model thymeleef表示用の引数です。通常は代入不要です。
+     * @param redirectAttributes thymeleef表示用の引数です。通常は代入不要です。
+     * @return 指定したユーザをロックします。
+     */
     @PostMapping("{id}/locked")
     public String changeLock(@PathVariable int id, Users user, Model model, RedirectAttributes redirectAttributes) {
         user = userService.getUserById(id);
