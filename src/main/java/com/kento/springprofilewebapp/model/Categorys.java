@@ -3,6 +3,7 @@ package com.kento.springprofilewebapp.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class Categorys {
     private int id;
 
     // 内部結合用変数(inquirysと結合するための物)
-    @OneToMany(mappedBy = "categorys")
+    @OneToMany(mappedBy = "categorys", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inquirys> inquirysList;
 
     // カテゴリーの名前

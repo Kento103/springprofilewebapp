@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,15 +41,15 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // startgy = GenerationType.IDENTITY自動採番する
     private int id;
 
-    @OneToMany(mappedBy = "users") // 一体多の関係mappedBY="テーブル名"を指定する。
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true) // 一体多の関係mappedBY="テーブル名"を指定する。
     private List<Inquirys> inquirysList; // 内部結合する為に使うもの(内部結合は必ずListとすること。)
 
     // Likesモデル用
-    @OneToMany(mappedBy = "fromLikeUserId") // 一体多の関係(参照先の変数を指定すること！)
+    @OneToMany(mappedBy = "fromLikeUserId", cascade = CascadeType.ALL, orphanRemoval = true) // 一体多の関係(参照先の変数を指定すること！)
     private List<Likes> likesSent; // 内部結合するために使うもの
 
     // Likesモデル用
-    @OneToMany(mappedBy = "toLikeUserId")
+    @OneToMany(mappedBy = "toLikeUserId", cascade = CascadeType.ALL, orphanRemoval = true) // cascade = CascadeType.ALL, orphanRemoval = trueでこちらのクエリを削除すると該当するInquiryレコードもDBレベルで削除される
     private List<Likes> likesReception;
 
     // validationメッセージ message={0}で全部の情報が出てくる

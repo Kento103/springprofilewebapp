@@ -2,6 +2,9 @@ package com.kento.springprofilewebapp.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +33,7 @@ public class Inquirys {
     // 投稿したユーザー
     @ManyToOne
     @JoinColumn(name = "user_id") // 自分のテーブル(この場合は、inquirysのどのテーブルとくっつけるかを名前にかく)
+    @OnDelete(action = OnDeleteAction.CASCADE) // Hibernate拡張、userが削除された時に該当のものすべて削除する
     private Users users;
 
     // private int userId;
@@ -37,6 +41,7 @@ public class Inquirys {
     // 選択されたカテゴリー
     @ManyToOne
     @JoinColumn(name = "category")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Categorys categorys;
 
     // private int category;

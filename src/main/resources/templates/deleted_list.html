@@ -28,7 +28,7 @@
                         <form th:action="@{/admin/{id}/recovery(id=${user.id})}" method="post"><button class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 復元する</button></form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/{id}/delete_all(id=${user.id})}" method="post"><button class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 完全に削除</button></form>
+                        <form id="deletedform" th:action="@{/admin/{id}/delete_all(id=${user.id})}" method="post"><button type="submit" id="deletedsubmit" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 完全に削除</button></form>
                     </td>
                 </tr>
             </tbody>
@@ -38,5 +38,6 @@
             <p>削除されているユーザはいません。</p>
         </div>
     </div>
+    <script src="/js/deleteduser.js" defer></script>
 </body>
 </html>

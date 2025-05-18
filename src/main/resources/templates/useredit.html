@@ -20,7 +20,7 @@
                     <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                     <br><br>
                     <input type="file" name="image" id="image" accept="image/*">
-                    <button type="submit" class="btn btn-success"><i class="bi bi-image"></i> プロフィール画像の変更</button>
+                    <button type="submit" id="saveButton" class="btn btn-success" disabled><i class="bi bi-image"></i> プロフィール画像の変更</button>
                 </form>
                 <!-- <label for="image" class="form-label">プロフィール画像</label><br>
                 <a th:href="@{/users/{id}/edit/image(id=${user.id})}"><button class="btn btn-success"><i class="bi bi-image"></i> プロフィール画像の変更</button></a> -->
@@ -32,11 +32,11 @@
                 <form th:action="@{/users/{id}/edit/password(id=${user.id})}" method="post">
                     <!-- パスワードの変更 -->
                     <label for="password" class="form-label">パスワード:</label>
-                    <input type="password" id="password" name="password" class="form-control">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="新しいパスワードを入力">
                     <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
                     <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
                     <br>
-                    <button type="submit" class="btn btn-danger"><i class="bi bi-key-fill"></i> パスワードの変更</button>
+                    <button type="submit" id="passwordsubmit" class="btn btn-danger" disabled><i class="bi bi-key-fill"></i> パスワードの変更</button>
                 </form>
                 <!-- <label for="password" class="form-label">パスワードの変更</label><br>
                 <a th:href="@{/users/{id}/edit/password(id=${user.id})}"><button class="btn btn-danger"><i class="bi bi-key-fill"></i> パスワードの変更</button></a> -->
@@ -111,7 +111,6 @@
         <br>
         <p th:if="${success}" th:text="${success}" style="color: green;"></p>
         <p th:if="${error}" th:text="${error}" style="color: red;"></p>
-        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
         <hr>
         <!-- 管理者かつ自分自身のアカウント編集以外で表示 -->
         <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')" th:if="${user.id} != ${#authentication.principal.id}">
@@ -152,6 +151,9 @@
             </div>
         </div>
         <hr>
-    </div>    
+        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
+        <hr>
+    </div>
+    <script src="/js/useredit.js" defer></script>    
 </body>
 </html>

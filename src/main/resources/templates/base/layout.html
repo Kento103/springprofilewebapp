@@ -17,6 +17,8 @@
     <!-- <script type="module" src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.2/dist/cdn/material-dynamic-colors.min.js"></script> -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/status.css}">
+    <!-- deferを付与するとhtmlが完全に読み込まれてからスクリプトが実行されるようになり、getElementByIdがnullとなるのを防ぐことができる -->
+    <script src="/js/main.js" defer></script>
 
     <!--各View固有で読み込むものを指定-->
     <th:block th:replace="${links} ?: _" />
@@ -33,27 +35,27 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <!-- ログインしていないときのメニュー -->
                 <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="isAnonymous()">
-                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
-                    <li class="nav-item"><a th:href="@{/login}" class="nav-link active" aria-current="page">ログイン</a></li>
-                    <li class="nav-item"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/login}" class="nav-link active" aria-current="page">ログイン</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
                 </ul>
                 <!-- 一般ユーザでログインしているときのメニュー -->
                 <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="hasRole('ROLE_USER')">
-                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
-                    <li class="nav-item"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
-                    <li class="nav-item"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
                     <form th:action="@{/logout}" method="post">
-                        <button class="nav-link">ログアウト</button>
+                        <button class="nav-link logout-btn">ログアウト</button>
                     </form>
                 </ul>
                 <!-- 管理者ユーザでログインしているときのメニュー -->
                 <ul class="navbar-nav me-auto mb-2 mb-md-0" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <li class="nav-item"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
-                    <li class="nav-item"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
-                    <li class="nav-item"><a th:href="@{/admin}" class="nav-link active" aria-current="page"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード(<i class="bi bi-person-gear"></i> ユーザ管理)</a></li>
-                    <li class="nav-item"><a th:href="@{/inquiry}" class="nav-link active" aria-current="page">お問い合わせ管理</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/admin}" class="nav-link active" aria-current="page"><i class="fa-regular fa-font-awesome"></i> 管理者ダッシュボード(<i class="bi bi-person-gear"></i> ユーザ管理)</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/inquiry}" class="nav-link active" aria-current="page">お問い合わせ管理</a></li>
                     <form th:action="@{/logout}" method="post">
-                        <button class="nav-link">ログアウト</button>
+                        <button class="nav-link logout-btn">ログアウト</button>
                     </form>
                 </ul>
             </div>

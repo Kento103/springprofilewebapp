@@ -114,7 +114,7 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     void changeUserGrant(@Param("id") int id, String grant);
 
     // likesテーブルと内部結合し、月間いいねの多い順にユーザを並び替える
-    @Query(value = "select u.id as user_id, u.username, u.description, u.image_path, count(l.id) as total_likes from users u left join likes l on l.to_like_id = u.id and l.liked_at >= now() - interval 1 month group by u.id, u.username order by count(l.id) desc, u.id asc", nativeQuery = true)
+    @Query(value = "select u.id as user_id, u.username, u.description, u.image_path, count(l.id) as total_likes from users u left join likes l on l.to_like_id = u.id and l.liked_at >= now() - interval 1 month where deleted = false group by u.id, u.username order by count(l.id) desc, u.id asc", nativeQuery = true)
     List<UserLikeSummary> sortByMostLikes(); // 本来Usersで取得したいが、idが競合しjpaでエラーになる。そのため、asでサマリーを作成するが、サマリーを作成する場合はinterfaceを作成する必要がある。そのためUserLikeSummaryで取得する方式となる
 }
 
