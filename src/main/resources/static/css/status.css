@@ -11,6 +11,10 @@
     cursor: not-allowed;
 }
 
+.valided-error {
+    color: red;
+}
+
 /* いいねマーク用 */
 .like {
     color: red;

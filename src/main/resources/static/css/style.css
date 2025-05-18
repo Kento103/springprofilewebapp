@@ -10,7 +10,7 @@ body {
     padding: 20px 0;
     text-align: center;
 }
-.header-logo h1 {
+.header-logo a {
     margin: 0;
     font-family: 'Zen Maru Gothic', sans-serif;
     color: white;
@@ -30,19 +30,21 @@ body {
 .header-menu a {
     padding: 10px 20px;
 }
-.menu-list {
+.menu-list a{
     text-decoration: none;
-    color: black;
+    color: black!important;
     transition: all 0.2s;
 }
-.menu-list:hover {
-    color: rgb(196, 104, 0);
+.menu-list:hover a{
+    color: rgb(196, 104, 0)!important;
 }
 .logout-btn {
-    background: transparent;
-    border: none;
-    outline: none;
-    box-shadow: none;
+    text-decoration: none;
+    color: black!important;
+    transition: all 0.2s;
+}
+.logout-btn:hover {
+    color: rgb(196, 104, 0)!important;
 }
 /* プロフ画像用 */
 .profile-img {
@@ -56,3 +58,16 @@ body {
     font-size: 50%;
     color: #555555;
 }
+
+/* カードリンク用 */
+.custom-card-link {
+    text-decoration: none;
+    color: black;
+    transition: all 0.2s;
+}
+.custom-card-link:hover {
+    color: rgb(196, 104, 0);
+    box-shadow: 0 0 10px gray;
+}
+
+/* いいねボタン用 */

@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,15 @@ public class LikeService {
     }
 
     // データの保存(いいねを保存する)
-    public Likes likeYou(int fromUserId, int toUserId) {
+    /*
+     * 注意！非同期処理(@Async)を実装する場合は、必ず返り値の型をvoid,Future<T>,CompletableFuture<T>とする必要がある
+     * 例）public void method() {}...結果を使わず、非同期で保存のみを行いたい場合(返り値なし)
+     * public Future<Likes> method() {}
+     * public CompletableFuture<Likes> method() {}...結果(Likesなど)を受け取りたい(返り値あり)
+     * 等にすること
+     */
+    // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
+    public void likeYou(int fromUserId, int toUserId) {
         Likes likes = new Likes();
         /*
          * Likes.javaでfromLikeUserIdおぴょび、toLikeUserIdはUsersがたとなっている。
@@ -40,7 +49,7 @@ public class LikeService {
         // 変換後、挿入する
         likes.setFromLikeUserId(fromUser); // いいねしたユーザー(ログイン中のユーザ)
         likes.setToLikeUserId(toUser); // いいねされるユーザ(対象のユーザー)
-        return likeRepository.save(likes);
+        likeRepository.save(likes);
     }
 
     // 特定のユーザーのいいねされた数のカウント
@@ -51,6 +60,18 @@ public class LikeService {
      */
     public int likesCount(int id) {
         return likeRepository.likesCount(id);
+    }
+
+    // 指定した年から現在までに取得したいいねのカウントを表示します
+    public int likesCountYearAgo(int id, long fromYear) {
+        LocalDateTime yearAgo = LocalDateTime.now().minusYears(fromYear); // 指定した年からのデータを取得する
+        return likeRepository.likesCountPast(id, yearAgo); // 指定した年以降のものを検索して、その該当の件数を返す。
+    }
+
+    // 指定した月から現在までに取得したいいねのカウントを表示する
+    public int likesCountMonthAgo(int id, long fromMonth) {
+        LocalDateTime monthAgo = LocalDateTime.now().minusMonths(fromMonth); // 指定した月以降のデータを取得する
+        return likeRepository.likesCountPast(id, monthAgo); // 指定した月以降の物を検索して、その該当の件数を返す。
     }
 
     /**

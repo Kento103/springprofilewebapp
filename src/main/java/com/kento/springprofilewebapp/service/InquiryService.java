@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class InquiryService {
 
     // users.idテーブルと結合させて表示する。
     public List<Inquirys> getInquirysWithUser() {
-        return inquiryRepository.findAllWithUsers();
+        return inquiryRepository.findAllWithUsers2(); // 試験
     }
 
     // categorysテーブルのidカラムを内部結合する
@@ -38,13 +39,19 @@ public class InquiryService {
     }
 
     // お問い合わせ登録する
-    public Inquirys registeInquiry(String description, int categoryId, Users user) {
-        Inquirys inquirys = new Inquirys(description, categoryId, user); // データを取得する
+    public Inquirys registeInquiry(String description, int categoryId, Users user, String inquiryEmail) {
+        Inquirys inquirys = new Inquirys(description, categoryId, user, inquiryEmail); // データを取得する
         return inquiryRepository.save(inquirys); // 取得したものをモデルに挿入して、DBに保管する
     }
 
     // お問い合わせのアップデート
     public Inquirys updateInquiry(Inquirys inquiry) {
+        inquiry.setUpdateAt(LocalDateTime.now()); // 現在時刻でアップデートする
         return inquiryRepository.save(inquiry);
+    }
+
+    // 指定したIDのレコードを削除する
+    public void deleteInquiry(int id) {
+        inquiryRepository.deleteById(id); // 指定したものを削除
     }
 }

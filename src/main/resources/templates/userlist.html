@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
-<head th:replace="~{base/layout::meta_header('top',~{::link},~{::script})}">
+<head th:replace="~{base/layout::meta_header('ユーザーリスト一覧',~{::link},~{::script})}">
     <meta charset="UTF-8">
 <title>登録ユーザ一覧 | SpringBootアプリ</title>
 </head>
 <body>
     <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
         <h1><i class="bi bi-person-lines-fill"></i> ユーザー一覧</h1>
+        <div class="admin-menu">
+            <!-- <a th:href="@{/admin/list}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-people-fill"></i> アカウント管理</button></a> -->
+            <a th:href="@{/register}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-add"></i> アカウント追加</button></a>
+            <a th:href="@{/admin/deleted_list}"><button type="button" class="btn btn-outline-danger"><i class="bi bi-person-dash-fill"></i> 削除アカウント管理</button></a>
+        </div>
+        <hr>
         <table border="1" class="table">
             <thead>
                 <tr>
