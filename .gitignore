@@ -34,5 +34,5 @@ build/
 
 ### カスタム ###
 uploads/
-src/main/resources/static/defaultimage/**
+# src/main/resources/static/defaultimage/**
 /.env
