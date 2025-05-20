@@ -18,10 +18,10 @@ services:
     container_name: mariadb
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=Aki10ken03.ad
-      - MARIADB_DATABASE=springprofileweb
-      - MARIADB_USER=root
-      - MARIADB_PASSWORD=Aki10ken03.ad
+      - MARIADB_ROOT_PASSWORD
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
     ports:
       - "3306:3306"
     volumes:
