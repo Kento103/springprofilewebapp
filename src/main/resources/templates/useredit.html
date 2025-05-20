@@ -17,7 +17,7 @@
                     <!-- プロフィール画像があるときの画像表示用 -->
                     <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
                     <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
-                    <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
+                    <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                     <br><br>
                     <input type="file" name="image" id="image" accept="image/*">
                     <button type="submit" id="saveButton" class="btn btn-success" disabled><i class="bi bi-image"></i> プロフィール画像の変更</button>

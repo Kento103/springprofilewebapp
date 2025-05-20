@@ -13,7 +13,7 @@
                 <!-- プロフィール画像があるときの画像表示用 -->
                 <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
                 <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
-                <img th:unless="${user.imagePath != null}" th:src="@{/images/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
+                <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                 <!--ユーザー名の表示用-->
                 <h2><span th:text="${user.username}"></span> <span class="hurigana" th:text="${user.hurigana}"></span></h2>
                 <!-- いいねをまだしていない場合に表示 -->

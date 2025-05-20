@@ -38,7 +38,7 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page, // URL?page=0でページを取得できる,defaultValueで指定しなかったときの初期値を指定できる。
             Model allUser, // ユーザー数を検索する(前ページ、次ページを出すために使うもの)
             Model model) { // 取得したものを入れる用のもの
-        long maxPage = userService.countUsers() / 5;
+        long maxPage = (userService.countUsers() - 1) / 5;
         model.addAttribute("users", userService.getLimitedUsers(page, 5)); // page:ページ数 size：いくつ取得するか
         allUser.addAttribute("allUsers", userService.countUsers()); // 全ユーザー人数確認用
         allUser.addAttribute("page", page); // 現在のページ
