@@ -18,7 +18,8 @@ public class TopController {
     // いいねの多い順に並び替える
     @GetMapping("/ranking")
     public String getLikeRanking(Model model) {
-        model.addAttribute("users", userService.getMostLikeUsers()); // いいねの多い順に並び変えた状態でユーザリストを取得する
+        model.addAttribute("users", userService.getMostLikeUsers()); // 月間いいねの多い順に並び変えた状態でユーザリストを取得する
+        model.addAttribute("usersYear", userService.getMostYearsLikeUsers()); // 年間いいねの多い順に並び替える
         return "ranking";
     }
 }

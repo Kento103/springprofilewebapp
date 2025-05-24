@@ -88,7 +88,7 @@ public class Users implements UserDetails {
 
     @Max(value = 999, message = "{user.age.invalided}")
     @NotNull(message = "{user.age.required}")
-    private int age; // 年齢(最大999歳まで許可)
+    private Integer age; // 年齢(最大999歳まで許可) ※プリミティブ型(int)では空の値はエラーとなる。そのためInteger(class)にしてnullを許容できるようにする
 
     // ユーザーが削除フラグを立てて登録されているか確認する(論理削除):trueで削除フラグ
     private boolean deleted;
@@ -105,7 +105,7 @@ public class Users implements UserDetails {
 
     private LocalDateTime deletedAt; // ユーザの削除日
 
-    public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, int age) {
+    public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, Integer age, boolean locked) {
         this.username = username; // ユーザー名
         this.email = email; // メールアドレス
         this.password = password; // パスワード
@@ -114,6 +114,7 @@ public class Users implements UserDetails {
         this.description = description; // 自己紹介
         this.sexial = sexial; // 性別
         this.age = age; // 年齢
+        this.locked = locked; // アクセス制御
     }
 
     @Override
