@@ -7,6 +7,7 @@ function toggleContentRegister() {
     const userSexial = document.getElementById('content-sexial');
     const userAge = document.getElementById('content-age');
     const userDescription = document.getElementById('content-description');
+    const inputAge = document.getElementById('age');
 
     // 一旦すべて非表示にする
     admin.classList.add('hidden');
@@ -18,11 +19,13 @@ function toggleContentRegister() {
     // 選択に応じて表示する
     if (value === "ROLE_ADMIN") {
         admin.classList.remove('hidden');
+        inputAge.value = '0';
     } else if (value === "ROLE_USER") {
         user.classList.remove('hidden');
         userSexial.classList.remove('hidden');
         userAge.classList.remove('hidden');
         userDescription.classList.remove('hidden');
+        inputAge.value = '';
     }
 }
 
