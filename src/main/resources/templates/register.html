@@ -11,7 +11,7 @@
             <h2><i class="bi bi-person-add"></i> <span th:text="${pageTitle}"></span></h2>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
             <hr>
-        <form th:action="@{/register}" th:object="${users}" method="post">
+        <form th:action="@{/register}" th:object="${users}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
                 <label><input type="radio" name="role" id="role_user" onclick="toggleContentRegister()" value="ROLE_USER" checked> 一般ユーザ</label>
@@ -32,7 +32,7 @@
                 <!-- バリデーションエラーが出た際に、ここに表示される-->
                 <div class="valided-error" th:if="${#fields.hasErrors('username')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{username}"></span></div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 hidden" id="content-hurigana">
                 <label for="hurigana" class="form-label">ふりがな： <span class="badge bg-secondary">必須</span></label>
                 <input type="text" id="hurigana" name="hurigana" th:field="*{hurigana}" class="form-control"/>
                 <div class="form-text">ひらがなのみ使用可</div>
@@ -94,6 +94,11 @@
                 <div class="form-text">1,500文字まで</div>
                 <!-- バリデーションエラーが出た際に、ここに表示される-->
                 <div class="valided-error" th:if="${#fields.hasErrors('description')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{description}"></span></div>
+            </div>
+            <!-- プロフィール画像 -->
+            <div class="mb-3 hidden" id="content-image">
+                <label for="user-image" class="form-label">プロフィール画像： </label>
+                <input type="file" name="image" id="image" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary">登録</button>
         </form>

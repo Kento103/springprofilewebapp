@@ -105,7 +105,7 @@ public class Users implements UserDetails {
 
     private LocalDateTime deletedAt; // ユーザの削除日
 
-    public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, Integer age, boolean locked) {
+    public Users(String username, String email, String password, String role, String hurigana, String description, int sexial, Integer age, boolean locked, String imagePass) {
         this.username = username; // ユーザー名
         this.email = email; // メールアドレス
         this.password = password; // パスワード
@@ -115,6 +115,7 @@ public class Users implements UserDetails {
         this.sexial = sexial; // 性別
         this.age = age; // 年齢
         this.locked = locked; // アクセス制御
+        this.imagePath = imagePass; // プロフ画像ファイルパス
     }
 
     @Override

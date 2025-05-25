@@ -51,7 +51,7 @@ public class UserService {
     }
     
     // ユーザー登録する(アクセス制御はstringで入れてください 0...許可、1...禁止)
-    public Users registerUser(String username, String email, String password, String hurigana, String description, int sexial, String role, String inputAge, String locked) {
+    public Users registerUser(String username, String email, String password, String hurigana, String description, int sexial, String role, String inputAge, String locked, String imagePass) {
         String encordedPassword = passwordEncoder.encode(password); // パスワードをハッシュ化する
         boolean islocked; // アクセス制御の挿入用
         if (locked.equals("0")) {
@@ -62,7 +62,7 @@ public class UserService {
             System.out.println("アクセス制御に渡されたパラメータが正しくありません。確認してください\n渡されたパラメータ：" + locked);
             islocked = false; // アクセス許可
         }
-        Users user = new Users(username, email, encordedPassword, role, hurigana, description, sexial, this.checkInputAge(inputAge), islocked); // パスワードはハッシュ化して、ロールはユーザーで保管する
+        Users user = new Users(username, email, encordedPassword, role, hurigana, description, sexial, this.checkInputAge(inputAge), islocked, imagePass); // パスワードはハッシュ化して、ロールはユーザーで保管する
         user.setCreateAt(LocalDateTime.now()); // 現在時刻で登録
         return userRepository.save(user); // DBにユーザー情報を保管する
     }

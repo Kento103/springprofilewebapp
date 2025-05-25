@@ -8,6 +8,9 @@ function toggleContentRegister() {
     const userAge = document.getElementById('content-age');
     const userDescription = document.getElementById('content-description');
     const inputAge = document.getElementById('age');
+    const userImage = document.getElementById('content-image');
+    const userHurigana = document.getElementById('content-hurigana');
+    const inputHurigana = document.getElementById('hurigana');
 
     // 一旦すべて非表示にする
     admin.classList.add('hidden');
@@ -15,17 +18,23 @@ function toggleContentRegister() {
     userSexial.classList.add('hidden');
     userAge.classList.add('hidden');
     userDescription.classList.add('hidden');
+    userImage.classList.add('hidden');
+    userHurigana.classList.add('hidden');
 
     // 選択に応じて表示する
     if (value === "ROLE_ADMIN") {
         admin.classList.remove('hidden');
         inputAge.value = '0';
+        inputHurigana.value = 'かんりしゃ';
     } else if (value === "ROLE_USER") {
         user.classList.remove('hidden');
         userSexial.classList.remove('hidden');
         userAge.classList.remove('hidden');
         userDescription.classList.remove('hidden');
+        userImage.classList.remove('hidden');
+        userHurigana.classList.remove('hidden');
         inputAge.value = '';
+        inputHurigana.value = '';
     }
 }
 
