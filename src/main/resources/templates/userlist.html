@@ -24,17 +24,25 @@
                     <th scope="col">ユーザーページ</th>
                     <!-- 管理者専用で表示するボタン -->
                     <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">編集</th>
+                    <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">ロック</th>
+                    <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">削除</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="user : ${users}">
                     <td th:text="${user.id}"></td>
-                    <td><span th:text="${user.username}"></span> <span class="fa-solid fa-web-awesome" th:if="${user.role} == 'ROLE_ADMIN'"></span><span class="fa-solid fa-ban" th:if="${user.locked}"></span></td>
+                    <td><span th:text="${user.username}"></span> <span class="badge text-bg-primary" th:if="${user.role} == 'ROLE_ADMIN'"><i class="bi bi-patch-check"></i> 管理者</span><span class="badge text-bg-warning" th:if="${user.locked}"><i class="bi bi-ban"></i> アクセス禁止</span></td>
                     <td th:text="${user.email}"></td>
                     <td><a th:href="@{/users/{id}(id=${user.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-person-bounding-box"></i> ページ</button></a></td>
                     <!-- 管理者専用で表示するボタン -->
                     <td sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 編集</button></a>
+                    </td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form th:action="@{/admin/{id}/locked(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${!user.locked}"><i class="bi bi-ban"></i> ロック</button><button type="submit" class="btn btn-outline-success" th:if="${user.locked}"><i class="bi bi-check2-circle"></i> ロック解除</button></form>
+                    </td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><i class="bi bi-person-x-fill"></i> 削除</button></form>
                     </td>
                 </tr>
             </tbody>
