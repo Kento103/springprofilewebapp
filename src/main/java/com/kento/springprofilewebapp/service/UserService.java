@@ -2,6 +2,8 @@ package com.kento.springprofilewebapp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -89,6 +91,12 @@ public class UserService {
                 return userRepository.save(user); // #.saveでデータベースの情報を更新する
             })
             .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
+    }
+
+    // パスワードエンコードのみ
+    public String passwordEncorded(String password) {
+        String encordedPassword = passwordEncoder.encode(password);
+        return encordedPassword; // ハッシュ化したパスワードを返す
     }
 
     // 最初の5件を取得する

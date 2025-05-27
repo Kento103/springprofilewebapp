@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('アカウント編集',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>アカウント編集 | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+            <h2><i class="bi bi-person-add"></i> アカウント情報編集</h2>
+            <hr>
+                <form th:action="@{/setting}" th:object="${user}" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">メールアドレス: <span class="badge bg-secondary">必須</span></label>
+                        <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required />
+                        <span class="error" th:errors="*{email}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <!-- パスワードの変更 -->
+                        <label for="password" class="form-label">新しいパスワード:</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="新しいパスワードを入力">
+                        <div class="form-text">8～32文字かつ半角英数と数字、ハイフンアンダーバーが使用可</div>
+                        <span class="error" th:if="${passwordfail}" th:text="${passwordfail}"></span>
+                    </div>
+                    <button type="submit" id="passwordsubmit" class="btn btn-primary"><i class="bi bi-key-fill"></i> 変更を保存</button>
+                </form>
+            <hr>
+        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
+        <hr>
+    </div> 
+</body>
+</html>
