@@ -44,6 +44,7 @@
                     <li class="nav-item menu-list"><a th:href="@{/ranking}" class="nav-link active" aria-current="page">ランキング</a></li>
                     <li class="nav-item menu-list"><a th:href="@{/users/{id}(id=${#authentication.principal.id})}" class="nav-link active" aria-current="page">マイページ</a></li>
                     <li class="nav-item menu-list"><a th:href="@{/inquiry/create}" class="nav-link active" aria-current="page">お問い合わせ</a></li>
+                    <li class="nav-item menu-list"><a th:href="@{/profile_edit}" class="nav-link active" aria-current="page">プロフィール設定</a></li>
                     <li class="nav-item menu-list"><a th:href="@{/setting}" class="nav-link active" aria-current="page">アカウント設定</a></li>
                     <form th:action="@{/logout}" method="post">
                         <button class="nav-link logout-btn">ログアウト</button>

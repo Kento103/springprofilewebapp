@@ -93,6 +93,16 @@ public class UserService {
             .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません")); // 該当するユーザーが三つからない場合はこのエラーに遷移する
     }
 
+    // 一般ユーザプロフィールの編集※設計しなおし
+    public Users updateProfile(Users updateUser, String username, String hurigana, Integer sexial, Integer age, String description) {
+        updateUser.setUsername(username);
+        updateUser.setHurigana(hurigana);
+        updateUser.setSexial(sexial);
+        updateUser.setAge(age);
+        updateUser.setDescription(description);
+        return userRepository.save(updateUser);
+    }
+
     // パスワードエンコードのみ
     public String passwordEncorded(String password) {
         String encordedPassword = passwordEncoder.encode(password);
