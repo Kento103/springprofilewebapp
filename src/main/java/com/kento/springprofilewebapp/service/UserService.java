@@ -85,7 +85,11 @@ public class UserService {
                 user.setUsername(updatedUser.getUsername()); // ユーザーネームを取得して変数に代入する
                 user.setHurigana(updatedUser.getHurigana()); // ふりがな
                 user.setEmail(updatedUser.getEmail()); // 登録メールアドレス
+                user.setSexial(updatedUser.getSexial()); // 性別
+                user.setAge(updatedUser.getAge()); // 年齢
                 user.setDescription(updatedUser.getDescription()); // 自己紹介
+                user.setRole(updatedUser.getRole()); // 権限
+                user.setLocked(updatedUser.isLocked()); // ロック状態(paramから取得するときは#.isLockedでよい)
                 System.out.println("content = [" + user.getDescription().replace("\n", "\\n").replace("\r", "\\r") + "]"); // 試験用
                 user.setUpdateAt(LocalDateTime.now()); // 現在時刻で更新
                 return userRepository.save(user); // #.saveでデータベースの情報を更新する

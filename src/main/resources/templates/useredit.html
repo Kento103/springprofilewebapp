@@ -10,7 +10,7 @@
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <h2><i class="bi bi-person-add"></i> ユーザー編集</h2>
             <hr>
-            <div class="mb-3">
+            <div class="mb-3" id="content-image">
                 <!-- アップロードフォーム -->
                 <form th:action="@{/users/{id}/edit/image(id=${user.id})}" method="post" enctype="multipart/form-data">
                     <label for="image" class="form-label">プロフィール画像</label><br>
@@ -58,7 +58,7 @@
                 <!--th:errors="*{username}" エラーが出た際に、ここに表示される-->
                 <span class="error" th:errors="*{username}"></span>
             </div>
-            <div class="mb-3">
+            <div class="mb-3" id="content-hurigana">
                 <label for="hurigana" class="form-label">ふりがな： <span class="badge bg-secondary">必須</span></label>
                 <input type="text" id="hurigana" name="hurigana" th:field="*{hurigana}" class="form-control" required />
                 <div class="form-text">ひらがなのみ使用可</div>
@@ -69,26 +69,21 @@
                 <input type="email" id="email" name="email" th:field="*{email}" class="form-control" required />
                 <span class="error" th:errors="*{email}"></span>
             </div>
-            <!--性別のコントローラ、モデル未実装-->
-            <!-- <div class="mb-3">
-                <label for="sexial" class="form-label">性別： <span class="badge bg-secondary">必須</span></label>
-                <select name="sexial" id="sexial" class="form-select">
-                    <option value="0" selected>選択しない</option>
+            <div class="mb-3" id="content-sexial">
+                <label for="sexial" class="form-label">性別：</label>
+                <select th:field="*{sexial}" id="sexial" class="form-select">
+                    <option value="0">選択しない</option>
                     <option value="1">男性</option>
                     <option value="2">女性</option>
                     <option value="3">その他</option>
                 </select>
-                <div class="form-text">性別は公開されません</div>
-                <span class="error" th:errors="*{sexial}"></span>
-            </div> -->
-            <!--誕生日のコントローラー、モデル未実装-->
-            <!-- <div class="mb-3">
-                <label for="age" class="form-label">年齢： <span class="badge bg-secondary">必須</span></label>
-                <input type="text" name="age" id="age" class="form-control" th:field="*{age}" required>
-                <div class="form-text">年齢を入力(任意)</div>
+            </div>
+            <div class="mb-3" id="content-age">
+                <label for="age" class="form-label">年齢：</label>
+                <input type="text" name="age" id="age" class="form-control" th:field="*{age}">
                 <span class="error" th:errors="*{age}"></span>
-            </div> -->
-            <div class="mb-3">
+            </div>
+            <div class="mb-3" id="content-description">
                 <label for="description" class="form-label">自己紹介： </label>
                 <textarea class="form-control" id="description" name="description" rows="5" th:field="*{description}"></textarea>
                 <span class="error" th:errors="*{description}"></span>
@@ -97,13 +92,29 @@
             </div>
             <!--管理者ユーザー時のメニュー-->
             <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
-                <label for="role" class="form-label">権限： 
-                    <span th:if="${user.role == 'ROLE_USER'}">一般ユーザ</span>
-                    <span th:if="${user.role == 'ROLE_ADMIN'}">管理者</span>
-                </label>
-                <div class="form-text">
-                    一般ユーザ：自分自身の情報を編集できる<br>
+                <div class="mb-3">
+                <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
+                <label><input type="radio" th:field="*{role}" name="role" id="role_user" onclick="toggleContentRegister()" value="ROLE_USER"> 一般ユーザ</label>
+                <label><input type="radio" th:field="*{role}" name="role" id="role_admin" onclick="toggleContentRegister()" value="ROLE_ADMIN"> 管理者</label>
+                <span class="error" th:errors="*{role}"></span>
+                <div class="form-text hidden" id="content-admin">
                     管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
+                </div>
+                <div class="form-text hidden" id="content-user">
+                    一般ユーザ：自分自身の情報を編集できる
+                </div>
+            </div>
+            <!-- ステータス登録 -->
+            <div class="mb-3">
+                <label for="locked" class="form-label">アクセス制御：</label>
+                <label><input type="radio" th:field="*{locked}" name="locked" id="unlocked" value="false" onclick="toggleAccess()" checked>アクセス許可</label>
+                <label><input type="radio" th:field="*{locked}" name="locked" id="enablelocked" value="true" onclick="toggleAccess()">アクセス禁止</label>
+                <div class="form-text hidden" id="content-unlocked">
+                    登録後、ユーザはメールアドレスとパスワードを使ってすぐにログインが可能です。
+                </div>
+                <div class="form-text hidden" id="content-enablelocked">
+                    登録された状態ではユーザはログインが禁止されています。<br>
+                    ログインできるようにするには登録後管理者がユーザ編集画面で「アクセス許可」に変更する必要があります。
                 </div>
             </div>
             <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> 保存</button>
@@ -154,6 +165,7 @@
         <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
         <hr>
     </div>
+    <script src="/js/register.js" defer></script>
     <script src="/js/useredit.js" defer></script>    
 </body>
 </html>
