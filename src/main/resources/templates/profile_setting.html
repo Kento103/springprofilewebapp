@@ -10,25 +10,24 @@
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <h2><i class="bi bi-person-add"></i> プロフィール編集</h2>
             <hr>
-            <div class="mb-3">
-                <!-- アップロードフォーム -->
-                <form th:action="@{/users/{id}/edit/image(id=${user.id})}" method="post" enctype="multipart/form-data">
-                    <label for="image" class="form-label">プロフィール画像</label><br>
-                    <!-- プロフィール画像があるときの画像表示用 -->
-                    <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
-                    <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
-                    <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
-                    <br><br>
-                    <input type="file" name="image" id="image" accept="image/*">
-                    <button type="submit" id="saveButton" class="btn btn-success" disabled><i class="bi bi-image"></i> プロフィール画像の変更</button>
-                </form>
-                <!-- <label for="image" class="form-label">プロフィール画像</label><br>
-                <a th:href="@{/users/{id}/edit/image(id=${user.id})}"><button class="btn btn-success"><i class="bi bi-image"></i> プロフィール画像の変更</button></a> -->
-                <div class="form-text">プロフィール画像を変更するにはこのボタンを押してください</div>
-            </div>
-            <hr>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
-        <form th:action="@{/profile_edit}" th:object="${user}" method="post">
+        <form th:action="@{/profile_edit}" th:object="${user}" method="post" enctype="multipart/form-data">
+            <!-- このIDフィールドがないとPostした際に既存ユーザと紐づかず、空の新規ユーザがバリデーションされてしまう。そのため隠し属性でidを入れておく -->
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{email}">
+            <input type="hidden" th:field="*{password}">
+            <input type="hidden" th:field="*{role}">
+            <input type="hidden" th:field="*{locked}">
+            <input type="hidden" th:field="*{deleted}">
+            <div class="mb-3">
+                <label for="image" class="form-label">プロフィール画像：</label><br>
+                <!-- プロフィール画像があるときの画像表示用 -->
+                <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
+                <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
+                <br><br>
+                <input type="file" name="image" id="image" accept="image/*">
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
                 <!--th:field="*{username}" どのフィールドなのか指定する-->
@@ -55,6 +54,7 @@
             <div class="mb-3">
                 <label for="age" class="form-label">年齢： </label>
                 <input type="text" name="age" id="age" class="form-control" th:field="*{age}">
+                <span class="error" th:errors="*{age}"></span>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">自己紹介： </label>
