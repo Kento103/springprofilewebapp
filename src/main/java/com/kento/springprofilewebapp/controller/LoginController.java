@@ -28,7 +28,7 @@ public class LoginController {
     @GetMapping("/")
     public String top(Model model) {
         model.addAttribute("systemSuccess", (String) model.getAttribute("systemSuccess")); // リダイレクトもとからのデータを受け取る
-        List<Users> users = userService.getallUsers(); // 全ユーザを取得する
+        List<Users> users = userService.getAllNormalUsers(); // 全ユーザを取得する
         model.addAttribute("users", users); // ユーザーリストをすべてリストに格納する
         return "top"; // トップページの表示をする。
     }

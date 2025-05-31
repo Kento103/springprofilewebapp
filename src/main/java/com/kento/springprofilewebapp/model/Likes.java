@@ -33,7 +33,6 @@ public class Likes {
 
     @ManyToOne
     @JoinColumn(name = "from_like_id")
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Users fromLikeUserId; // いいね！した本人(誰からいいねをもらったか確認する為にある)
 

@@ -9,7 +9,6 @@
     <div th:replace="~{base/layout::system-dialog}"></div>
     <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
             <h2><i class="bi bi-person-add"></i> ユーザー編集</h2>
-            <hr>
             <div class="mb-3" id="content-image">
                 <!-- アップロードフォーム -->
                 <form th:action="@{/users/{id}/edit/image(id=${user.id})}" method="post" enctype="multipart/form-data">

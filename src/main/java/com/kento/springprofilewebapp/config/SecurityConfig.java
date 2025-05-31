@@ -39,6 +39,8 @@ public class SecurityConfig {
             .requestMatchers("/ranking").permitAll() // 権限なしでも許可する
             .requestMatchers("/inquiry/create").permitAll() // お問い合わせ画面
             .requestMatchers("/defaultimage/**").permitAll() // システム用画像は誰でも許可
+            .requestMatchers("/users/*").permitAll() // ユーザページはだれでも見られる
+            .requestMatchers("/users/*/like").permitAll() // ユーザページは誰でも見られる
             .requestMatchers("/").permitAll() // 権限なしでも許可する
             .anyRequest().authenticated() // ルールにないものは常に認証が必要
         );

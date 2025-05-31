@@ -32,6 +32,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    // 全ユーザ(一般ユーザのみ)を取得する
+    public List<Users> getAllNormalUsers() {
+        return userRepository.usersList();
+    }
+
     // ユーザーをIDで取得
     public Users getUserById(Integer id) {
         return userRepository.findById(id).orElse(null);

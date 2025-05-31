@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.kento.springprofilewebapp.model.Likes;
@@ -36,7 +37,8 @@ public class LikeService {
      * 等にすること
      */
     // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
-    public void likeYou(int fromUserId, int toUserId) {
+    @Async
+    public void likeYou(Integer fromUserId, Integer toUserId) {
         Likes likes = new Likes();
         /*
          * Likes.javaでfromLikeUserIdおぴょび、toLikeUserIdはUsersがたとなっている。
@@ -44,10 +46,10 @@ public class LikeService {
          * そのため、Usersオブジェクトに変換してから、渡す必要がある。
          */
         // Usersオブジェクトに渡してやる。
-        Users fromUser = userRepository.findById(fromUserId).orElseThrow(); // .orElseThrowはユーザがみつからなかった時の例外
-        Users toUser = userRepository.findById(toUserId).orElseThrow();
+        //Users fromUser = userRepository.findById(fromUserId).orElseThrow(); // .orElseThrowはユーザがみつからなかった時の例外(ログイン必須にしなかったため無効とした)
+        Users toUser = userRepository.findById(toUserId).orElseThrow(); // .orElseThrowはユーザがみつからなかった時の例外
         // 変換後、挿入する
-        likes.setFromLikeUserId(fromUser); // いいねしたユーザー(ログイン中のユーザ)
+        //likes.setFromLikeUserId(fromUser); // いいねしたユーザー(ログイン中のユーザ)(ログイン必須にしなかったため、無効にした)
         likes.setToLikeUserId(toUser); // いいねされるユーザ(対象のユーザー)
         likeRepository.save(likes);
     }

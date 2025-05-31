@@ -16,10 +16,12 @@
                 <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
                 <!--ユーザー名の表示用-->
                 <h2><span th:text="${user.username}"></span> <span class="hurigana" th:text="${user.hurigana}"></span></h2>
-                <!-- いいねをまだしていない場合に表示 -->
-                <form th:if="${isLike != null and !isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form>
-                <!-- いいねをすでにしている場合に表示 -->
-                <form th:if="${isLike}" th:action="@{/users/{id}/unlike(id=${user.id})}" method="post"><button type="submit" class="btn btn-danger"><span>いいね取り消し </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form>
+                <!-- いいねする用のボタン -->
+                <form th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form>
+                <!-- いいねをまだしていない場合に表示(旧コマンドログイン確認してた時に使った) -->
+                <!-- <form th:if="${isLike != null and !isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form> -->
+                <!-- いいねをすでにしている場合に表示(旧コマンドログイン確認してた時に使った) -->
+                <!-- <form th:if="${isLike}" th:action="@{/users/{id}/unlike(id=${user.id})}" method="post"><button type="submit" class="btn btn-danger"><span>いいね取り消し </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form> -->
                 <!-- 性別の表示(数字で格納しているので条件式で表記するやり方でやる) -->
                 <p>
                     性別：
@@ -43,7 +45,7 @@
             </div>
             <!-- 一般ユーザ専用で表示するボタン -->
             <div class="edit-btn-aria" sec:authorize="hasRole('ROLE_USER')" th:if="${user.id} == ${#authentication.principal.id}">
-                <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> 編集する</button></a>
+                <a th:href="@{/profile_edit}"><button type="submit" class="btn btn-primary"><i class="bi bi-pencil-square"></i> 編集する</button></a>
             </div>
             <!-- テスト用現在ログインのメールアドレス -->
              <!-- th:text="${#authentication.principal}" でログイン中のユーザー情報を取得できる -->

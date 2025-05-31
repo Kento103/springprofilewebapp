@@ -11,10 +11,6 @@
         <h1>お問い合わせ</h1>
         <form th:action="@{/inquiry/create}" method="post">
             <div class="mb-3">
-                <label for="category" class="form-label">カテゴリーを選択</label>
-                <p>ここにカテゴリが入る</p>
-            </div>
-            <div class="mb-3">
                 <label for="description">お問い合わせ内容</label>
                 <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
                 <div class="form-text">お問い合わせ内容を入力</div>

@@ -38,22 +38,44 @@ public class UserController {
 
     // 各ユーザーページを表示する
     @GetMapping("/{id}")
-    public String getUserPage(@PathVariable int id, Model model, @AuthenticationPrincipal Users loginUser, RedirectAttributes redirectAttributes) {
+    public String getUserPage(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         Users user = userService.getUserById(id); // usersテーブルのidから該当の情報尾を検索する
         if (user == null) {
             // 存在しないユーザをたどった場合は、一覧に戻す
             redirectAttributes.addFlashAttribute("systemWarning", "指定したユーザは存在しません");
+            return "redirect:/";
+        } else if (user.getRole().equals("ROLE_ADMIN")) {
+            // 管理者ユーザを検索しようとした場合は。一覧に戻す
+            redirectAttributes.addFlashAttribute("systemWarning", "指定したユーザは管理者です");
             return "redirect:/";
         }
         model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
         model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。(総数)
         model.addAttribute("like_year", likeService.likesCountYearAgo(id, 1)); // いいねされた数をカウントする(1年前から現在)
         model.addAttribute("like_month", likeService.likesCountMonthAgo(id, 1)); // いいねされた数をカウントする(1カ月まえから現在)
-        model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
         model.addAttribute("systemError", (String) model.getAttribute("systemError"));
         model.addAttribute("systemSuccess", (String) model.getAttribute("systemSuccess"));
         return "profile"; // profile.htmlのページを表示する
     }
+
+    // 各ユーザーページを表示する(旧コード将来のために無効化して残す)
+    // @GetMapping("/{id}")
+    // public String getUserPage(@PathVariable int id, Model model, @AuthenticationPrincipal Users loginUser, RedirectAttributes redirectAttributes) {
+    //     Users user = userService.getUserById(id); // usersテーブルのidから該当の情報尾を検索する
+    //     if (user == null) {
+    //         // 存在しないユーザをたどった場合は、一覧に戻す
+    //         redirectAttributes.addFlashAttribute("systemWarning", "指定したユーザは存在しません");
+    //         return "redirect:/";
+    //     }
+    //     model.addAttribute("user", user); // 情報をモデルへ代入する(thymaleefで使えるようにする)
+    //     model.addAttribute("like", likeService.likesCount(id)); // いいねされた数をカウントする。(総数)
+    //     model.addAttribute("like_year", likeService.likesCountYearAgo(id, 1)); // いいねされた数をカウントする(1年前から現在)
+    //     model.addAttribute("like_month", likeService.likesCountMonthAgo(id, 1)); // いいねされた数をカウントする(1カ月まえから現在)
+    //     model.addAttribute("isLike", likeService.isExistLike(loginUser.getId(), id)); // すでに言い値しているかの有無を確認する。boolで返るためこれをthymaleef側で表示制御するのに用いる
+    //     model.addAttribute("systemError", (String) model.getAttribute("systemError"));
+    //     model.addAttribute("systemSuccess", (String) model.getAttribute("systemSuccess"));
+    //     return "profile"; // profile.htmlのページを表示する
+    // }
 
     // ユーザー情報の編集ページを表示する
     @GetMapping("/{id}/edit")
@@ -105,7 +127,7 @@ public class UserController {
                 users = userService.updateUser(id, user);
                 model.addAttribute("user", users);
                 redirectAttributes.addFlashAttribute("systemSuccess", "ユーザー情報の変更に成功しました");
-                return "redirect:/users/{id}";
+                return "redirect:/admin";
             } catch (Exception e) {
                 model.addAttribute("systemError", "登録に失敗しました");
                 return "useredit";
@@ -235,12 +257,22 @@ public class UserController {
      * @return DBに保存して、プロフィールページに遷移します。
      */
     @PostMapping("/{id}/like")
-    public String likeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+    public String likeYou(@PathVariable int id, Users user, Model model) {
         user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
         model.addAttribute("user", user);
-        likeService.likeYou(loginUser.getId(), id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+        likeService.likeYou(1, id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
         return "redirect:/users/{id}";
     }
+
+    // いいねする(ログインを確認してた時のコード)
+    // @PostMapping("/{id}/like")
+    // public String likeYou(@PathVariable int id, Users user, @AuthenticationPrincipal Users loginUser, Model model) {
+    //     user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
+    //     model.addAttribute("user", user);
+    //     likeService.likeYou(loginUser.getId(), id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+    //     return "redirect:/users/{id}";
+    // }
+
 
     // いいねをやめる(取り消し)の動作(Postリクエスト)
     /**
