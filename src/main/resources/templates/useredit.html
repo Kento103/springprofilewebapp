@@ -49,6 +49,9 @@
             <hr>
             <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
         <form th:action="@{/users/{id}(id=${user.id})}" th:object="${user}" method="post">
+            <div>
+                <input type="hidden" id="password" name="password" value="password">
+            </div>
             <div class="mb-3">
                 <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
                 <!--th:field="*{username}" どのフィールドなのか指定する-->

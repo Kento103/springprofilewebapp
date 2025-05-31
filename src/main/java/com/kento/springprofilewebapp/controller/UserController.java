@@ -10,6 +10,7 @@ import com.kento.springprofilewebapp.model.Users;
 import com.kento.springprofilewebapp.service.LikeService;
 import com.kento.springprofilewebapp.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
@@ -108,16 +109,23 @@ public class UserController {
     @PostMapping("/{id}")
     public String updateUser(
             @PathVariable int id,
-            @ModelAttribute Users user,
+            @Valid @ModelAttribute("user") Users user,
+            BindingResult bindingResult,
             Model model,
             @ModelAttribute Users users,
             @AuthenticationPrincipal Users loginUsers,
-            BindingResult bindingResult,
             RedirectAttributes redirectAttributes
             ) {
+            // 値を上書きする
+            user.setPassword(loginUsers.getPassword()); // パスワードを上書きして変更させない
             if (bindingResult.hasErrors()) {
+                Users dbUser = userService.getUserById(id);
+                user.setImagePath(dbUser.getImagePath()); // 画像が消えてしまうので保管する
                 //Getリクエスト用のメゾットを呼び出し、編集画面に戻る
-                return editUserPage(user.getId(), model, user, loginUsers, null);
+                model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
+                model.addAttribute("user", user);
+                return "useredit";
+                // return editUserPage(user.getId(), model, user, loginUsers, null);
             }
             if (!userService.chackGrant(users, loginUsers)) {
                 redirectAttributes.addFlashAttribute("systemError", "不正なリクエストです\n権限がありません。");
