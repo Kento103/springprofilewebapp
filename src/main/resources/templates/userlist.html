@@ -24,18 +24,25 @@
                     <th scope="col">ユーザーページ</th>
                     <!-- 管理者専用で表示するボタン -->
                     <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">編集</th>
+                    <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">ロック</th>
+                    <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">削除</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="user : ${users}">
                     <td th:text="${user.id}"></td>
-                    <td><span th:text="${user.username}"></span> <span class="fa-solid fa-web-awesome" th:if="${user.role} == 'ROLE_ADMIN'"></span><span class="fa-solid fa-ban" th:if="${user.locked}"></span></td>
+                    <td><span th:text="${user.username}"></span> <span class="badge text-bg-primary" th:if="${user.role} == 'ROLE_ADMIN'"><i class="bi bi-patch-check"></i> 管理者</span><span class="badge text-bg-warning" th:if="${user.locked}"><i class="bi bi-ban"></i> アクセス禁止</span></td>
                     <td th:text="${user.email}"></td>
                     <td><a th:href="@{/users/{id}(id=${user.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-person-bounding-box"></i> ページ</button></a></td>
                     <!-- 管理者専用で表示するボタン -->
                     <td sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 編集</button></a>
-                        <a href=""><button type="button" class="btn btn-outline-danger"><i class="bi bi-trash3-fill"></i> 削除</button></a>
+                    </td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form th:action="@{/admin/{id}/locked(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${!user.locked}"><i class="bi bi-ban"></i> ロック</button><button type="submit" class="btn btn-outline-success" th:if="${user.locked}"><i class="bi bi-check2-circle"></i> ロック解除</button></form>
+                    </td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><i class="bi bi-person-x-fill"></i> 削除</button></form>
                     </td>
                 </tr>
             </tbody>
@@ -43,13 +50,13 @@
         <!-- ページボタン用 -->
         <div class="page-btn">
             <!-- 最初のページ(page=0)を表示するただし、最初のページの場合は表示しない -->
-            <a th:href="@{/admin/list(page=${0})}" th:if="${page > 0}"><button class="btn btn-outline-primary">最初のページ</button></a>
+            <a th:href="@{/admin(page=${0})}" th:if="${page > 0}"><button class="btn btn-outline-primary">最初のページ</button></a>
             <!-- 一つ前のページを表示する。ただし、最初のページの場合は表示しない -->
-            <a th:href="@{/admin/list(page=${page - 1})}" th:if="${page > 0}"><button class="btn btn-outline-primary">前のページ</button></a>
+            <a th:href="@{/admin(page=${page - 1})}" th:if="${page > 0}"><button class="btn btn-outline-primary">前のページ</button></a>
             <!-- 次のページを表示する。ただし、最後のページの場合は表示しない -->
-            <a th:href="@{/admin/list(page=${page + 1})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">次のページ</button></a>
+            <a th:href="@{/admin(page=${page + 1})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">次のページ</button></a>
             <!-- 最後のページを表示する。ただし、最後のページの場合は表示しない -->
-            <a th:href="@{/admin/list(page=${maxpage})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">最後のページ</button></a>
+            <a th:href="@{/admin(page=${maxpage})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">最後のページ</button></a>
         </div>
         <p>現在<span th:text="${page}"></span>ページ / 全<span th:text="${maxpage}"></span>ページ</p>
         <p>全<span th:text="${allUsers}"></span>ユーザー</p>

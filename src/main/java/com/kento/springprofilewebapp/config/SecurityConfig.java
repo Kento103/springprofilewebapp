@@ -38,6 +38,11 @@ public class SecurityConfig {
             .requestMatchers("/register").hasAnyRole("ADMIN") // 管理者権限があるユーザのみ許可する
             .requestMatchers("/ranking").permitAll() // 権限なしでも許可する
             .requestMatchers("/inquiry/create").permitAll() // お問い合わせ画面
+            .requestMatchers("/defaultimage/**").permitAll() // システム用画像は誰でも許可
+            .requestMatchers("/users/*").permitAll() // ユーザページはだれでも見られる
+            .requestMatchers("/users/*/like").permitAll() // ユーザページは誰でも見られる
+            .requestMatchers("/users/*/liketop").permitAll() // ユーザページは誰でも見られる
+            .requestMatchers("/users/*/likerank").permitAll() // ユーザページは誰でも見られる
             .requestMatchers("/").permitAll() // 権限なしでも許可する
             .anyRequest().authenticated() // ルールにないものは常に認証が必要
         );

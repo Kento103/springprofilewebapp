@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:replace="~{base/layout::meta_header('プロフィール編集',~{::link},~{::script})}">
+    <meta charset="UTF-8">
+<title>プロフィール情報編集 | SpringBootアプリ</title>
+</head>
+<body>
+    <header th:replace="~{base/layout::header}"></header>
+    <div th:replace="~{base/layout::system-dialog}"></div>
+    <div th:fragment="~{base/layout::maincontent}" class="main-content container-md">
+            <h2><i class="bi bi-person-add"></i> プロフィール編集</h2>
+            <hr>
+            <!--th:object="${users}" コントローラから渡されたusersオブジェクトを参照していることを確認する。ないとエラー！-->
+        <form th:action="@{/profile_edit}" th:object="${user}" method="post" enctype="multipart/form-data">
+            <!-- このIDフィールドがないとPostした際に既存ユーザと紐づかず、空の新規ユーザがバリデーションされてしまう。そのため隠し属性でidを入れておく -->
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{email}">
+            <input type="hidden" th:field="*{password}">
+            <input type="hidden" th:field="*{role}">
+            <input type="hidden" th:field="*{locked}">
+            <input type="hidden" th:field="*{deleted}">
+            <div class="mb-3">
+                <label for="image" class="form-label">プロフィール画像：</label><br>
+                <!-- プロフィール画像があるときの画像表示用 -->
+                <img th:if="${user.imagePath != null}" th:src="@{${user.imagePath}}" th:alt="${user.username}" class="img-fluid profile-img">
+                <!-- プロフィール画像がないときの画像表示用(デフォルト画像) -->
+                <img th:unless="${user.imagePath != null}" th:src="@{/defaultimage/default_image.png}" th:alt="${user.username}" class="img-fluid profile-img">
+                <br><br>
+                <input type="file" name="image" id="image" accept="image/*">
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">ユーザー名： <span class="badge bg-secondary">必須</span></label>
+                <!--th:field="*{username}" どのフィールドなのか指定する-->
+                <input type="text" id="username" name="username" th:field="*{username}" class="form-control" required />
+                <div class="form-text">255文字まで</div>
+                <!--th:errors="*{username}" エラーが出た際に、ここに表示される-->
+                <span class="error" th:errors="*{username}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="hurigana" class="form-label">ふりがな： <span class="badge bg-secondary">必須</span></label>
+                <input type="text" id="hurigana" name="hurigana" th:field="*{hurigana}" class="form-control" required />
+                <div class="form-text">ひらがなのみ使用可</div>
+                <span class="error" th:errors="*{hurigana}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="sexial" class="form-label">性別： </label>
+                <select th:field="*{sexial}" id="sexial" class="form-select">
+                    <option value="0">選択しない</option>
+                    <option value="1">男性</option>
+                    <option value="2">女性</option>
+                    <option value="3">その他</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">年齢： </label>
+                <input type="text" name="age" id="age" class="form-control" th:field="*{age}">
+                <span class="error" th:errors="*{age}"></span>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">自己紹介： </label>
+                <textarea class="form-control" id="description" name="description" rows="5" th:field="*{description}"></textarea>
+                <span class="error" th:errors="*{description}"></span>
+                <div class="form-text">1,500文字まで</div>
+                <span class="error" th:errors="*{description}"></span>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-floppy"></i> 保存</button>
+        </form>
+        <hr>
+        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
+        <hr>
+    </div>
+    <script src="/js/useredit.js" defer></script>    
+</body>
+</html>
+<!-- 要再設計 -->

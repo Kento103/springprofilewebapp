@@ -38,7 +38,7 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page, // URL?page=0でページを取得できる,defaultValueで指定しなかったときの初期値を指定できる。
             Model allUser, // ユーザー数を検索する(前ページ、次ページを出すために使うもの)
             Model model) { // 取得したものを入れる用のもの
-        long maxPage = userService.countUsers() / 5;
+        long maxPage = (userService.countUsers() - 1) / 5;
         model.addAttribute("users", userService.getLimitedUsers(page, 5)); // page:ページ数 size：いくつ取得するか
         allUser.addAttribute("allUsers", userService.countUsers()); // 全ユーザー人数確認用
         allUser.addAttribute("page", page); // 現在のページ
@@ -47,6 +47,14 @@ public class AdminController {
         return "userlist";
     }
 
+    // いいねの多い順に並び替える
+    @GetMapping("/ranking")
+    public String getLikeRanking(Model model) {
+        model.addAttribute("users", userService.getMostLikeUsers()); // 月間いいねの多い順に並び変えた状態でユーザリストを取得する
+        model.addAttribute("usersYear", userService.getMostYearsLikeUsers()); // 年間いいねの多い順に並び替える
+        return "ranking";
+    }
+    
     // 削除されているユーザーリストを表示する
     /**
      * 削除されているユーザリストを表示します
