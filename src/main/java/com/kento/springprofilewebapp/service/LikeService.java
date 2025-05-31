@@ -37,7 +37,6 @@ public class LikeService {
      * 等にすること
      */
     // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
-    @Async
     public void likeYou(Integer fromUserId, Integer toUserId) {
         Likes likes = new Likes();
         /*

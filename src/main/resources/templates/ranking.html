@@ -32,6 +32,8 @@
                       <h5 class="card-title" th:text="${user.username}"></h5>
                       <p class="card-text">月間いいね：<span th:text="${user.totalLikes}"></span></p>
                       <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
+                      <!-- いいねする用のボタン -->
+                      <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form>
                     </div>
                   </div>
                 </div>
@@ -70,6 +72,8 @@
                       <h5 class="card-title" th:text="${user.username}"></h5>
                       <p class="card-text">年間いいね：<span th:text="${user.totalLikes}"></span></p>
                       <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
+                      <!-- いいねする用のボタン -->
+                      <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form>
                     </div>
                   </div>
                 </div>

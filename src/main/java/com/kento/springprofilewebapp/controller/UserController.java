@@ -223,7 +223,7 @@ public class UserController {
             try {
                 userService.changePassword(id, password);
                 redirectAttributes.addFlashAttribute("systemSuccess", "パスワードを変更しました");
-                return "redirect:/users/{id}";
+                return "redirect:/users";
             } catch (Exception e) {
                 // model.addAttribute("error", "パスワードの保存中にエラーが発生しました！");
                 redirectAttributes.addFlashAttribute("systemError", "パスワードの変更中にエラーが発生しました！");
@@ -271,6 +271,23 @@ public class UserController {
         likeService.likeYou(1, id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
         return "redirect:/users/{id}";
     }
+
+    @PostMapping("/{id}/liketop")
+    public String likeYouTop(@PathVariable int id, Users user, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.likeYou(1, id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+        return "redirect:/";
+    }
+
+    @PostMapping("/{id}/likerank")
+    public String likeYouRank(@PathVariable int id, Users user, Model model) {
+        user = userService.getUserById(id); // URL中のidから該当のユーザを検索する。
+        model.addAttribute("user", user);
+        likeService.likeYou(1, id); // fromにはログイン中のユーザID、toには対象のユーザーIDが入る。いいねをして保存する
+        return "redirect:/ranking";
+    }
+
 
     // いいねする(ログインを確認してた時のコード)
     // @PostMapping("/{id}/like")
