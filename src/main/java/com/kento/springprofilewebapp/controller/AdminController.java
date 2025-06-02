@@ -161,4 +161,11 @@ public class AdminController {
         }
         return "redirect:/admin";
     }
+    
+    @GetMapping("/dashboard")
+    public String adminDash(Model model) {
+        model.addAttribute("users", userService.getMostLikeUsers()); // 月間いいね
+        model.addAttribute("usersYear", userService.getMostYearsLikeUsers()); // 年間いいね
+        return "admin_dash"; // 管理者用ダッシュボードのページ
+    }
 }
