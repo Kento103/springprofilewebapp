@@ -21,7 +21,7 @@
                     <th scope="col">ID</th>
                     <th scope="col">名前</th>
                     <th scope="col">メール</th>
-                    <th scope="col">ユーザーページ</th>
+                    <!-- <th scope="col">ユーザーページ</th> -->
                     <!-- 管理者専用で表示するボタン -->
                     <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">編集</th>
                     <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">ロック</th>
@@ -33,7 +33,7 @@
                     <td th:text="${user.id}"></td>
                     <td><span th:text="${user.username}"></span> <span class="badge text-bg-primary" th:if="${user.role} == 'ROLE_ADMIN'"><i class="bi bi-patch-check"></i> 管理者</span><span class="badge text-bg-warning" th:if="${user.locked}"><i class="bi bi-ban"></i> アクセス禁止</span></td>
                     <td th:text="${user.email}"></td>
-                    <td><a th:href="@{/users/{id}(id=${user.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-person-bounding-box"></i> ページ</button></a></td>
+                    <!-- <td><a th:href="@{/users/{id}(id=${user.id})}"><button type="button" class="btn btn-outline-secondary"><i class="bi bi-person-bounding-box"></i> ページ</button></a></td> -->
                     <!-- 管理者専用で表示するボタン -->
                     <td sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 編集</button></a>
@@ -58,7 +58,7 @@
             <!-- 最後のページを表示する。ただし、最後のページの場合は表示しない -->
             <a th:href="@{/admin(page=${maxpage})}" th:if="${page < maxpage}"><button class="btn btn-outline-primary">最後のページ</button></a>
         </div>
-        <p>現在<span th:text="${page}"></span>ページ / 全<span th:text="${maxpage}"></span>ページ</p>
+        <p>現在<span th:text="${page + 1}"></span>ページ / 全<span th:text="${maxpage + 1}"></span>ページ</p>
         <p>全<span th:text="${allUsers}"></span>ユーザー</p>
     </div>
 </body>

@@ -122,7 +122,7 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     List<UserLikeSummary> sortByMostLikesYears(); // 本来Usersで取得したいが、idが競合しjpaでエラーになる。そのため、asでサマリーを作成するが、サマリーを作成する場合はinterfaceを作成する必要がある。そのためUserLikeSummaryで取得する方式となる
 
     // ユーザ一覧を表示する(ユーザロール限定)
-    @Query(value = "select * from users u where u.role = 'ROLE_USER' order by u.id asc", nativeQuery = true)
+    @Query(value = "select * from users u where u.role = 'ROLE_USER' and u.deleted = false order by u.id asc", nativeQuery = true)
     List<Users> usersList(); // 管理者ロール以外を指定している
 }
 
