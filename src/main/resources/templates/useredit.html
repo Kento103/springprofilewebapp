@@ -91,12 +91,17 @@
                 <div class="form-text">1,500文字まで</div>
                 <span class="error" th:errors="*{description}"></span>
             </div>
+            <div th:if="${user.id == #authentication.principal.id}">
+                <!-- 管理者かつ自分自身を編集するときに隠しパラメータとして送信 -->
+                <input type="hidden" name="role" id="role" value="ROLE_ADMIN">
+                <input type="hidden" name="locked" id="locked" value="false">
+            </div>
             <!--管理者ユーザー時のメニュー-->
-            <div class="mb-3" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="mb-3">
                 <div class="mb-3">
                 <label for="role" class="form-label">権限： <span class="badge bg-secondary">必須</span></label>
-                <label><input type="radio" th:field="*{role}" name="role" id="role_user" onclick="toggleContentRegister()" value="ROLE_USER"> 一般ユーザ</label>
-                <label><input type="radio" th:field="*{role}" name="role" id="role_admin" onclick="toggleContentRegister()" value="ROLE_ADMIN"> 管理者</label>
+                <label><input type="radio" th:field="*{role}" name="role" id="role_user" onclick="toggleContentRegister()" value="ROLE_USER" th:disabled="${user.id == #authentication.principal.id}" checked> 一般ユーザ</label>
+                <label><input type="radio" th:field="*{role}" name="role" id="role_admin" onclick="toggleContentRegister()" value="ROLE_ADMIN" th:disabled="${user.id == #authentication.principal.id}"> 管理者</label>
                 <span class="error" th:errors="*{role}"></span>
                 <div class="form-text hidden" id="content-admin">
                     管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
@@ -108,8 +113,8 @@
             <!-- ステータス登録 -->
             <div class="mb-3">
                 <label for="locked" class="form-label">アクセス制御：</label>
-                <label><input type="radio" th:field="*{locked}" name="locked" id="unlocked" value="false" onclick="toggleAccess()" checked>アクセス許可</label>
-                <label><input type="radio" th:field="*{locked}" name="locked" id="enablelocked" value="true" onclick="toggleAccess()">アクセス禁止</label>
+                <label><input type="radio" th:field="*{locked}" name="locked" id="unlocked" value="false" onclick="toggleAccess()" th:disabled="${user.id == #authentication.principal.id}">アクセス許可</label>
+                <label><input type="radio" th:field="*{locked}" name="locked" id="enablelocked" value="true" onclick="toggleAccess()" th:disabled="${user.id == #authentication.principal.id}">アクセス禁止</label>
                 <div class="form-text hidden" id="content-unlocked">
                     登録後、ユーザはメールアドレスとパスワードを使ってすぐにログインが可能です。
                 </div>
@@ -163,8 +168,8 @@
             </div>
         </div>
         <hr>
-        <a th:href="@{/users/{id}(id=${user.id})}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a>
-        <hr>
+        <!-- <a th:href="@{/admin}"><button class="btn btn-secondary"><i class="bi bi-door-open-fill"></i> 変更せずに戻る</button></a> -->
+        <!-- <hr> -->
     </div>
     <script src="/js/register.js" defer></script>
     <script src="/js/useredit.js" defer></script>    

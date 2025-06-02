@@ -111,7 +111,13 @@ public class TopController {
         user.setRole(loginUser.getRole());
         user.setLocked(loginUser.isLocked());
         user.setDeleted(loginUser.isDeleted());
+
         Users dbUser = userService.getUserById(loginUser.getId());
+        dbUser.setEmail(loginUser.getEmail());
+        dbUser.setPassword(loginUser.getPassword());
+        dbUser.setRole(loginUser.getRole());
+        dbUser.setLocked(loginUser.isLocked());
+        dbUser.setDeleted(loginUser.isDeleted());
         if (!file.isEmpty()) {
             try {
                 String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
@@ -133,33 +139,34 @@ public class TopController {
                 file.transferTo(path.toFile());
 
                 // データベースにデータを保管する
-                user.setImagePath("/images/" + filename); // Webでアクセスするパスになる
+                dbUser.setImagePath("/images/" + filename); // Webでアクセスするパスになる
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("systemError", "画像ファイルをアップロードしてください");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             } catch (IOException e) {
                 redirectAttributes.addFlashAttribute("systemError", "予期せぬエラーが発生しました");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             } catch (MaxUploadSizeExceededException e) {
                 redirectAttributes.addFlashAttribute("systemError", "画像のファイルサイズは最大2MBまでです");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             }
         } else {
-            user.setImagePath(dbUser.getImagePath());
+            dbUser.setImagePath(dbUser.getImagePath());
         }
         // バリデーション検査
         if (bindingResult.hasErrors()) {
             // 警告画面を呼び出し、ユーザ登録画面に戻る
+            model.addAttribute("user", dbUser);
             model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
             return "profile_setting";
         }
         try {
             // 結果をDBに保存する
-            userService.save(user);
+            userService.save(dbUser);
             redirectAttributes.addFlashAttribute("systemSuccess", "プロフィール情報の変更に成功しました");
         } catch (Exception e) {
             model.addAttribute("systemError", "保存に失敗しました！");
         }
-        return "redirect:/profile_edit";
+        return "redirect:/users/" + dbUser.getId();
     }
 }

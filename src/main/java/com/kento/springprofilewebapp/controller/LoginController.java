@@ -35,10 +35,10 @@ public class LoginController {
         return "top"; // トップページの表示をする。
     }
 
-    @GetMapping("/dashboard")
-    public String user() {
-        return "user"; // ユーザーページの表示
-    }
+    // @GetMapping("/dashboard")
+    // public String user() {
+    //     return "user"; // ユーザーページの表示
+    // }
 
     @GetMapping("/login/ok")
     public String loginSuccess(@AuthenticationPrincipal Users user) {
