@@ -237,4 +237,15 @@ public class UserService {
             return null; // 変換失敗した場合はnullを返す
         }
     }
+
+    // メールがすでに登録されているかの存在チェック
+    public boolean isExistEmail(String email) {
+        if (userRepository.existsByEmail(email)) {
+            // すでに存在する場合
+            return true;
+        } else {
+            // 存在しない場合
+            return false;
+        }
+    }
 }

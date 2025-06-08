@@ -53,6 +53,10 @@ public class TopController {
     // 一般ユーザ情報の変更(リダイレクト先要編集)
     @PostMapping("/setting")
     public String saveSetting(@AuthenticationPrincipal Users user, Model model, @RequestParam String email, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        if (userService.isExistEmail(email)) {
+            redirectAttributes.addFlashAttribute("systemError", "このメールアドレスは他のユーザがすでに使用しています。別のメールアドレスを使用して下さい。");
+            return "redirect:/setting";
+        }
         model.addAttribute("user", user); // 情報をモデルに代入する
         if (email.isEmpty() && password.isEmpty()) {
             redirectAttributes.addFlashAttribute("systemWarning", "変更したい項目を入力してください");

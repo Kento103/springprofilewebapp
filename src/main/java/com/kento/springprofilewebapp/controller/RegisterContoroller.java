@@ -64,6 +64,10 @@ public class RegisterContoroller {
      */
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String email, @RequestParam String password, @RequestParam String hurigana, @RequestParam String description, @RequestParam int sexial, @RequestParam String role, @RequestParam String locked, @RequestParam String age, @RequestParam("image") MultipartFile file, Model model, @Valid @ModelAttribute Users users, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (userService.isExistEmail(email)) {
+            redirectAttributes.addFlashAttribute("systemError", "このメールアドレスはすでに登録されています。");
+            return "redirect:/register";
+        }
         try {
             // パスワード専用バリデーションチェック(パスワードはハッシュ化するため、下の所でバリデーションチェック出来ない)
             // チェック用(正規表現)検査値
