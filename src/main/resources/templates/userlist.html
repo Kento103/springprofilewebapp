@@ -39,10 +39,10 @@
                         <a th:href="@{/users/{id}/edit(id=${user.id})}"><button type="button" class="btn btn-outline-primary"><i class="bi bi-person-fill-gear"></i> 編集</button></a>
                     </td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')">
-                        <form th:action="@{/admin/{id}/locked(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${!user.locked}"><i class="bi bi-ban"></i> ロック</button><button type="submit" class="btn btn-outline-success" th:if="${user.locked}"><i class="bi bi-check2-circle"></i> ロック解除</button></form>
+                        <form th:action="@{/admin/{id}/locked(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${!user.locked}" th:disabled="${user.id == #authentication.principal.id}"><i class="bi bi-ban"></i> ロック</button><button type="submit" class="btn btn-outline-success" th:if="${user.locked}"><i class="bi bi-check2-circle"></i> ロック解除</button></form>
                     </td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')">
-                        <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><i class="bi bi-person-x-fill"></i> 削除</button></form>
+                        <form th:action="@{/admin/{id}/delete(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:disabled="${user.id == #authentication.principal.id}"><i class="bi bi-person-x-fill"></i> 削除</button></form>
                     </td>
                 </tr>
             </tbody>

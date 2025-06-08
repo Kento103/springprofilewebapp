@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.kento.springprofilewebapp.annotation.UniqueEmail;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,6 +64,7 @@ public class Users implements UserDetails {
     @NotBlank(message = "{user.email.required}")
     @Email(message = "{user.email.invalided}")
     @Column(nullable = false, unique = true) //unique...一意でないと登録できないようにする
+    @UniqueEmail // 自作したアノテーション(Emailのバリデーションエラーになったらメッセージを返す)
     private String email;
 
     //@Pattern(regexp = "^[a-zA-Z0-9_-]$", message = "パスワードは半角英数と数字、_-のみ使用出来ます")

@@ -124,6 +124,8 @@ public interface UserRepository extends JpaRepository<Users, Integer>{
     // ユーザ一覧を表示する(ユーザロール限定)
     @Query(value = "select * from users u where u.role = 'ROLE_USER' and u.deleted = false order by u.id asc", nativeQuery = true)
     List<Users> usersList(); // 管理者ロール以外を指定している
+
+    boolean existsByEmail(String email);
 }
 
 /*
