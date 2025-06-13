@@ -1,5 +1,6 @@
 package com.kento.springprofilewebapp.controller;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -98,15 +100,29 @@ public class RegisterContoroller {
             Path path;
             String dbPass = null; // データベースに保管するためのパスを指定する
             if (!file.isEmpty()) {
-                // ファイルのバリデーションチェックを行う
-                userService.imageValidate(file);
-                String uniqueFilename = UUID.randomUUID().toString(); // UUIDを生成し、ファイル名をランダムに作成する
-                uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
-                filename = "user_" + uniqueFilename + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
-                path = Paths.get(uploadDir + filename);
-                Files.createDirectories(path.getParent()); // ディレクトリがない時は作成してくれる。
-                file.transferTo(path.toFile());
-                dbPass = "/images/" + filename; // データベースに保管する為のファイルの場所を格納する
+                try {
+                    // ファイルのバリデーションチェックを行う
+                    userService.imageValidate(file);
+                    String uniqueFilename = UUID.randomUUID().toString(); // UUIDを生成し、ファイル名をランダムに作成する
+                    uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
+                    filename = "user_" + uniqueFilename + "_" + file.getOriginalFilename(); // ファイル名を指定する(file.getOriginalFilenameはファイル名をそのまま使用する為のもの)
+                    path = Paths.get(uploadDir + filename);
+                    Files.createDirectories(path.getParent()); // ディレクトリがない時は作成してくれる。
+                    file.transferTo(path.toFile());
+                    dbPass = "/images/" + filename; // データベースに保管する為のファイルの場所を格納する
+                } catch (IllegalArgumentException e) {
+                    model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
+                    model.addAttribute("imgError", "画像ファイルをアップロードしてください");
+                    return showRegisterForm(users, model);
+                } catch (MaxUploadSizeExceededException e) {
+                    model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
+                    model.addAttribute("imgError", "画像のファイルサイズは最大2MBまでです");
+                    return showRegisterForm(users, model);
+                } catch (IOException e) {
+                    model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
+                    model.addAttribute("imgError", "予期せぬエラーが発生しました");
+                    return showRegisterForm(users, model);
+                }
             } else {
                 System.out.println("画像検知なし");
             }

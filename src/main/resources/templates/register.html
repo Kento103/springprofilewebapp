@@ -99,6 +99,7 @@
             <div class="mb-3 hidden" id="content-image">
                 <label for="user-image" class="form-label">プロフィール画像： </label>
                 <input type="file" name="image" id="image" accept="image/*">
+                <div class="valided-error" th:if="${imgError}"><i class="fa-solid fa-circle-xmark"></i> <span th:text="${imgError}"></span></div>
             </div>
             <button type="submit" class="btn btn-primary">登録</button>
         </form>

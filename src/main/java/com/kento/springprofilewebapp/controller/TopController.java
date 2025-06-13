@@ -109,12 +109,12 @@ public class TopController {
     ) {
         // 値を上書きする。こうすることでhtml側で不正に書き換えられても絶対に書き換えさせない。
         // htmlに書いている理由として、@validが最初の段階で検査されてしまい、値が空と怒られてしまう。そのためhtmlにやむを得ず記載している
-        user.setId(loginUser.getId());
-        user.setEmail(loginUser.getEmail());
-        user.setPassword(loginUser.getPassword());
-        user.setRole(loginUser.getRole());
-        user.setLocked(loginUser.isLocked());
-        user.setDeleted(loginUser.isDeleted());
+        // user.setId(loginUser.getId());
+        // user.setEmail(loginUser.getEmail());
+        // user.setPassword(loginUser.getPassword());
+        // user.setRole(loginUser.getRole());
+        // user.setLocked(loginUser.isLocked());
+        // user.setDeleted(loginUser.isDeleted());
 
         Users dbUser = userService.getUserById(loginUser.getId());
         dbUser.setEmail(loginUser.getEmail());
@@ -165,8 +165,10 @@ public class TopController {
             return "profile_setting";
         }
         try {
+            // フォームから値を取得し、DBに保存する
+            dbUser = userService.updateUser(dbUser.getId(), user);
             // 結果をDBに保存する
-            userService.save(dbUser);
+            //userService.save(dbUser);
             redirectAttributes.addFlashAttribute("systemSuccess", "プロフィール情報の変更に成功しました");
         } catch (Exception e) {
             model.addAttribute("systemError", "保存に失敗しました！");
