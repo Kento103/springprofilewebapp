@@ -22,6 +22,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf().disable(); // csrf無効化設定。本番で使わないこと！
         http.formLogin(login -> login
             .loginProcessingUrl("/login") // ログインページ
             .loginPage("/login") // ログインページの指定
@@ -43,6 +44,7 @@ public class SecurityConfig {
             .requestMatchers("/users/*/like").permitAll() // ユーザページは誰でも見られる
             .requestMatchers("/users/*/liketop").permitAll() // ユーザページは誰でも見られる
             .requestMatchers("/users/*/likerank").permitAll() // ユーザページは誰でも見られる
+            .requestMatchers("/addlike/**").permitAll() // 非同期いいねはだれでも見られる
             .requestMatchers("/").permitAll() // 権限なしでも許可する
             .anyRequest().authenticated() // ルールにないものは常に認証が必要
         );

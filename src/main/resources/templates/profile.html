@@ -17,7 +17,9 @@
                 <!--ユーザー名の表示用-->
                 <h2><span th:text="${user.username}"></span> <span class="hurigana" th:text="${user.hurigana}"></span></h2>
                 <!-- いいねする用のボタン -->
-                <form th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form>
+                <!-- <form th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form> -->
+                <!-- いいねする用のボタン -->
+                <button id="like-btn" th:data-user-id="${user.id}" type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする</span> <i class="bi bi-heart-fill"></i><span id="like-count" th:text="${like}"></span></button>
                 <!-- いいねをまだしていない場合に表示(旧コマンドログイン確認してた時に使った) -->
                 <!-- <form th:if="${isLike != null and !isLike}" th:action="@{/users/{id}/like(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする </span><i class="bi bi-heart-fill"></i>×<span th:text="${like}"></span></button></form> -->
                 <!-- いいねをすでにしている場合に表示(旧コマンドログイン確認してた時に使った) -->
@@ -36,7 +38,7 @@
                 <!-- <p><span th:text="${user.description}"></span></p> -->
                 <pre th:text="${#strings.replace(#strings.replace(user.description, '\r\n', '<br/>'), '\n', '<br/>')}"></pre>
                 <!-- 年間いいね -->
-                <p>年間いいね：<span th:text="${like_year}"></span>  月間いいね：<span th:text="${like_month}"></span></p>
+                <p>年間いいね：<span id="like-year-count" th:text="${like_year}"></span>  月間いいね：<span id="like-month-count" th:text="${like_month}"></span></p>
             </div>
             <!--編集ボタンエリア(実装時は、管理者権限と、本人のみ表示すること)-->
             <!-- 管理者権限専用で表示するボタン -->
@@ -51,5 +53,6 @@
              <!-- th:text="${#authentication.principal}" でログイン中のユーザー情報を取得できる -->
              <!-- <h2 th:text="${#authentication.principal}"></h2> -->
         </div>
+        <script src="/js/addlike.js"></script>
     </body>
 </html>

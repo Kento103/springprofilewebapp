@@ -2,6 +2,7 @@ package com.kento.springprofilewebapp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -37,6 +38,7 @@ public class LikeService {
      * 等にすること
      */
     // 非同期処理(データベースの保存等、重めの処理を非同期で行うことができるアノテーション)
+    @Async
     public void likeYou(Integer fromUserId, Integer toUserId) {
         Likes likes = new Likes();
         /*
@@ -51,6 +53,18 @@ public class LikeService {
         //likes.setFromLikeUserId(fromUser); // いいねしたユーザー(ログイン中のユーザ)(ログイン必須にしなかったため、無効にした)
         likes.setToLikeUserId(toUser); // いいねされるユーザ(対象のユーザー)
         likeRepository.save(likes);
+    }
+
+    // 新いいねを非同期でする
+    @Async // 非同期処理を行う
+    public CompletableFuture<Integer> addLikeAsync(Integer fromUserId, Integer toUserId) {
+        // いいね処理をする
+        Likes likes = new Likes();
+        Users toUser = userRepository.findById(toUserId).orElseThrow(); // IDで検索する
+        int likeCount = this.likesCount(toUser.getId());
+        likes.setToLikeUserId(toUser); //いいねのユーザIDを挿入する
+        likeRepository.save(likes); // 結果を保存する
+        return CompletableFuture.completedFuture(likeCount + 1); // いったんテストで。数値を返すようにセットすること
     }
 
     // 特定のユーザーのいいねされた数のカウント
