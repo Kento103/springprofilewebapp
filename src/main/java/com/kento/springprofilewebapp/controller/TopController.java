@@ -160,9 +160,11 @@ public class TopController {
         // バリデーション検査
         if (bindingResult.hasErrors()) {
             // 警告画面を呼び出し、ユーザ登録画面に戻る
-            model.addAttribute("user", dbUser);
+            user.setImagePath(dbUser.getImagePath());
+            model.addAttribute("user", user);
             model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
             return "profile_setting";
+            // return "profile_setting";
         }
         try {
             // フォームから値を取得し、DBに保存する
