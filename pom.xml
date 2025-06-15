@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.kento</groupId>
 	<artifactId>springprofilewebapp</artifactId>
-	<version>0.3.0-PreRelease</version>
+	<version>0.4.0-PreRelease</version>
 	<name>springprofilewebapp</name>
 	<description>Spring Profile WebApp</description>
 	<url/>
