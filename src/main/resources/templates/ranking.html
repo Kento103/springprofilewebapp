@@ -17,7 +17,7 @@
         </div>
         <hr>
         <div id="content-month" class="hidden">
-          <div class="card mb-3" style="max-width: 540px;" th:each="user, iterStat : ${users}">
+          <div class="card mb-3 ranking-card" style="max-width: 540px;" th:each="user, iterStat : ${users}" th:attr="data-user-id=${user.userId},data-like-count=${user.totalLikes}">
               <a th:href="@{/users/{id}(id=${user.userId})}" class="custom-card-link">
                 <div class="row g-0">
                   <div class="col-md-4">
@@ -28,16 +28,18 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5><span th:text="${iterStat.count}"></span>位</h5>
+                      <h5><span th:text="${iterStat.count} + '位'" class="rank-number"></span></h5>
                       <h5 class="card-title" th:text="${user.username}"></h5>
-                      <p class="card-text">月間いいね：<span th:text="${user.totalLikes}"></span></p>
+                      <p class="card-text">月間いいね：<span th:attr="data-user-id=${user.userId}" th:text="${user.totalLikes}" class="like-count"></span></p>
                       <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
-                      <!-- いいねする用のボタン -->
-                      <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form>
                     </div>
                   </div>
                 </div>
               </a>
+              <!-- いいねする用のボタン -->
+              <!-- <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form> -->
+              <!-- いいねする用のボタン -->
+              <button th:data-user-id="${user.userId}" type="submit" class="btn btn-outline-danger like-btn"><span>いいねする</span><i class="bi bi-heart-fill"></i></button>
           </div>
         </div>
         <!-- <div class="row">
@@ -57,7 +59,7 @@
             </div>
         </div> -->
         <div id="content-year" class="hidden">
-          <div class="card mb-3" style="max-width: 540px;" th:each="user, iterStat : ${usersYear}">
+          <div class="card mb-3 ranking-card" style="max-width: 540px;" th:each="user, iterStat : ${usersYear}" th:attr="data-user-id=${user.userId},data-like-count=${user.totalLikes}">
               <a th:href="@{/users/{id}(id=${user.userId})}" class="custom-card-link">
                 <div class="row g-0">
                   <div class="col-md-4">
@@ -68,20 +70,22 @@
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
-                      <h5><span th:text="${iterStat.count}"></span>位</h5>
+                      <h5><span th:text="${iterStat.count} + '位'" class="rank-number"></span></h5>
                       <h5 class="card-title" th:text="${user.username}"></h5>
-                      <p class="card-text">年間いいね：<span th:text="${user.totalLikes}"></span></p>
+                      <p class="card-text">年間いいね：<span th:attr="data-user-id=${user.userId}" th:text="${user.totalLikes}" class="like-count"></span></p>
                       <p class="card-text"><small class="text-body-secondary" th:text="${user.description}"></small></p>
-                      <!-- いいねする用のボタン -->
-                      <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form>
                     </div>
                   </div>
                 </div>
               </a>
+              <!-- いいねする用のボタン -->
+              <!-- <form th:action="@{/users/{id}/likerank(id=${user.userId})}" method="post"><button type="submit" class="btn btn-outline-danger"><span>いいねする</span><i class="bi bi-heart-fill"></i></button></form> -->
+              <!-- いいねする用のボタン -->
+              <button th:data-user-id="${user.userId}" type="submit" class="btn btn-outline-danger like-btn"><span>いいねする</span><i class="bi bi-heart-fill"></i></button>
           </div>
         </div>
     </div>
-    
+    <script src="/js/addlike-list.js"></script>
     <script src="/js/ranking.js" defer></script>
 </body>
 </html>

@@ -35,13 +35,16 @@
                 <div class="card-body">
                   <h5 class="card-title" th:text="${user.username}"></h5>
                   <p class="card-text"><small  th:text="${user.description}" class="text-body-secondary"></small></p>
-                  <!-- いいねする用のボタン -->
-                  <form th:action="@{/users/{id}/liketop(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする</span> <i class="bi bi-heart-fill"></i><span th:text="${like}"></span></button></form>
                 </div>
               </div>
             </div>
           </a>
+          <!-- いいねする用のボタン -->
+          <!-- <form th:action="@{/users/{id}/liketop(id=${user.id})}" method="post"><button type="submit" class="btn btn-outline-danger" th:if="${user.role == 'ROLE_USER'}"><span>いいねする</span> <i class="bi bi-heart-fill"></i><span th:text="${like}"></span></button></form> -->
+          <!-- いいねする用のボタン -->
+          <button th:data-user-id="${user.id}" type="submit" class="btn btn-outline-danger like-btn" th:if="${user.role == 'ROLE_USER'}"><span>いいねする</span> <i class="bi bi-heart-fill"></i><span th:text="${like}"></span></button>
         </div>
     </div>
+    <script src="/js/addlike-top.js"></script>
 </body>
 </html>
