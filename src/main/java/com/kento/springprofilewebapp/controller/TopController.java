@@ -53,6 +53,10 @@ public class TopController {
     // 一般ユーザ情報の変更(リダイレクト先要編集)
     @PostMapping("/setting")
     public String saveSetting(@AuthenticationPrincipal Users user, Model model, @RequestParam String email, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        if (userService.isExistEmail(email)) {
+            redirectAttributes.addFlashAttribute("systemError", "このメールアドレスは他のユーザがすでに使用しています。別のメールアドレスを使用して下さい。");
+            return "redirect:/setting";
+        }
         model.addAttribute("user", user); // 情報をモデルに代入する
         if (email.isEmpty() && password.isEmpty()) {
             redirectAttributes.addFlashAttribute("systemWarning", "変更したい項目を入力してください");
@@ -105,13 +109,19 @@ public class TopController {
     ) {
         // 値を上書きする。こうすることでhtml側で不正に書き換えられても絶対に書き換えさせない。
         // htmlに書いている理由として、@validが最初の段階で検査されてしまい、値が空と怒られてしまう。そのためhtmlにやむを得ず記載している
-        user.setId(loginUser.getId());
-        user.setEmail(loginUser.getEmail());
-        user.setPassword(loginUser.getPassword());
-        user.setRole(loginUser.getRole());
-        user.setLocked(loginUser.isLocked());
-        user.setDeleted(loginUser.isDeleted());
+        // user.setId(loginUser.getId());
+        // user.setEmail(loginUser.getEmail());
+        // user.setPassword(loginUser.getPassword());
+        // user.setRole(loginUser.getRole());
+        // user.setLocked(loginUser.isLocked());
+        // user.setDeleted(loginUser.isDeleted());
+
         Users dbUser = userService.getUserById(loginUser.getId());
+        dbUser.setEmail(loginUser.getEmail());
+        dbUser.setPassword(loginUser.getPassword());
+        dbUser.setRole(loginUser.getRole());
+        dbUser.setLocked(loginUser.isLocked());
+        dbUser.setDeleted(loginUser.isDeleted());
         if (!file.isEmpty()) {
             try {
                 String uploadDir = System.getProperty("user.dir") + "/uploads/"; // アップロードするディレクトリを指定する
@@ -133,33 +143,38 @@ public class TopController {
                 file.transferTo(path.toFile());
 
                 // データベースにデータを保管する
-                user.setImagePath("/images/" + filename); // Webでアクセスするパスになる
+                dbUser.setImagePath("/images/" + filename); // Webでアクセスするパスになる
             } catch (IllegalArgumentException e) {
                 redirectAttributes.addFlashAttribute("systemError", "画像ファイルをアップロードしてください");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             } catch (IOException e) {
                 redirectAttributes.addFlashAttribute("systemError", "予期せぬエラーが発生しました");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             } catch (MaxUploadSizeExceededException e) {
                 redirectAttributes.addFlashAttribute("systemError", "画像のファイルサイズは最大2MBまでです");
-                return "redirect:/users/{id}/edit";
+                return "redirect:/profile_edit";
             }
         } else {
-            user.setImagePath(dbUser.getImagePath());
+            dbUser.setImagePath(dbUser.getImagePath());
         }
         // バリデーション検査
         if (bindingResult.hasErrors()) {
             // 警告画面を呼び出し、ユーザ登録画面に戻る
+            user.setImagePath(dbUser.getImagePath());
+            model.addAttribute("user", user);
             model.addAttribute("systemError", "入力が正しくありません\n確認してください！");
             return "profile_setting";
+            // return "profile_setting";
         }
         try {
+            // フォームから値を取得し、DBに保存する
+            dbUser = userService.updateUser(dbUser.getId(), user);
             // 結果をDBに保存する
-            userService.save(user);
+            //userService.save(dbUser);
             redirectAttributes.addFlashAttribute("systemSuccess", "プロフィール情報の変更に成功しました");
         } catch (Exception e) {
             model.addAttribute("systemError", "保存に失敗しました！");
         }
-        return "redirect:/profile_edit";
+        return "redirect:/users/" + dbUser.getId();
     }
 }

@@ -18,10 +18,10 @@
                 <label><input type="radio" name="role" id="role_admin" onclick="toggleContentRegister()" value="ROLE_ADMIN"> 管理者</label>
                 <span class="error" th:errors="*{role}"></span>
                 <div class="form-text hidden" id="content-admin">
-                    管理者：他ユーザを含めたすべてのユーザの情報の編集及び追加、削除ができる
+                    ユーザの追加や編集・削除、お問い合わせの回答等ができる権限です
                 </div>
                 <div class="form-text hidden" id="content-user">
-                    一般ユーザ：自分自身の情報を編集できる
+                    通常のユーザです。自分のプロフィール編集のみ行うことが出来ます。
                 </div>
             </div>
             <div class="mb-3">
@@ -76,7 +76,7 @@
                     <option value="2">女性</option>
                     <option value="3">その他</option>
                 </select>
-                <div class="form-text">性別は公開されません</div>
+                <div class="form-text">性別を選択</div>
                 <!-- バリデーションエラーが出た際に、ここに表示される-->
                 <div class="valided-error" th:if="${#fields.hasErrors('sexial')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{sexial}"></span></div>
             </div>
@@ -84,7 +84,7 @@
             <div class="mb-3 hidden" id="content-age">
                 <label for="age" class="form-label">年齢： <span class="badge bg-secondary">必須</span></label>
                 <input type="text" name="age" id="age" class="form-control">
-                <div class="form-text">年齢を入力(任意)</div>
+                <div class="form-text">年齢を入力</div>
                 <!-- バリデーションエラーが出た際に、ここに表示される-->
                 <div class="valided-error" th:if="${#fields.hasErrors('age')}"><i class="fa-solid fa-circle-xmark"></i> <span th:errors="*{age}"></span></div>
             </div>
@@ -99,6 +99,7 @@
             <div class="mb-3 hidden" id="content-image">
                 <label for="user-image" class="form-label">プロフィール画像： </label>
                 <input type="file" name="image" id="image" accept="image/*">
+                <div class="valided-error" th:if="${imgError}"><i class="fa-solid fa-circle-xmark"></i> <span th:text="${imgError}"></span></div>
             </div>
             <button type="submit" class="btn btn-primary">登録</button>
         </form>

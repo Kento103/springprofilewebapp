@@ -223,7 +223,7 @@ public class UserController {
             try {
                 userService.changePassword(id, password);
                 redirectAttributes.addFlashAttribute("systemSuccess", "パスワードを変更しました");
-                return "redirect:/users";
+                return "redirect:/users/{id}/edit";
             } catch (Exception e) {
                 // model.addAttribute("error", "パスワードの保存中にエラーが発生しました！");
                 redirectAttributes.addFlashAttribute("systemError", "パスワードの変更中にエラーが発生しました！");

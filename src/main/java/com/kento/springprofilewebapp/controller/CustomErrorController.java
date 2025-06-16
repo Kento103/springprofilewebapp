@@ -19,7 +19,7 @@ public class CustomErrorController implements ErrorController{
         int statusCode = statusObj != null ? Integer.parseInt(statusObj.toString()) : 500;
 
         if (statusCode == 404) {
-            System.out.println("404エラー検知");
+            //System.out.println("404エラー検知");
             return "error/404";
         } else if (statusCode == 403) {
             System.out.println("403エラー検知");

@@ -15,6 +15,7 @@
                 <span th:unless="${inquiry.users != null}">ゲスト</span>
             </p>
             <p>カテゴリ：<span th:text="${inquiry.categorys.name}"></span></p>
+            <p>メールアドレス： <span th:text="${inquiry.inquiryEmail}"></span></p>
             <!-- <p><span th:text="${inquiry.description}"></span></p> -->
             <pre th:text="${#strings.replace(#strings.replace(inquiry.description, '\r\n', '<br/>'), '\n', '<br/>')}"></pre>
         </div>
